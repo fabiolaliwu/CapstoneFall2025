@@ -7,7 +7,7 @@
     ```
 2. Clone the repository:
     ```sh
-    git clone [https://github.com/Dewiin/blind-spot.git](https://github.com/fabiolaliwu/CapstoneFall2025)
+    git clone https://github.com/fabiolaliwu/CapstoneFall2025
     ```
 3. Navigate to the project directory:
     ```sh
