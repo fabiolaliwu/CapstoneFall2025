@@ -1,4 +1,4 @@
-### Capstone Fall 2025
+#### Capstone Fall 2025
 
 ### Setup
 1. Navigate to the directory where you want to clone/run/save the application:
