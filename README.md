@@ -1,4 +1,4 @@
-#Stay in the Loop
+# Stay in the Loop
 
 ### Setup
 1. Navigate to the directory where you want to clone/run/save the application:
