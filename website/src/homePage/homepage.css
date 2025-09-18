@@ -1,5 +1,27 @@
 .bar{
     background-color: rgb(213, 213, 213);
     width: 100%;
-    height: 100px;
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+}
+.logo{
+    font-size: larger;
+    font-family:fantasy;
+    height: 100%;
+    width: 80%;
+}
+.information{
+    height: 100%;
+    width: 20%;
+    flex-direction: row;
+    display: flex;
+}
+.about{
+    width: 50%;
+    height: 100%;
+}
+.help{
+    width: 50%;
+    height: 100%;
 }
