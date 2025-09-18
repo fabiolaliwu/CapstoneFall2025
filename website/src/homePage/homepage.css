@@ -1,27 +1,32 @@
 .bar{
-    background-color: rgb(213, 213, 213);
+    background-color: rgb(225, 225, 225);
     width: 100%;
     height: 80px;
     display: flex;
     flex-direction: row;
+    font-family:fantasy;
+    margin: 0;
 }
 .logo{
-    font-size: larger;
-    font-family:fantasy;
+    display: flex;
+    align-items: center;
+    font-size: xxx-large;
+    font-weight: bolder;
     height: 100%;
-    width: 80%;
+    width: 85%;
+    margin-left: 20px;
 }
 .information{
+    font-size: x-large;
     height: 100%;
-    width: 20%;
+    width: 15%;
     flex-direction: row;
     display: flex;
 }
-.about{
-    width: 50%;
-    height: 100%;
-}
-.help{
+.about,.help{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 50%;
     height: 100%;
 }
