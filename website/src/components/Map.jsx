@@ -15,6 +15,7 @@ const Map = () => {
         new google.maps.Map(mapRef.current, {
           center: { lat: 40.7128, lng: -74.0060 }, // data taken from google
           zoom: 12.25,
+          mapId: 'ba9f438e91bcc80eeddbc99c'
         });
       }
     });
