@@ -6,20 +6,19 @@ const Map = () => {
 
   useEffect(() => {
     const loader = new Loader({
-      apiKey: 'AIzaSyDE-2chTGwM3ZyKgIe3fdBuzuz6FkQcvBM',
+      apiKey: 'AIzaSyDE-2chTGwM3ZyKgIe3fdBuzuz6FkQcvBM', // this key should be private
       version: 'weekly',
       libraries: ['places'],
     });
-
     loader.load().then(() => {
       if (mapRef.current) {
         new google.maps.Map(mapRef.current, {
-          center: { lat: 37.7749, lng: -122.4194 }, 
-          zoom: 12,
+          center: { lat: 40.7128, lng: -74.0060 }, // data taken from google
+          zoom: 12.25,
         });
       }
     });
   }, []);
-  return <div ref={mapRef} style={{ height: '100vh', width: '100vw' }} />;
+  return <div ref={mapRef} style={{ height: '900px', width: '100vw' }} />;
 };
 export default Map;

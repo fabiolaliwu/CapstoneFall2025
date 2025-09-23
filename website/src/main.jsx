@@ -6,7 +6,7 @@ import Map from './components/Map';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* <Homepage /> */}
-    <Map />
+    <Homepage />
+    {/* <Map /> */}
   </StrictMode>,
 )
