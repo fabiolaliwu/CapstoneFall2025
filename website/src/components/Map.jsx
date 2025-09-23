@@ -19,6 +19,6 @@ const Map = () => {
       }
     });
   }, []);
-  return <div ref={mapRef} style={{ height: '900px', width: '100vw' }} />;
+  return <div ref={mapRef} style={{ height: '100vh', width: '100vw' }} />;
 };
 export default Map;

@@ -6,8 +6,12 @@ import Map from '../Map';
 function Homepage() {
     return (
         <div className='homepage'>
-            <Bar />
-            <Map />
+            <div className = 'background'>
+                <Map />
+            </div>
+            <div className='content'>
+                <Bar />
+            </div>
         </div>
     )
 }
