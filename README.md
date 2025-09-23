@@ -1,5 +1,10 @@
 # Stay in the Loop
 
+### Install vis.gl library
+    ```sh
+    npm install @vis.gl/react-google-maps
+    ```
+
 ### Setup
 1. Navigate to the directory where you want to clone/run/save the application:
     ```sh
