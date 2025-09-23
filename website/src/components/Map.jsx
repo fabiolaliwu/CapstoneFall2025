@@ -6,7 +6,7 @@ const Map = () => {
 
   useEffect(() => {
     const loader = new Loader({
-      apiKey: 'AIzaSyDE-2chTGwM3ZyKgIe3fdBuzuz6FkQcvBM', // this key should be private
+      apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
       version: 'weekly',
       libraries: ['places'],
     });
