@@ -1,10 +1,5 @@
 # Stay in the Loop
 
-### Install vis.gl library
-    ```sh
-    npm install @vis.gl/react-google-maps
-    ```
-
 ### Setup
 1. Navigate to the directory where you want to clone/run/save the application:
     ```sh
@@ -17,6 +12,10 @@
 3. Navigate to the project directory:
     ```sh
     cd website
+    ```
+4. Install Google Maps loader
+    ```sh
+    npm install @googlemaps/js-api-loader
     ```
 4. First, download the dependencies in package.json:
     ```sh
