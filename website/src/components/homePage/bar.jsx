@@ -1,4 +1,5 @@
 import './bar.css';
+import AddPost from './newPost/add_post';  
 
 function Bar(){
     return(
@@ -7,6 +8,9 @@ function Bar(){
                 stay in the loop
             </div>
             <div className ='information'>
+                <div className='addpost'>
+                    <AddPost />
+                </div>
                 <div className='about'>
                     about
                 </div>
