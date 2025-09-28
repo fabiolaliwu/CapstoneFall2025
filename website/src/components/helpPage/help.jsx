@@ -2,13 +2,12 @@ import './help.css';
 import linkedin_logo from './linkedin_logo.png';
 import instagram_logo from './instagram_logo.jpg';
 
-
 function Help(){
     return(
         <div className ='help-page'>
             <div className='left-container'>
                 <div className='help-title'>
-                Contact Us
+                    Contact Us
                 </div>
                 <div className='help-description'>
                     Have feedback or run into an issue? We’d love to hear from you.
