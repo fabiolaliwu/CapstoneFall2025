@@ -15,12 +15,12 @@
     font-size: 24px;
     font-family: 'Jomolhari', serif;
     margin-top: 150px;
+    line-height: 0.1;
 }
 .slogan-bottom{
     color: #6c90a6;
     font-size: 46px;
     font-family: 'Jomolhari', serif;
-    margin-top: -20px;
 }
 .logo-image{
     width: 100px;
