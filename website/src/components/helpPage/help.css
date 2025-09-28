@@ -1,4 +1,25 @@
-.help{
-    height: 100%;
-    width: 100%;
+@import url('https://fonts.googleapis.com/css2?family=Jomolhari&display=swap');
+
+.help-page{
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    background-color:#cdcdcd;
+}
+.help-title{
+    color: black;
+    font-family: 'Jomolhari', serif;
+    font-size: 36px;
+    margin-top: 250px;
+    margin-left: 300px;
+}
+.help-description{
+    color: black;
+    font-family: 'Jomolhari', serif;
+    font-size: 20px;
+    text-align: justify;
+    margin-left: 120px;
+    margin-top: 10px;
 }
