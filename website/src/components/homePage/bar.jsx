@@ -1,5 +1,6 @@
 import './bar.css';
-import AddPost from './newPost/add_post';  
+import AddPost from './newPost/add_post'; 
+import { Link } from "react-router-dom"; 
 
 function Bar(){
     return(
@@ -12,11 +13,10 @@ function Bar(){
                     <AddPost />
                 </div>
                 <div className='about'>
-                    about
+                    <Link to="/about">About</Link>
                 </div>
                 <div className='help'>
-                    help
-                </div>
+                    <Link to="/help">Help</Link>                </div>
             </div>
         </div>
     )
