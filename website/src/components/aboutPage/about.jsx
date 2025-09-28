@@ -19,9 +19,9 @@ function About(){
             </div>
             <br />
             <div className='about-description'>
-            Loop combines incident reports, local events, and real-time chat 
-            into a single platform. Whether it’s a subway delay, a criminal incident, 
-            or an upcoming neighborhood event, Loop will always keep you informed.
+                Loop combines incident reports, local events, and real-time chat 
+                into a single platform. Whether it’s a subway delay, a criminal incident, 
+                or an upcoming neighborhood event, Loop will always keep you informed.
             </div>
             <br />
             <div className='about-subtitle'>
