@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad:wght@400;500;600;700&display=swap');
+
 .about-page{
     min-height: 100vh;
     width: 100vw;
@@ -19,6 +21,19 @@
 .logo-image{
     width: 100px;
     height: auto;
-    margin-top: 20px;
-
+    margin-top: 40px;
+}
+.about-subtitle{
+    color: white;
+    font-family: 'Afacad', sans-serif;
+    font-size: 28px;
+    margin-top: 40px;
+}
+.about-description{
+    color: #b1b1b1;
+    font-family: 'Afacad', sans-serif;
+    font-size: 20px;
+    text-align: justify;
+    margin-left: 294px;
+    margin-right: 294px;
 }
