@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Jomolhari&display=swap');
 
 .help-page{
@@ -69,16 +70,27 @@
     margin-left: 30px;
     padding-left: 10px;
     font-size: 16px;
+    font-family: 'Afacad', sans-serif;
     border: 1px solid #999;
 }
 textarea.input-box{
     height: 230px;
+    padding-top: 10px;
 }
 .form-button{
-    display: flex;
     background-color: black;
     color: white;
+    height: 40px;
+    width: 100px;
     border-radius: 10px;
-    flex-direction: column;
-    justify-content: right;
+    border: none;
+    align-self: flex-end;
+    margin-top: 10px;
+    margin-right: 42px;
+    font-family: 'Afacad', sans-serif;
+    font-size: 16px;
+}
+.form-button:hover{
+    background-color: #8a8888;
+    cursor: pointer;
 }

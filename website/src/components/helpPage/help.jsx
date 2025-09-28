@@ -25,9 +25,7 @@ function Help(){
                     <input type="email" placeholder="Email" className='input-box' required />
                     <input type="text" placeholder="Subject" className='input-box' required />
                     <textarea type="text" placeholder="Message" className='input-box'></textarea>  
-                    <div className='form-button'>
-                        <button type="submit">Submit</button>
-                    </div>                   
+                    <button type="submit" className='form-button'>Submit</button>                 
                 </form>
             </div>
         </div>
