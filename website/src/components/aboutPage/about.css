@@ -14,7 +14,7 @@
     color: #6c90a6;
     font-size: 24px;
     font-family: 'Jomolhari', serif;
-    margin-top: 150px;
+    margin-top: 20vh;
     line-height: 0.1;
 }
 .slogan-bottom{
@@ -38,8 +38,8 @@
     font-family: 'Afacad', sans-serif;
     font-size: 20px;
     text-align: justify;
-    margin-left: 294px;
-    margin-right: 294px;
+    margin-left: 21vw;
+    margin-right: 21vw;
 }
 .square-container{
     display: flex;

@@ -24,23 +24,24 @@
     color: black;
     font-family: 'Jomolhari', serif;
     font-size: 36px;
-    margin-top: 250px;
-    margin-left: 300px;
+    justify-content: center;
+    margin-top: 40vh;
+    margin-left: 20vw;
 }
 .help-description{
     color: black;
     font-family: 'Jomolhari', serif;
     font-size: 20px;
-    text-align: justify;
-    margin-left: 120px;
-    margin-top: 10px;
+    justify-content: center;
+    margin-top: 8px;
+    margin-left: 7vw;
 }
 .help-logo-container{
     flex-direction: row;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 30px;
-    margin-left: 325px;
+    margin-left: 5vw;
 }
 .help-logo{
     width: 50px;
@@ -51,12 +52,11 @@
 .form{
     background-color: #d9d9d9;
     width: 42vw;
-    height: 80vh;
+    height: 83vh;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    margin-top: 110px;
+    justify-content: center;
+    margin-top: 15vh;
     margin-bottom: 50px;
     border-radius: 10px;
 }
