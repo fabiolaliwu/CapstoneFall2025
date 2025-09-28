@@ -8,7 +8,7 @@ function About(){
                 Stay Safe. Stay Connect.
             </div>
             <div className='slogan-bottom'>
-                Stay In the LOOP.
+                Stay In the LOOP
             </div>
             <img src={logo} alt="Logo" className="logo-image" />
             <div className='about-subtitle'>
@@ -27,8 +27,13 @@ function About(){
             <div className='about-subtitle'>
                 Meet Our Team
             </div>
-
-            
+            <br />
+            <div className='square-container'>
+                <div className='square'>Team Member 1</div>
+                <div className='square'>Team Member 2</div>
+                <div className='square'>Team Member 3</div>
+                <div className='square'>Team Member 4</div>
+            </div>  
         </div>
     )
 }
