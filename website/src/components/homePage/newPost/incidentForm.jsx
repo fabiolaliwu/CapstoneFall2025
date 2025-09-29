@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import {useRef, useEffect} from 'react';
 import './add_post.css';
+import { useLocationInput } from './LocationInput';
 
-function IncidentForm({ currentUser }) {
+function IncidentForm({ currentUser}) {
 
   const { id } = currentUser || { id: '0' };
 
@@ -12,7 +14,6 @@ function IncidentForm({ currentUser }) {
     category: [],
     userid: id
   });
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [image, setImage] = useState(null);
 
@@ -25,7 +26,11 @@ function IncidentForm({ currentUser }) {
     'Protest',
     'Gun',
     'Crime',
-     'Other' ];
+    'Other' ];
+
+  const { locationInputRef, handleUseMyLocation, isLoaded } = useLocationInput((address) => {
+    setIncidentInfo(prev=>({...prev, location:address}));
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,9 +68,15 @@ function IncidentForm({ currentUser }) {
         // append all incident info to formData
         const formData = new FormData();
         Object.entries(incidentInfo).forEach(([key, value]) => {
-            formData.append(key, Array.isArray(value) ? value[0] : value);
+          if(key==='category'){
+            value.forEach((cat) => formData.append('category', cat));
+          }
+          else{
+            formData.append(key, value);
+          }
         });
         if (image) formData.append('image', image);
+        // !!! TODO: send formData to server
 
         setIncidentInfo({
             title: '',
@@ -75,6 +86,10 @@ function IncidentForm({ currentUser }) {
             userid: id
         });
         setImage(null);
+
+        if(locationInputRef.current){
+          locationInputRef.current.value = '';
+        }
     }catch (err) {
         console.error('Error saving incident:', err);
         alert(`Error saving incident: ${err.message || 'Something went wrong'}`);
@@ -96,13 +111,22 @@ function IncidentForm({ currentUser }) {
         />
 
         <label>Location <span className="required">*</span></label>
-        <input
+        {isLoaded ? (
+          <>
+            <input ref={locationInputRef} type="text" placeholder="Enter location or use my location" onChange={handleChange} />
+            <button type="button" onClick={handleUseMyLocation}>Use My Location</button>
+          </>
+        ) : (
+          <input
             type="text"
             name="location"
-            value={incidentInfo.location}
-            onChange={handleChange}
             required
-        />
+            style={{ width: "305px", padding: "10px" }}
+            placeholder="Loading Google Maps..."
+            disabled
+          />
+        )}
+        <p className="reminder">Reminder: only available in NYC</p>
 
         <label>Category <span className="required">*</span></label>
         <div className="category-toggle">
