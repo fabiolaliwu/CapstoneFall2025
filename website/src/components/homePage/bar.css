@@ -45,6 +45,14 @@
     flex: 0 0 auto;
     margin-right:50px;
 }
+.signup,.login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 100%;
+    border-color: burlywood;
+}
 .about,.help{
     display: flex;
     justify-content: center;
