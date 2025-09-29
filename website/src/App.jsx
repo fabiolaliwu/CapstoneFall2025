@@ -3,6 +3,7 @@ import Homepage from './components/homePage/homepage'
 import About from "./components/aboutPage/about";
 import Help from "./components/helpPage/help";
 import Bar from "./components/homePage/bar";
+import Landing from "./components/landingPage/landing"
 import './index.css'
 
 function App() {
