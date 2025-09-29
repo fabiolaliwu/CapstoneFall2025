@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jomolhari&display=swap');
+
+.help-page{
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 100px;
+    background-color:#cdcdcd;
+}
+.left-container{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}       
+.right-container{
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+}
+.help-title{
+    color: black;
+    font-family: 'Jomolhari', serif;
+    font-size: 36px;
+    justify-content: center;
+    margin-top: 40vh;
+    margin-left: 20vw;
+}
+.help-description{
+    color: black;
+    font-family: 'Jomolhari', serif;
+    font-size: 20px;
+    justify-content: center;
+    margin-top: 8px;
+    margin-left: 7vw;
+}
+.help-logo-container{
+    flex-direction: row;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-left: 5vw;
+}
+.help-logo{
+    width: 50px;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 40px;
+}
+.form{
+    background-color: #d9d9d9;
+    width: 42vw;
+    height: 83vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 15vh;
+    margin-bottom: 50px;
+    border-radius: 10px;
+}
+.input-box{
+    display: flex;
+    width: 36vw;
+    height: 50px;
+    border-radius: 10px;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-left: 30px;
+    padding-left: 10px;
+    font-size: 16px;
+    font-family: 'Afacad', sans-serif;
+    border: 1px solid #999;
+}
+textarea.input-box{
+    height: 230px;
+    padding-top: 10px;
+}
+.form-button{
+    background-color: black;
+    color: white;
+    height: 40px;
+    width: 100px;
+    border-radius: 10px;
+    border: none;
+    align-self: flex-end;
+    margin-top: 10px;
+    margin-right: 42px;
+    font-family: 'Afacad', sans-serif;
+    font-size: 16px;
+}
+.form-button:hover{
+    background-color: #8a8888;
+    cursor: pointer;
+}
+
+/* Citation:
+    - Figma word font link generated with GPT
+    - Used Google search for forgotten syntax
+ */

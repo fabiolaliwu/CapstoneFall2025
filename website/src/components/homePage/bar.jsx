@@ -1,21 +1,26 @@
 import './bar.css';
-import AddPost from './newPost/add_post';  
+import AddPost from './newPost/add_post'; 
+import { Link, NavLink } from "react-router-dom"; 
 
 function Bar(){
     return(
         <div className='bar'>
             <div className = 'logo'>
-                stay in the loop
+            <Link to="/">stay in the loop</Link> 
             </div>
             <div className ='information'>
                 <div className='addpost'>
                     <AddPost />
                 </div>
                 <div className='about'>
-                    about
+                    <NavLink to="/about"  className={({ isActive }) => isActive ? 'active-link' : ''}>
+                        About
+                    </NavLink>
                 </div>
                 <div className='help'>
-                    help
+                    <NavLink to="/help"  className={({ isActive }) => isActive ? 'active-link' : ''}>
+                        Help
+                    </NavLink>                
                 </div>
             </div>
         </div>
