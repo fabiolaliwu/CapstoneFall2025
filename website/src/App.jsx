@@ -9,9 +9,9 @@ import './index.css'
 function App() {
     return (
         <Router>
-            <Bar />
             <Routes>
-                <Route path="/" element={<Homepage />} />
+                <Route path="/" element={<Landing />} />
+                <Route path="/home" element={<Homepage />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/help" element={<Help />} />
             </Routes>
