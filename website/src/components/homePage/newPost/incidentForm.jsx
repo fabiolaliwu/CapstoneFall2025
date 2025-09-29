@@ -27,7 +27,8 @@ function IncidentForm({ currentUser}) {
     'Gun',
     'Crime',
     'Other' ];
-
+  
+  // Location input handle
   const { locationInputRef, handleUseMyLocation, isLoaded } = useLocationInput((address) => {
     setIncidentInfo(prev=>({...prev, location:address}));
   });
@@ -76,7 +77,7 @@ function IncidentForm({ currentUser}) {
           }
         });
         if (image) formData.append('image', image);
-        // !!! TODO: send formData to server
+        // !!! TODO: send formData to backend
 
         setIncidentInfo({
             title: '',

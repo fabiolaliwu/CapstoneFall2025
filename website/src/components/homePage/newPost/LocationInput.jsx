@@ -43,31 +43,32 @@ export function useLocationInput(onChange) {
             const geocoder = new window.google.maps.Geocoder();
             const latlng = { lat: latitude, lng: longitude };
 
-            // Turn Lat and long to Address
+            // Turn Lat and long to address
             geocoder.geocode({ location: latlng }, (results, status) => {
                 if (status === 'OK' && results[0]) {
-                const address = results[0].formatted_address;
-                onChange(address, { lat: latitude, lng: longitude });
-                if (locationInputRef.current) {
+                    const address = results[0].formatted_address;
+                    onChange(address, { lat: latitude, lng: longitude });
+                if(locationInputRef.current) {
                     locationInputRef.current.value = address;
                 }
-                } else {
-                console.error('Geocoder failed due to: ' + status);
-                alert('Unable to retrieve address. Please try again.');
+                } else{
+                    console.error("Geocoder faile: " + status);
+                    alert("Unable to retrieve address. Please try again.");
                 }
             });
         },
         (error) => {
           console.error('Error getting location:', error);
-          if (error.code === error.PERMISSION_DENIED) {
+          if(error.code === error.PERMISSION_DENIED) {
             alert('Location permission denied. Please allow location access.');
-          } else {
+          } 
+          else {
             alert('Error getting location: ' + error.message);
           }
         }
       );
     } else {
-      alert('Geolocation is not supported by your browser.');
+        alert('Geolocation is not supported by your browser.');
     }
   };
 
