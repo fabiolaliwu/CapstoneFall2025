@@ -1,10 +1,12 @@
 import './help.css';
 import linkedin_logo from './linkedin_logo.png';
 import instagram_logo from './instagram_logo.jpg';
+import Bar from '../homePage/bar'
 
 function Help(){
     return(
         <div className ='help-page'>
+            <Bar />
             <div className='left-container'>
                 <div className='help-title'>
                     Contact Us
