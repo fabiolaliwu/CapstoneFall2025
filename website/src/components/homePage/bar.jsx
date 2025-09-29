@@ -12,14 +12,9 @@ function Bar(){
                 <div className='addpost'>
                     <AddPost />
                 </div>
-                <div className= 'signup'>
-                    <NavLink to="/signup"  className={({ isActive }) => isActive ? 'active-link' : ''}>
-                        Sign Up
-                    </NavLink>
-                </div>
                 <div className='login'>
                     <NavLink to="/login"  className={({ isActive }) => isActive ? 'active-link' : ''}>
-                        Log In
+                        Sign In
                     </NavLink>
                 </div>
                 <div className='about'>
