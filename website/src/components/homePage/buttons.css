@@ -1,0 +1,25 @@
+.all-buttons {
+  position: fixed;
+  bottom: 30px;
+  display: flex;
+  gap: 16px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: max-content;
+  z-index: 1000;
+}
+
+.all-buttons button {
+  background: #ffffff;
+  color: rgb(0, 0, 0);
+  border: 2px solid #000000;
+  border-radius: 30px;
+  width: 150px;
+  height: 70px;
+  font-size: 20px;
+  cursor: pointer;
+}
+.all-buttons button:hover {
+  background: #e4e4e4;
+}
