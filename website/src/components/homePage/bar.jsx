@@ -6,11 +6,16 @@ function Bar(){
     return(
         <div className='bar'>
             <div className = 'logo'>
-            <Link to="/">stay in the loop</Link> 
+            <Link to="/home">stay in the loop</Link> 
             </div>
             <div className ='information'>
                 <div className='addpost'>
                     <AddPost />
+                </div>
+                <div className='login'>
+                    <NavLink to="/login"  className={({ isActive }) => isActive ? 'active-link' : ''}>
+                        Sign In
+                    </NavLink>
                 </div>
                 <div className='about'>
                     <NavLink to="/about"  className={({ isActive }) => isActive ? 'active-link' : ''}>

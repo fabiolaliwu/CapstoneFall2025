@@ -1,9 +1,11 @@
 import './about.css';
 import logo from './logo.jpg';
+import Bar from '../homePage/bar';
 
 function About(){
     return(
         <div className ='about-page'>
+            <Bar />
             <div className='slogan-top'>
                 Stay Safe. Stay Connect.
             </div>
