@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './add_post.css';
+import { useLocationInput } from './LocationInput.jsx';
 
 function EventForm({categoriesFetchStartAsync,currentUser }) {
   const { id } = currentUser || { id: '0' }; // id: 0 is just for testing purpose
@@ -18,8 +19,7 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
   const [categories, setCategories] = useState([]);
   const [image, setImage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [eventTypes, setEventTypes] = useState(['Free', 'Paid']);
-
+  const [eventTypes] = useState(['Free', 'Paid']);
 
   // mapping the category to include emoji to the frontend
   const categoryMap = {
@@ -34,6 +34,11 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
     'Promotions': '🎁 Promotions',
     'Other': 'Other'
   };
+
+  // Location input autofill
+  const { locationInputRef, handleUseMyLocation, isLoaded } = useLocationInput((address, coords) => {
+    setEventInfo(prev => ({ ...prev, location: address }));
+  })
 
   // Fetch the categories from server 
   useEffect(() => {
@@ -110,6 +115,8 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
         formData.append('image', image);
       }
 
+      // !!To do: connect to backend
+
       // empty data after submit
       setEventInfo({
         title: '',
@@ -123,7 +130,9 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
         userid: id
       });
       setImage(null);
-      
+      if(locationInputRef.current){
+        locationInputRef.current.value = '';
+      }
     } catch (err) {
       console.error('Error saving event:', err);
       const message = err?.response?.data?.message || err.message || 'Something went wrong';
@@ -195,12 +204,30 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
         <label>Location
           <span className="required">*</span>
         </label>
-        <input
-          type="text"
-          name="location"
-          value={eventInfo.location}
-          onChange={handleChange}
-        />
+        {isLoaded ? (
+          <>
+            <input
+              ref={locationInputRef}
+              type="text"
+              placeholder="Enter location or use my location"
+              value={eventInfo.location}
+              onChange={(e) => setEventInfo(prev => ({ ...prev, location: e.target.value }))}
+            />
+            <button type="button" onClick={handleUseMyLocation}>
+              Use My Location
+            </button>
+          </>
+        ) : (
+          <input
+            type="text"
+            name="location"
+            required
+            style={{ width: "305px", padding: "10px" }}
+            placeholder="Loading Google Maps..."
+            disabled
+          />
+        )}
+        <p className="reminder">Reminder: only available in NYC</p>
 
         <label>Organiser</label>
         <input
@@ -261,9 +288,4 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
 
 export default EventForm;
 
-
-// /**
-//  * Citation: 
-//https://www.youtube.com/watch?v=tNgbF1s-nZQ
-//  */
 

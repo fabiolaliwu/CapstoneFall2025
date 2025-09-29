@@ -104,11 +104,18 @@
     height:40px;
 }
 
-p{
+/* p{
     color:#542424;
-}
+} */
 
 div button.selected {
     background-color: #333333;
     color: white;
+}
+
+p, .reminder{
+    font-size: smaller;
+    margin-top: 0;
+    margin-bottom: 0px;
+    color:#8bb486
 }
