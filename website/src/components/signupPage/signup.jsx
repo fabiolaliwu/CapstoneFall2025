@@ -15,8 +15,7 @@ function Signup(){
                         <br></br>Stay in the loop by signing up today.
                     </div>
                     <form className='signup-form'>
-                        <input type="text" placeholder="Full Name" className='name-input' required />
-                        <input type="email" placeholder="Email" className='email-input' required />
+                        <input type="text" placeholder="Username" className='username-input' required />
                         <input type="password" placeholder="Password" className='password-input' required />
 
                         <button type="submit" className='signup-button'>Sign Up</button>
