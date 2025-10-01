@@ -1,11 +1,14 @@
 import {Link } from 'react-router-dom';
 import './landing.css'
+import Logo from '/draftLogo.png'
 
 function Landing(){
     return(
         <div className = 'landing'>
-            This will be the landing page
-            <Link to = "/home"> Go to Home </Link>
+            <img src= {Logo} alt="Logo goes here" width= "50%" />
+            <Link to="/home" className="button">
+                Get Started
+            </Link>  
         </div>
     );
 }
