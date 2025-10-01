@@ -12,7 +12,6 @@ function Homepage() {
             </div>
             <div className='content'>
                 <Bar />
-                <Body />
             </div>
             <Buttons />
         </div>
