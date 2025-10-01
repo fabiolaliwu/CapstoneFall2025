@@ -41,7 +41,6 @@
 .information{
     font-size: x-large;
     height: 100%;
-    width: 15%;
     flex-direction: row;
     display: flex;
     gap:30px;
