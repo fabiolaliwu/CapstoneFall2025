@@ -14,7 +14,7 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
     location: '',
     description: '',
     host: '',
-    userid: id
+    userId: id
   });
   const [categories, setCategories] = useState([]);
   const [image, setImage] = useState(null);
@@ -26,12 +26,14 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
     'Street Fair': '🛍️ Street Fair',
     'Food & Drink': '🍔 Food & Drink',
     'Pop-up': '📍 Pop-up',
+    'Networking': '🧑‍🤝‍🧑 Networking',
     'Concert / Live Music': '🎶 Concert / Live Music',
     'Neighborhood': '🏘️ Neighborhood',
     'Job': '💼 Job',
+    'Sports': '🎽 Sports',
     'Pet / Animal': '🐕 Pet / Animal',
-    'Networking': '🧑‍🤝‍🧑 Networking',
     'Promotions': '🎁 Promotions',
+    'Education': '📚 Education',
     'Other': 'Other'
   };
 
@@ -101,21 +103,28 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
       const formData = new FormData();
       
       // Append all event info
-      Object.entries(eventInfo).forEach(([key, value]) => {
-        if(key === 'category'){
-          value.forEach((cat) => formData.append('category', cat));
-        }
-        else{
-          formData.append(key, value);
-        }
-        
-      });
+      formData.append('title', eventInfo.title);
+      formData.append('start_date', eventInfo.startDate);
+      formData.append('end_date', eventInfo.endDate);
+      formData.append('cost', eventInfo.cost);
+      formData.append('location', eventInfo.location);
+      formData.append('description', eventInfo.description);
+      formData.append('host', eventInfo.host);
+      formData.append('user_id', eventInfo.userId);
+      eventInfo.category.forEach(cat => formData.append('category', cat));
       
       if (image) {
         formData.append('image', image);
       }
 
-      // !!To do: connect to backend
+      //connect to backend
+      const response = await fetch("http://localhost:4000/api/events", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error("Failed to submit event"); // error in event controller
+
 
       // empty data after submit
       setEventInfo({
@@ -127,7 +136,7 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
         location: '',
         description: '',
         host: '',
-        userid: id
+        userId: id
       });
       setImage(null);
       if(locationInputRef.current){
@@ -208,6 +217,7 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
           <>
             <input
               ref={locationInputRef}
+              name="location"
               type="text"
               placeholder="Enter location or use my location"
               value={eventInfo.location}
@@ -219,6 +229,7 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
           </>
         ) : (
           <input
+            ref={locationInputRef}
             type="text"
             name="location"
             required

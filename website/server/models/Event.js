@@ -1,50 +1,49 @@
 import mongoose from "mongoose";
 
-
 // define schema for Event
 const EventSchema = new mongoose.Schema({
   title: { 
     type: String, 
     required: true,
-    maxLength: 100,
-    required: true
+    maxLength: 100
   },
   description: {
     type: String,
     maxLength: 300,
     default: ""
   },
-  startDate: { 
+  start_date: { 
     type: Date, 
     required: true
   },
-  endDate: { 
+  end_date: { 
     type: Date,
     default: null
   },
   cost: { 
     type: String, 
     enum: ['Free', 'Paid'], 
+    default: 'Free'
   },
   category: {
-    type: String,
-    default: "",
-    enum:['Street Fair','Food & Drink','Pop-up', 'Concert / Live Music','Neighborhood','Job','Pet / Animal','Networking','Promotions','Other'],
-
+    type: [String],
+    default: 'Other',
+    enum:['Street Fair','Food & Drink','Pop-up', 'Concert / Live Music','Neighborhood','Job','Pet / Animal','Networking','Promotions','Sports','Education','Other'],
+    required: true
   },
   location: {
     type: String,
-    default: ""
+    required: true
   },
   host: {
     type: String,
     default: ""
   },
-  userId:{
+  user_id:{
     type: String, 
-    required: true 
+    required: true
   },
-  imageUrl: {
+  image_url: {
     type: String,
     default: ""
   }

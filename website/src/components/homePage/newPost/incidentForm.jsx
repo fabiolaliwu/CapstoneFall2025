@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {useRef, useEffect} from 'react';
+import {useRef } from 'react';
 import './add_post.css';
 import { useLocationInput } from './LocationInput';
 
@@ -68,17 +68,21 @@ function IncidentForm({ currentUser}) {
     try {
         // append all incident info to formData
         const formData = new FormData();
-        Object.entries(incidentInfo).forEach(([key, value]) => {
-          if(key==='category'){
-            value.forEach((cat) => formData.append('category', cat));
-          }
-          else{
-            formData.append(key, value);
-          }
-        });
-        if (image) formData.append('image', image);
-        // !!! TODO: send formData to backend
+        formData.append("title", incidentInfo.title);
+        formData.append("location", incidentInfo.location);
+        formData.append("description", incidentInfo.description);
+        formData.append("user_id", incidentInfo.userid);
+        formData.append("category", incidentInfo.category[0] || "");
+        if (image) formData.append("image", image);  
 
+        // send POST request to server
+        const response = await fetch("http://localhost:4000/api/incidents", {
+          method: "POST",
+          body: formData,
+        });
+        if (!response.ok) throw new Error("Failed to submit incident");
+        
+        // Reset form to default state
         setIncidentInfo({
             title: '',
             location: '',
@@ -114,11 +118,17 @@ function IncidentForm({ currentUser}) {
         <label>Location <span className="required">*</span></label>
         {isLoaded ? (
           <>
-            <input ref={locationInputRef} type="text" placeholder="Enter location or use my location" onChange={handleChange} />
+            <input
+              ref={locationInputRef}
+              name="location"
+              type="text"
+              placeholder="Enter location or use my location"
+            />
             <button type="button" onClick={handleUseMyLocation}>Use My Location</button>
           </>
         ) : (
           <input
+            ref={locationInputRef}
             type="text"
             name="location"
             required
