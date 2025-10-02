@@ -65,3 +65,9 @@ export const deleteContactForm = async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 };
+
+/**
+ * The backend worklow of contact form is reference by 
+https://javascript.plainenglish.io/how-i-integrated-a-mongodb-database-into-my-react-js-project-6cdc331923d3
+to handle formData submission to the mongodb database
+ */
