@@ -32,22 +32,32 @@ export const createNewIncident = async (req, res) => {
     if (req.file) {
         image_url = `/uploads/${req.file.filename}`;
     }
-  
     try {
+        let locationData;
+        try {
+            locationData = typeof location === 'string' ? JSON.parse(location) : location;
+        } catch (parseError) {
+            // If parsing fails, use the string as address with default coordinates
+            locationData = {
+            address: location,
+            coordinates: { lat: 40.7128, lng: -74.0060 }
+            };
+        }
         const incident = await Incident.create({
             title,
             description,
-            location,
+            location: locationData,
             category,
             user_id,
             image_url,
         });
         res.status(200).json(incident);
-    } catch (error) {
+    }catch (error) {
+        console.error("INCIDENT CREATE ERROR:", error);
         res.status(400).json({ error: error.message });
     }
-  }
-
+}
+  
 // DELETE
 export const deleteIncident = async (req, res) => {
     try {

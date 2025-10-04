@@ -34,6 +34,10 @@
     transition: background-color 0.2s ease;
 }
 
+.dropdown-item:hover {
+    background-color: #bdc1c7;
+}
+
 .form-wrapper {
     position: fixed;
     top: 7%;
