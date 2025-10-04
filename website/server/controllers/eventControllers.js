@@ -32,13 +32,23 @@ export const createNewEvent = async (req, res) => {
         image_url = `/uploads/${req.file.filename}`;
     }
     try {
+        let locationData;
+        try {
+            locationData = typeof location === 'string' ? JSON.parse(location) : location;
+        } catch (parseError) {
+            // If parsing fails, use the string as address with default coordinates
+            locationData = {
+            address: location || "Unknown location",
+            coordinates: { lat: 40.7128, lng: -74.0060 }
+            };
+        }
         const event = await Event.create({
             title,
             description,
             start_date,
             end_date,
             cost,
-            location,
+            location: locationData,
             category,
             host,
             user_id,

@@ -21,14 +21,20 @@ export function useLocationInput(onChange) {
         locationInputRef.current,
         { 
           types: ['geocode', 'establishment'],
-          componentRestrictions: { country: 'us' }
+          componentRestrictions: { country: 'us' },
+          fields: ['formatted_address', 'geometry']
         }
       );
-
       autocompleteRef.current.addListener('place_changed', () => {
         const place = autocompleteRef.current.getPlace();
         if (place && place.formatted_address) {
-          onChange(place.formatted_address, place.geometry?.location);
+          const location = place.geometry?.location;
+          const coordinates = location ? { 
+            lat: location.lat(), 
+            lng: location.lng() 
+          } : null;
+          console.log('Coordinates:', coordinates);
+          onChange(place.formatted_address, coordinates);
         }
       });
     }
@@ -39,23 +45,23 @@ export function useLocationInput(onChange) {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-            const { latitude, longitude } = position.coords;
-            const geocoder = new window.google.maps.Geocoder();
-            const latlng = { lat: latitude, lng: longitude };
+          const { latitude, longitude } = position.coords;
+          const geocoder = new window.google.maps.Geocoder();
+          const latlng = { lat: latitude, lng: longitude };
 
-            // Turn Lat and long to address
-            geocoder.geocode({ location: latlng }, (results, status) => {
-                if (status === 'OK' && results[0]) {
-                    const address = results[0].formatted_address;
-                    onChange(address, { lat: latitude, lng: longitude });
-                if(locationInputRef.current) {
-                    locationInputRef.current.value = address;
-                }
-                } else{
-                    console.error("Geocoder faile: " + status);
-                    alert("Unable to retrieve address. Please try again.");
-                }
-            });
+          geocoder.geocode({ location: latlng }, (results, status) => {
+            if (status === 'OK' && results[0]) {
+              const address = results[0].formatted_address;
+              // Return both address and coordinates
+              onChange(address, { lat: latitude, lng: longitude });
+              if(locationInputRef.current) {
+                locationInputRef.current.value = address;
+              }
+            } else {
+              console.error("Geocoder failed: " + status);
+              alert("Unable to retrieve address. Please try again.");
+            }
+          });
         },
         (error) => {
           console.error('Error getting location:', error);
