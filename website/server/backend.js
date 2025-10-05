@@ -6,6 +6,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import incidentRoutes from "./routes/incidents.js";
 import eventRoutes from "./routes/events.js";
+import contactRoutes from "./routes/contacts.js";
 
 dotenv.config();
 
@@ -23,6 +24,8 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Routes
 app.use("/api/Incidents", incidentRoutes);
 app.use("/api/Events", eventRoutes);
+app.use("/api/Contacts", contactRoutes);
+
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)

@@ -1,12 +1,13 @@
 import './bar.css';
 import AddPost from './newPost/add_post'; 
 import { Link, NavLink } from "react-router-dom"; 
+import Logo from '/title.png'
 
 function Bar(){
     return(
         <div className='bar'>
             <div className = 'logo'>
-            <Link to="/home">stay in the loop</Link> 
+            <Link to="/home"><img src= {Logo} alt="Logo goes here"  /></Link> 
             </div>
             <div className ='information'>
                 <div className='addpost'>

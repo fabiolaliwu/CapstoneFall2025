@@ -73,6 +73,16 @@
     font-family: 'Afacad', sans-serif;
     border: 1px solid #999;
 }
+select.input-box{
+    color: black;
+    width: 18vw;
+    padding-top: 10px;
+    padding-left: 6px;
+    cursor: pointer;
+}
+select.input-box:invalid{
+    color: #767575;
+} 
 textarea.input-box{
     height: 230px;
     padding-top: 10px;
@@ -86,6 +96,7 @@ textarea.input-box{
     border: none;
     align-self: flex-end;
     margin-top: 10px;
+    margin-bottom: 10px;
     margin-right: 42px;
     font-family: 'Afacad', sans-serif;
     font-size: 16px;

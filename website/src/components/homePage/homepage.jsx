@@ -2,6 +2,7 @@ import './homepage.css';
 import Bar from './bar';
 import Body from './body';
 import Map from '../Map';
+import Buttons from './buttons';
 
 function Homepage() {
     return (
@@ -11,8 +12,8 @@ function Homepage() {
             </div>
             <div className='content'>
                 <Bar />
-                <Body />
             </div>
+            <Buttons />
         </div>
     )
 }

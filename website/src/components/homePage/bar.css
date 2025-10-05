@@ -35,14 +35,12 @@
     font-size: xxx-large;
     font-weight: bolder;
     height: 100%;
-    width: 85%;
     margin-left: 20px;
     flex:1;
 }
 .information{
     font-size: x-large;
     height: 100%;
-    width: 15%;
     flex-direction: row;
     display: flex;
     gap:30px;
@@ -66,4 +64,8 @@
     justify-content: center;
     min-width: 100px;
     background-color: rgb(255, 255, 255);
+}
+.logo img{
+    height: 90px;
+  
 }

@@ -15,7 +15,7 @@ function Login(){
                         Please enter your details.
                     </div>
                     <form className='login-form'>
-                        <input type="email" placeholder="Email" className='email-input' required />
+                        <input type="username" placeholder="Username" className='username-input' required />
                         <input type="password" placeholder="Password" className='password-input' required />
                         <div className='forgot-password'>
                             <a href="/reset-password">Forgot Password?</a> 
