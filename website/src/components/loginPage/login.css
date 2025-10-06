@@ -30,6 +30,13 @@
     color: #333333;
 }
 
+.message-container {
+    color: red;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
 .username-input, .password-input {
     width: 90%;
     height: 50px;
@@ -53,16 +60,6 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-}
-
-.forgot-password {
-    width: 90%;          
-    margin: 5px auto 10px auto; 
-    text-align: right; 
-}
-.forgot-password a {
-    font-size: 14px;
-    color: #007bff;
 }
 
 .signup-redirect {

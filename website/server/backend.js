@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 import incidentRoutes from "./routes/incidents.js";
 import eventRoutes from "./routes/events.js";
 import contactRoutes from "./routes/contacts.js";
+import userRoutes from "./routes/users.js";
 
 dotenv.config();
 
@@ -22,17 +23,23 @@ app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
-app.use("/api/Incidents", incidentRoutes);
-app.use("/api/Events", eventRoutes);
-app.use("/api/Contacts", contactRoutes);
+app.use("/api/incidents", incidentRoutes);
+app.use("/api/events", eventRoutes);
+app.use("/api/contacts", contactRoutes);
+app.use("/api/users", userRoutes);
 
+// wait for database connection before starting server --> needed for authentication
+const startServer = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("Connected to MongoDB");
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("Connected to MongoDB"))
-  .catch(err => console.error("MongoDB connection error:", err));
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("MongoDB connection error:", err);
+  }
+}; // ai debugging here
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
-// citation:https://javascript.plainenglish.io/how-i-integrated-a-mongodb-database-into-my-react-js-project-6cdc331923d3
+startServer();
