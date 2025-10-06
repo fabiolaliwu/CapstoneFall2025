@@ -30,6 +30,13 @@
     color: #333333;
 }
 
+.message-container {
+    color: red;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
 .password-input, .username-input {
     width: 90%;
     height: 50px;

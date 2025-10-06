@@ -40,6 +40,6 @@ const startServer = async () => {
   } catch (err) {
     console.error("MongoDB connection error:", err);
   }
-};
+}; // ai debugging here
 
 startServer();
