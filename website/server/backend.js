@@ -28,13 +28,18 @@ app.use("/api/events", eventRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/users", userRoutes);
 
+// wait for database connection before starting server --> needed for authentication
+const startServer = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("Connected to MongoDB");
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("Connected to MongoDB"))
-  .catch(err => console.error("MongoDB connection error:", err));
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("MongoDB connection error:", err);
+  }
+};
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
-// citation:https://javascript.plainenglish.io/how-i-integrated-a-mongodb-database-into-my-react-js-project-6cdc331923d3
+startServer();

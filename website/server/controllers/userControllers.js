@@ -2,7 +2,7 @@ import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-// register a new user
+// Register a new user
 export const createNewUser = async (req, res) => { // req is request from frontend, res is response from backend
     console.log("signup route is here"); // Debug log
     
