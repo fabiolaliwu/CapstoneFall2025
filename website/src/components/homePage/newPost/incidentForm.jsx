@@ -9,7 +9,10 @@ function IncidentForm({ currentUser}) {
 
   const [incidentInfo, setIncidentInfo] = useState({
     title: '',
-    location: '',
+    location: {
+      address: '',
+      coordinates: { lat: 0, lng: 0 }
+    },
     description: '',
     category: [],
     userid: id
@@ -29,14 +32,32 @@ function IncidentForm({ currentUser}) {
     'Other' ];
   
   // Location input handle
-  const { locationInputRef, handleUseMyLocation, isLoaded } = useLocationInput((address) => {
-    setIncidentInfo(prev=>({...prev, location:address}));
+  const { locationInputRef, handleUseMyLocation, isLoaded } = useLocationInput((address, coordinates) => {
+    setIncidentInfo(prev => ({
+      ...prev, 
+      location: {
+        address: address,
+        coordinates: coordinates || { lat: 40.7128, lng: -74.0060 } // fallback to NYC coord
+      }
+    }));
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setIncidentInfo((prev) => ({ ...prev, [name]: value }));
+    
+    if (name === "location") {
+      setIncidentInfo((prev) => ({ 
+        ...prev, 
+        location: {
+          ...prev.location,
+          address: value
+        }
+      }));
+    } else {
+      setIncidentInfo((prev) => ({ ...prev, [name]: value }));
+    }
   };
+  
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
@@ -48,7 +69,7 @@ function IncidentForm({ currentUser}) {
         alert('Incident title is required');
       return false;
     }
-    if (!incidentInfo.location.trim()) {
+    if (!incidentInfo.location.address.trim()) {
       alert('Location is required');
       return false;
     }
@@ -69,7 +90,7 @@ function IncidentForm({ currentUser}) {
         // append all incident info to formData
         const formData = new FormData();
         formData.append("title", incidentInfo.title);
-        formData.append("location", incidentInfo.location);
+        formData.append("location", JSON.stringify(incidentInfo.location));
         formData.append("description", incidentInfo.description);
         formData.append("user_id", incidentInfo.userid);
         formData.append("category", incidentInfo.category[0] || "");
@@ -85,7 +106,10 @@ function IncidentForm({ currentUser}) {
         // Reset form to default state
         setIncidentInfo({
             title: '',
-            location: '',
+            location: {
+              address: '',
+              coordinates: { lat: 0, lng: 0 }
+            },
             description: '',
             category: [],
             userid: id
@@ -138,6 +162,7 @@ function IncidentForm({ currentUser}) {
           />
         )}
         <p className="reminder">Reminder: only available in NYC</p>
+        <p>Selected address: {incidentInfo.location.address || 'None'}</p>
 
         <label>Category <span className="required">*</span></label>
         <div className="category-toggle">

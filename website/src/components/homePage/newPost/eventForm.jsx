@@ -11,7 +11,10 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
     endDate: '',
     cost: 'Free', //default
     category: [],
-    location: '',
+    location: {
+      address: '',
+      coordinates: { lat: 0, lng: 0 }
+    },
     description: '',
     host: '',
     userId: id
@@ -38,9 +41,15 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
   };
 
   // Location input autofill
-  const { locationInputRef, handleUseMyLocation, isLoaded } = useLocationInput((address, coords) => {
-    setEventInfo(prev => ({ ...prev, location: address }));
-  })
+  const { locationInputRef, handleUseMyLocation, isLoaded } = useLocationInput((address, coordinates) => {
+    setEventInfo(prev => ({
+      ...prev, 
+      location: {
+        address: address,
+        coordinates: coordinates || { lat: 40.7128, lng: -74.0060 } // fallback to NYC coord
+      }
+    }));
+  });
 
   // Fetch the categories from server 
   useEffect(() => {
@@ -61,16 +70,20 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
 
   
   const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-  
-    setEventInfo((prevInfo) => {
-      return { 
-        ...prevInfo, 
-        [name]: value 
-      };
-    });
-  };  
+    const { name, value } = e.target;
+    
+    if (name === "location") {
+      setEventInfo((prev) => ({
+        ...prev, 
+        location: {
+          ...prev.location,
+          address: value
+        }
+      }));
+    } else {
+      setEventInfo((prev) => ({ ...prev, [name]: value }) );
+    }
+  };
 
   //  image file selection
   const handleImageChange = (e) => {
@@ -85,6 +98,10 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
     }
     if (eventInfo.endDate && new Date(eventInfo.endDate) <= new Date(eventInfo.startDate)) {
       alert('End date must be after start date');
+      return false;
+    }
+    if(!eventInfo.location.address.trim()) {
+      alert('Location is required');
       return false;
     }
     return true;
@@ -107,7 +124,7 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
       formData.append('start_date', eventInfo.startDate);
       formData.append('end_date', eventInfo.endDate);
       formData.append('cost', eventInfo.cost);
-      formData.append('location', eventInfo.location);
+      formData.append('location', JSON.stringify(eventInfo.location));
       formData.append('description', eventInfo.description);
       formData.append('host', eventInfo.host);
       formData.append('user_id', eventInfo.userId);
@@ -133,7 +150,10 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
         endDate: '',
         cost: 'Free',
         category: [],
-        location: '',
+        location: {
+          address: '',
+          coordinates: { lat: 0, lng: 0 }
+        },
         description: '',
         host: '',
         userId: id
@@ -220,8 +240,6 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
               name="location"
               type="text"
               placeholder="Enter location or use my location"
-              value={eventInfo.location}
-              onChange={(e) => setEventInfo(prev => ({ ...prev, location: e.target.value }))}
             />
             <button type="button" onClick={handleUseMyLocation}>
               Use My Location
@@ -239,6 +257,9 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
           />
         )}
         <p className="reminder">Reminder: only available in NYC</p>
+        <p style={{ fontSize: '14px', color: '#666', marginTop: '5px' }}>
+          Selected: {eventInfo.location.address || 'None'}
+        </p>
 
         <label>Organiser</label>
         <input
@@ -298,5 +319,3 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
 }
 
 export default EventForm;
-
-

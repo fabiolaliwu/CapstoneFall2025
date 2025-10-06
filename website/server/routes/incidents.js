@@ -11,17 +11,23 @@ import {
 
 const router = express.Router();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const currentFilePath = fileURLToPath(import.meta.url);
+const currentDir = path.dirname(currentFilePath);
 
-// hanldle image uploads
+// Multer setup
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, "../uploads"));
-      },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
+    // image destination
+    destination: (req, file, callback) => {
+      const uploadFolder = path.join(currentDir, "../uploads");
+      callback(null, uploadFolder);
+    },
+    filename: (req, file, callback) => {
+        const timestamp = Date.now();
+        const fileExtension = path.extname(file.originalname); 
+        const newFileName = `${timestamp}${fileExtension}`; // image filename format
+  
+      callback(null, newFileName);
+    },
 });
 
 const upload = multer({ storage });
