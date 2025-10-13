@@ -3,7 +3,7 @@ import AddPost from './newPost/add_post';
 import { Link, NavLink } from "react-router-dom"; 
 import Logo from '/title.png'
 
-function Bar(){
+function Bar( {currentUser} ) {
     return(
         <div className='bar'>
             <div className = 'logo'>
@@ -11,7 +11,7 @@ function Bar(){
             </div>
             <div className ='information'>
                 <div className='addpost'>
-                    <AddPost />
+                    <AddPost currentUser={currentUser} />
                 </div>
                 <NavLink to="/login" className="login">
                     Sign In

@@ -2,7 +2,7 @@ import './login.css';
 import Bar from '../homePage/bar';
 import { useState } from 'react';
 
-function Login(){
+function Login( {setCurrentUser} ) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
@@ -30,6 +30,7 @@ function Login(){
                 localStorage.setItem('token', data.token); // save jwt as token in local storage
                 localStorage.setItem('user', JSON.stringify(data.user)); // save user info in local storage
 
+                setCurrentUser(data.user);
                 alert('Login successful! thank you');
             }
     

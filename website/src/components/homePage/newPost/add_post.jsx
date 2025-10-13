@@ -3,7 +3,7 @@ import './add_post.css';
 import EventForm from './eventForm.jsx';
 import IncidentForm from './incidentForm';
 
-function AddPost() {
+function AddPost( {currentUser} ) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showForm, setShowForm] = useState(null);
 
@@ -52,8 +52,8 @@ function AddPost() {
         </div>
       )}
 
-      {showForm === 'event' && <EventForm onClose={closeForm} />}
-      {showForm === 'incident' && <IncidentForm onClose={closeForm} />}
+      {showForm === 'event' && <EventForm onClose={closeForm}  currentUser={currentUser}/>}
+      {showForm === 'incident' && <IncidentForm onClose={closeForm} currentUser={currentUser} />}
       
     </div>
   );

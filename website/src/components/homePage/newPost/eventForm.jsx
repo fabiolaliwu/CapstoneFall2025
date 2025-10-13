@@ -3,7 +3,7 @@ import './add_post.css';
 import { useLocationInput } from './LocationInput.jsx';
 
 function EventForm({categoriesFetchStartAsync,currentUser }) {
-  const { id } = currentUser || { id: '0' }; // id: 0 is just for testing purpose
+  const [userId, setUserId] = useState(null);
 
   const [eventInfo, setEventInfo] = useState({
     title: '',
@@ -17,7 +17,7 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
     },
     description: '',
     host: '',
-    userId: id
+    userId: ''
   });
   const [categories, setCategories] = useState([]);
   const [image, setImage] = useState(null);
@@ -39,6 +39,14 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
     'Education': '📚 Education',
     'Other': 'Other'
   };
+
+  // set user id when currentUser load
+  useEffect(() => {
+    if (currentUser?._id) {
+      setUserId(currentUser._id);
+      setEventInfo(prev => ({ ...prev, userId: currentUser._id }));
+    }
+  }, [currentUser]);
 
   // Location input autofill
   const { locationInputRef, handleUseMyLocation, isLoaded } = useLocationInput((address, coordinates) => {
@@ -127,7 +135,11 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
       formData.append('location', JSON.stringify(eventInfo.location));
       formData.append('description', eventInfo.description);
       formData.append('host', eventInfo.host);
-      formData.append('user_id', eventInfo.userId);
+      formData.append('user_id', currentUser?._id || '');
+      if (!currentUser?._id) {
+        alert("You must log in to submit an event.");
+        return false;
+      }
       eventInfo.category.forEach(cat => formData.append('category', cat));
       
       if (image) {
@@ -156,7 +168,7 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
         },
         description: '',
         host: '',
-        userId: id
+        userId: userId
       });
       setImage(null);
       if(locationInputRef.current){
