@@ -26,3 +26,9 @@
     npm run dev
     ```
 
+Running the backend
+    ```sh 
+    cd website/server
+    node backend.js
+    ```
+
