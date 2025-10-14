@@ -33,6 +33,7 @@ function IncidentList({ incidents, onClose }) {
                 coords.lat,
                 coords.lng
             ).toFixed(1);
+            newDistances[incident._id] = distance;
             }
         });
         setDistances(newDistances);
@@ -40,9 +41,9 @@ function IncidentList({ incidents, onClose }) {
     }, [userLocation, incidents]);
 
 
-    // formula to calculate distance between user location and incident location
+    // formula to calculate distance between user location and incident location in miles
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
-        const R = 6371; // km
+        const R = 3958.8; // mi
         const dLat = ((lat2 - lat1) * Math.PI) / 180;
         const dLon = ((lon2 - lon1) * Math.PI) / 180;
         const a =
@@ -79,5 +80,5 @@ export default IncidentList;
 
 /* Citation: 
     - referenced how to use axios from https://levelup.gitconnected.com/fetch-api-data-with-axios-and-display-it-in-a-react-app-with-hooks-3f9c8fa89e7b
-    - use ChatGPT for help with calculating the distance between locations 
+    - use ChatGPT to help with calculating the distance between locations 
 */

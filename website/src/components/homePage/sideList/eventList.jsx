@@ -27,27 +27,23 @@ function EventList({ events, onClose }) {
         events.forEach((event) => {
             const coords = event.location?.coordinates;
             if (userLocation && coords?.lat != null && coords?.lng != null) {
-            distance = calculateDistance(
+            const distance = calculateDistance(
                 userLocation.lat,
                 userLocation.lng,
                 coords.lat,
                 coords.lng
             ).toFixed(1);
+            newDistances[event._id] = distance;
             }
-        console.log('Event ID:', event._id);
-        console.log('Event title:', event.title);
-        console.log('Event location:', event.location);
-        console.log('Event coordinates:', event.location?.coordinates);
         });
-        console.log('Calculated distances:', newDistances);
         setDistances(newDistances);
     }
     }, [userLocation, events]);
 
 
-    // formula to calculate distance between user location and event location
+    // formula to calculate distance between user location and event location in miles
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // km
+    const R = 3958.8; // mi
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLon = ((lon2 - lon1) * Math.PI) / 180;
     const a =
@@ -107,5 +103,5 @@ export default EventList;
 
 /* Citation: 
     - referenced how to use axios from https://levelup.gitconnected.com/fetch-api-data-with-axios-and-display-it-in-a-react-app-with-hooks-3f9c8fa89e7b
-    - use ChatGPT for help with calculating the distance between locations
+    - use ChatGPT to help with calculating the distance between locations
 */
