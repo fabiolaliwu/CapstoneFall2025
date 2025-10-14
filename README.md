@@ -26,7 +26,7 @@
     npm run dev
     ```
 
-Running the backend
+6. In another terminal, run the backend
     ```sh 
     cd website/server
     node backend.js
