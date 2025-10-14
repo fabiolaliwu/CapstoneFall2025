@@ -36,9 +36,7 @@ function Bar(){
                     </div>
                 )}
                 {isLoggedIn ? (
-                    <div className='logout'>
-                        <button onClick={handleLogout} className="logout-button">Logout</button>
-                    </div>
+                    <button onClick={handleLogout} className="logout-button">Log Out</button>
                 ) :
                     <NavLink to="/login" className="login">
                         Sign In

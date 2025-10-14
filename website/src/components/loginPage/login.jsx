@@ -13,7 +13,7 @@ function Login(){
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        setMessage(''); // Clear previous messages
+        setMessage('');
 
         try {
             const response = await fetch('http://localhost:4000/api/users/login', {
@@ -34,7 +34,7 @@ function Login(){
                 localStorage.setItem('user', JSON.stringify(data.user)); // save user info in local storage
 
                 // alert('Login successful! thank you');
-                navigate('/home'); // Redirect to home page
+                navigate('/home'); // redirect to home page
             }
     
         } catch (error) {

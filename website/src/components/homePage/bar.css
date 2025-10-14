@@ -1,7 +1,7 @@
 .bar{
     background-color: rgb(225, 225, 225);
     width: 100%;
-    height: 80px;
+    height: 70px;
     display: flex;
     flex-direction: row;
     font-family:fantasy;
@@ -53,28 +53,6 @@
     width: 100px;
     height: 80px;
 }
-
-
-/* .login{
-    height: 45px;
-    margin:15px;
-    width: 180px;
-    font-size: 16px;
-    font-weight: bold;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.login:hover {
-    background-color: #575555;
-    color: #fff;
-} */
-
 .login {
     height: 45px;
     padding: 0 25px;
@@ -91,8 +69,8 @@
     justify-content: center;
 }
 
-.logout {
-    
+.logout-button {
+    font: inherit;
     height: 45px;
     padding: 0 25px;
     font-size: 16px;
@@ -112,11 +90,16 @@
 .login:hover {
     background-color: #4e97e4;
     color: white;
-    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.logout-button:hover {
+    background-color: #e74c3c;
+    color: white;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
 .logo img{
-    height: 70px;
+    height: 60px;
 }
 
