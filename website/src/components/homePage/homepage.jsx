@@ -24,6 +24,7 @@ function Homepage() {
     useEffect(() => {
         axios.get('http://localhost:4000/api/events')
             .then(response => {
+                console.log('Fetched events:', response.data);
                 setEvents(response.data);
             })
             .catch(error => {
@@ -53,3 +54,4 @@ function Homepage() {
 }
 export default Homepage;
     
+/* Citation: referenced how to use axios from https://levelup.gitconnected.com/fetch-api-data-with-axios-and-display-it-in-a-react-app-with-hooks-3f9c8fa89e7b */
