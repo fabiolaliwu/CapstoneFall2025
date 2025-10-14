@@ -1,47 +1,48 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import './incidentList.css';
 
 function IncidentList({ incidents, onClose }) {
     const [userLocation, setUserLocation] = useState(null);
-    const [distances, setDistances] = useState({}); // Store distances per event
+    const [distances, setDistances] = useState({}); // Store distances per incident
 
-    // Get user location
-    useEffect(() => {
-        if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-            setUserLocation({
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-            });
-            },
-            (error) => console.error('Error getting location:', error)
-        );
-        }
-    }, []);
-
-    // Calculate distances everytime user location or events change
-    useEffect(() => {
-    if (userLocation) {
-        const newDistances = {};
-        incidents.forEach((incident) => {
-            const coords = incident.location?.coordinates;
-            if (userLocation && coords?.lat != null && coords?.lng != null) {
-            distance = calculateDistance(
-                userLocation.lat,
-                userLocation.lng,
-                coords.lat,
-                coords.lng
-            ).toFixed(1);
-            }
-        });
-        setDistances(newDistances);
+  // Get user location
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => console.error('Error getting location:', error)
+      );
     }
-    }, [userLocation, incidents]);
+  }, []);
+
+  // Calculate distances whenever user location or incidents change
+  useEffect(() => {
+    if (userLocation) {
+      const newDistances = {};
+      incidents.forEach((incident) => {
+        const coords = incident.location?.coordinates;
+        if (coords?.lat != null && coords?.lng != null) {
+          const distance = calculateDistance(
+            userLocation.lat,
+            userLocation.lng,
+            coords.lat,
+            coords.lng
+          ).toFixed(1);
+          newDistances[incident._id] = distance;
+        }
+      });
+      setDistances(newDistances);
+    }
+  }, [userLocation, incidents]);
 
 
-    // formula to calculate distance between user location and event location
-    const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  // formula to calculate distance between user location and incident location
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371; // km
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLon = ((lon2 - lon1) * Math.PI) / 180;
@@ -52,50 +53,27 @@ function IncidentList({ incidents, onClose }) {
         Math.sin(dLon / 2) ** 2;
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
-    };
+  };
 
-    return (
-        <div className="incident-list-container">
-        <button className="close-btn" onClick={onClose}>►</button>
-        <div className="incident-list">
-            <header>INCIDENTS</header>
-            <div className="incident-items">
-            {incidents.map((incident) => (
-                <div key={incident._id} className="incident-item">
-                <div className="distance-bar">
-                {distances[incident._id] ?? 0} km away
-                </div>
-                <h3>{incident.title}</h3>
-                <p>{incident.description}</p>
-                <span>
-                    Start Date:{' '}
-                    {new Date(incident.start_date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    })}
-                </span>
-                <br />
-                <span>
-                    End Date:{' '}
-                    {incident.end_date
-                    ? new Date(event.end_date).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        })
-                    : 'None'}
-                </span>
-                </div>
-            ))}
+  return (
+    <div className="incident-list-container">
+      <button className="close-btn" onClick={onClose}>►</button>
+      <div className="incident-list">
+        <header>INCIDENTS</header>
+        <div className="incident-items">
+          {incidents.map((incident) => (
+            <div key={incident._id} className="incident-item">
+              {distances[incident._id] && (
+                <div className="distance-bar">{distances[incident._id]} km away</div>
+              )}
+              <h3>{incident.title}</h3>
+              <p>{incident.description}</p>
             </div>
+          ))}
         </div>
-        </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 export default IncidentList;

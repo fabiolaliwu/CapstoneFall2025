@@ -74,12 +74,6 @@
     color: #666;
 }
 
-/* incident start date */
-.incident-item span {
-    font-size: 12px;
-    color: #999;
-}
-
 .distance-bar {
     background-color: #626262;
     color: white;
