@@ -9,8 +9,12 @@ function Bar({ currentUser }) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     useEffect(() => {
         const token = localStorage.getItem('token');
-        setIsLoggedIn(!!token);
-    }, []);
+        if (token) {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
+        }
+    }, []);        
 
     const handleLogout = () => {
         localStorage.removeItem('token');
