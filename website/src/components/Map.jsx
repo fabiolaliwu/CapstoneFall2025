@@ -52,11 +52,11 @@ const Map = () => {
         setMap(mapInstance);
 
         const eventMarkerIcon = document.createElement('div');
-        eventMarkerIcon.style.fontSize = '1rem'; 
+        eventMarkerIcon.style.fontSize = '2rem'; 
         eventMarkerIcon.innerHTML = '📍';
 
         const incidentMarkerIcon = document.createElement('div');
-        incidentMarkerIcon.style.fontSize = '1rem';
+        incidentMarkerIcon.style.fontSize = '2rem';
         incidentMarkerIcon.innerHTML = '⚠️';
 
         // --- Add Event Markers ---
