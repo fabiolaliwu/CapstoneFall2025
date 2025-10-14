@@ -1,11 +1,22 @@
 import './buttons.css';
 
-function Buttons() {
+function Buttons({ openEvents, openSummary, openIncidents }) {
   return (
     <div className="all-buttons">
-      <button className="event-btn">Events</button>
-      <button className="summary-btn">Summary</button>
-      <button className="Incidents">Incidents</button>
+      <button 
+        onClick={openEvents} 
+        className="event-btn"
+      >Events</button>
+
+      <button 
+        onClick={openSummary} 
+        className="summary-btn"
+      >Summary</button>
+
+      <button 
+        onClick={openIncidents} 
+        className="incident-btn"
+      >Incidents</button>
     </div>
   );
 }
