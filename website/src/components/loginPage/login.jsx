@@ -1,11 +1,14 @@
 import './login.css';
 import Bar from '../homePage/bar';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Login(){
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,11 +29,12 @@ function Login(){
             if (!response.ok) {
                 setMessage(data.error || 'Invalid username or password');
             } else {
-                setMessage(`Welcome back, ${data.user.username}!`);
+                // setMessage(`Welcome back, ${data.user.username}!`);
                 localStorage.setItem('token', data.token); // save jwt as token in local storage
                 localStorage.setItem('user', JSON.stringify(data.user)); // save user info in local storage
 
-                alert('Login successful! thank you');
+                // alert('Login successful! thank you');
+                navigate('/home'); // Redirect to home page
             }
     
         } catch (error) {
