@@ -4,16 +4,16 @@ import Body from './body';
 import Map from '../Map';
 import Buttons from './buttons';
 
-function Homepage() {
+function Homepage({currentUser}) {
     return (
         <div className='homepage'>
             <div className = 'background'>
                 <Map />
             </div>
             <div className='content'>
-                <Bar />
+                <Bar currentUser={currentUser}/>
             </div>
-            <Buttons />
+            <Buttons/>
         </div>
     )
 }

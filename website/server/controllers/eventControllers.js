@@ -31,6 +31,9 @@ export const createNewEvent = async (req, res) => {
     if (req.file) {
         image_url = `/uploads/${req.file.filename}`;
     }
+    if (user_id === '0' || !user_id) {
+        return res.status(401).json({ error: "Unauthorized: User ID is required" });
+    }
     try {
         let locationData;
         try {
