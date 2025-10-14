@@ -105,4 +105,7 @@ function EventList({ events, onClose }) {
 
 export default EventList;
 
-/* Citation: referenced how to use axios from https://levelup.gitconnected.com/fetch-api-data-with-axios-and-display-it-in-a-react-app-with-hooks-3f9c8fa89e7b */
+/* Citation: 
+    - referenced how to use axios from https://levelup.gitconnected.com/fetch-api-data-with-axios-and-display-it-in-a-react-app-with-hooks-3f9c8fa89e7b
+    - use ChatGPT for help with calculating the distance between locations
+*/

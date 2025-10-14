@@ -33,7 +33,6 @@ function Homepage() {
     }, []);
 
     useEffect(() => {
-        console.log("Fetching incidents...");
         axios.get('http://localhost:4000/api/incidents')
             .then(response => {
                 console.log('Fetched incidents:', response.data);
