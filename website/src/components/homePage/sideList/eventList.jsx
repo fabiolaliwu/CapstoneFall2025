@@ -43,16 +43,16 @@ function EventList({ events, onClose }) {
 
     // formula to calculate distance between user location and event location in miles
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 3958.8; // mi
-    const dLat = ((lat2 - lat1) * Math.PI) / 180;
-    const dLon = ((lon2 - lon1) * Math.PI) / 180;
-    const a =
-        Math.sin(dLat / 2) ** 2 +
-        Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) ** 2;
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
+        const R = 3958.8; // radius of earth in miles
+        const dLat = ((lat2 - lat1) * Math.PI) / 180; // convert latitudes from degrees to radians
+        const dLon = ((lon2 - lon1) * Math.PI) / 180;
+        const a =
+            Math.sin(dLat / 2) ** 2 +
+            Math.cos((lat1 * Math.PI) / 180) *
+            Math.cos((lat2 * Math.PI) / 180) *
+            Math.sin(dLon / 2) ** 2; // Haversine formula 
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // find central angle, how far apart in radians
+        return R * c;
     };
 
     return (
@@ -63,34 +63,32 @@ function EventList({ events, onClose }) {
             <div className="event-items">
             {events.map((event) => (
                 <div key={event._id} className="event-item">
-                <div className="distance-bar">
-                {distances[event._id] ?? 0} mi
-                </div>
-                <h3>{event.title}</h3>
-                <p>{event.description}</p>
-                <span>
-                    Start Date:{' '}
-                    {new Date(event.start_date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    })}
-                </span>
-                <br />
-                <span>
-                    End Date:{' '}
-                    {event.end_date
-                    ? new Date(event.end_date).toLocaleDateString('en-US', {
+                    <div className="distance-bar"> {distances[event._id] ?? 0} mi </div>  
+                    <h3>{event.title}</h3>
+                    <p>{event.description}</p>
+                    <span>
+                        Start Date:{' '}
+                        {new Date(event.start_date).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'short',
                         day: 'numeric',
                         hour: '2-digit',
                         minute: '2-digit',
-                        })
-                    : 'None'}
-                </span>
+                        })}
+                    </span>
+                    <br />
+                    <span>
+                        End Date:{' '}
+                        {event.end_date
+                        ? new Date(event.end_date).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            })
+                        : 'None'}
+                    </span>
                 </div>
             ))}
             </div>
@@ -103,5 +101,5 @@ export default EventList;
 
 /* Citation: 
     - referenced how to use axios from https://levelup.gitconnected.com/fetch-api-data-with-axios-and-display-it-in-a-react-app-with-hooks-3f9c8fa89e7b
-    - use ChatGPT to help with calculating the distance between locations
+    - use ChatGPT to help with getting user location and calculating the distance between user and event/incident locations
 */
