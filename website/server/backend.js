@@ -3,11 +3,14 @@ import mongoose from "mongoose";
 import express from "express";
 import cors from "cors";
 import path from "path";
+import http from "http";
+import { Server } from "socket.io";
 import { fileURLToPath } from "url";
 import incidentRoutes from "./routes/incidents.js";
 import eventRoutes from "./routes/events.js";
 import contactRoutes from "./routes/contacts.js";
 import userRoutes from "./routes/users.js";
+import messageRoutes from "./routes/messages.js";
 
 dotenv.config();
 
@@ -27,6 +30,34 @@ app.use("/api/incidents", incidentRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/messages", messageRoutes);
+
+// Create HTTP server and setup socket.io
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("New client connected");
+
+  // EMIT: welcome emit event
+  socket.emit("welcome", "Hello from server!");
+
+  // ON: listen for messages
+  socket.on("sendMessage", (data) => {
+    console.log("Received message:", data);
+    // emit back to all clients
+    io.emit("receiveMessage", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected:", socket.id);
+  });
+
+});
 
 // wait for database connection before starting server --> needed for authentication
 const startServer = async () => {

@@ -5,13 +5,16 @@ import Map from '../Map';
 import Buttons from './buttons';
 import EventList from './sideList/eventList.jsx';   
 import IncidentList from './sideList/incidentList.jsx';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import axios from 'axios';
+import GlobalChat from './live-chat/chatRoom.jsx';
 
-function Homepage() {
+function Homepage({currentUser}) {
     const [openList, setOpenList] = useState('');
     const [events, setEvents] = useState([]);
     const [incidents, setIncidents] = useState([]);
+    const [messages, setMessages] = useState([]);
+    
 
     const toggleList = (listName) => {
         if (openList === listName) {
@@ -56,10 +59,12 @@ function Homepage() {
                 openEvents={() => toggleList('events')}
                 openSummary={() => toggleList('summary')}
                 openIncidents={() => toggleList('incidents')}
+                openMessages={() => toggleList('chat')}
             />
 
             {openList === 'events' && <EventList events={events} onClose={() => setOpenList('')} />}
             {openList === 'incidents' && <IncidentList incidents={incidents} onClose={() => setOpenList('')} />}
+            {openList === 'chat' && <GlobalChat currentUser={currentUser} onClose={() => setOpenList('')} />}
         </div>
     );
 }
