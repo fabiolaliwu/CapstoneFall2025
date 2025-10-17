@@ -63,7 +63,7 @@ function EventList({ events, onClose }) {
             <div className="event-items">
             {events.map((event) => (
                 <div key={event._id} className="event-item">
-                    <div className="distance-bar"> {distances[event._id] ?? 0} mi </div>  
+                    <div className="event-distance-bar"> {distances[event._id] ?? 0} mi </div>  
                     <h3>{event.title}</h3>
                     <p>{event.description}</p>
                     <span>

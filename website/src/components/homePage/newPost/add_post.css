@@ -1,10 +1,10 @@
 .add-btn {
-    height: 45px;
-    font-family: fantasy;
+    height: 42px;
+    font-family: 'Afacad', sans-serif;
     font-size: 20px; 
     font-weight: normal;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
+    background-color: #f3f5f9;
+    border: 1px solid rgb(182, 182, 182);
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
@@ -12,7 +12,7 @@
 }
 
 .add-btn:hover {
-    background-color: #575555;
+    background-color: #d0d1d3;
     color: #fff;
 }
 
@@ -24,15 +24,15 @@
     flex-direction: column;
     gap: 5px;
     border-radius: 10px;
-    width: 200px;
+    width: 160px;
 }
   
 .dropdown-item {
     padding: 10px;
     font-size: 14px;
     border-radius: 8px;
-    border: none;
-    background-color: #c6c6c6;
+    border: 1px solid rgb(136, 136, 136);
+    background-color: #ffffff;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }

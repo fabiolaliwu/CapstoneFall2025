@@ -64,7 +64,7 @@ function IncidentList({ incidents, onClose }) {
             {incidents.map((incident) => (
                 <div key={incident._id} className="incident-item">
                 {(
-                    <div className="distance-bar">{distances[incident._id] ?? 0} mi</div> // Show 0 if distance is undefined
+                    <div className="incident-distance-bar">{distances[incident._id] ?? 0} mi</div> // Show 0 if distance is undefined
                 )}
                 <h3>{incident.title}</h3>
                 <p>{incident.description}</p>

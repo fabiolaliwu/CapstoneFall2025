@@ -23,21 +23,21 @@ function Homepage() {
 
     useEffect(() => {
         const fetchEvents = async () => {
-          try {
-            const response = await axios.get('http://localhost:4000/api/events')
-            setEvents(response.data);
-          } catch (error) {
-            console.error('Error fetching events:', error);
-          }
+            try {
+                const response = await axios.get('http://localhost:4000/api/events')
+                setEvents(response.data);
+            } catch (error) {
+                console.error('Error fetching events:', error);
+            }
         };
     
         const fetchIncidents = async () => {
-          try {
-            const response = await axios.get('http://localhost:4000/api/incidents')
-            setIncidents(response.data);
-          } catch (error) {
-            console.error('Error fetching incidents:', error);
-          }
+            try {
+                const response = await axios.get('http://localhost:4000/api/incidents')
+                setIncidents(response.data);
+            } catch (error) {
+                console.error('Error fetching incidents:', error);
+            }
         };
     
         fetchEvents();
