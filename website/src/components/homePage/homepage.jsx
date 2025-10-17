@@ -5,7 +5,7 @@ import Map from '../Map';
 import Buttons from './buttons';
 import EventList from './sideList/eventList.jsx';   
 import IncidentList from './sideList/incidentList.jsx';
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import GlobalChat from './live-chat/chatRoom.jsx';
 
