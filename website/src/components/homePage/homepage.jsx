@@ -25,26 +25,26 @@ function Homepage({currentUser}) {
     };
 
     useEffect(() => {
-        axios.get('http://localhost:4000/api/events')
-            .then(response => {
-                console.log('Fetched events:', response.data);
+        const fetchEvents = async () => {
+            try {
+                const response = await axios.get('http://localhost:4000/api/events')
                 setEvents(response.data);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Error fetching events:', error);
-            });
-    }, []);
-
-    useEffect(() => {
-        console.log("Fetching incidents...");
-        axios.get('http://localhost:4000/api/incidents')
-            .then(response => {
-                console.log('Fetched incidents:', response.data);
+            }
+        };
+    
+        const fetchIncidents = async () => {
+            try {
+                const response = await axios.get('http://localhost:4000/api/incidents')
                 setIncidents(response.data);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Error fetching incidents:', error);
-            });
+            }
+        };
+    
+        fetchEvents();
+        fetchIncidents();
     }, []);
 
     return (
