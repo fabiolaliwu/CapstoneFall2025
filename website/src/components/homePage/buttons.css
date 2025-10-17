@@ -11,15 +11,17 @@
 }
 
 .all-buttons button {
-  background: #ffffff;
-  color: rgb(0, 0, 0);
-  border: 1.5px solid #000000;
+  background: rgba(160, 160, 160, 0.8);
+  color: rgb(255, 255, 255);
+  border: 0.6px solid #000000;
   border-radius: 30px;
   width: 150px;
-  height: 70px;
+  height: 50px;
   font-size: 20px;
   cursor: pointer;
+  font-family: 'Afacad', sans-serif;
 }
 .all-buttons button:hover {
+  color: black;
   background: #e4e4e4;
 }
