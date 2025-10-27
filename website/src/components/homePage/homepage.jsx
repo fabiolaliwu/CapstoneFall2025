@@ -12,6 +12,7 @@ function Homepage() {
     const [openList, setOpenList] = useState('');
     const [events, setEvents] = useState([]);
     const [incidents, setIncidents] = useState([]);
+    const [userLocation, setUserLocation] = useState(null);
 
     const toggleList = (listName) => {
         if (openList === listName) {
@@ -20,6 +21,23 @@ function Homepage() {
             setOpenList(listName); // Open the selected list
         }
     };
+
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    console.log('Location enabled');
+                    setUserLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    });
+                },
+                (error) => {
+                    console.error('Error getting location', error);
+                }
+            );
+        }
+    }, []);
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -65,4 +83,5 @@ function Homepage() {
 }
 export default Homepage;
 
+// https://dev.to/choiruladamm/how-to-use-geolocation-api-using-reactjs-ndk  https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API/Using_the_Geolocation_API 
 /* Citation: referenced how to use axios from https://levelup.gitconnected.com/fetch-api-data-with-axios-and-display-it-in-a-react-app-with-hooks-3f9c8fa89e7b */
