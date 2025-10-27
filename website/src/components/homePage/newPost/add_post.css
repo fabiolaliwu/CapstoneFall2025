@@ -12,7 +12,7 @@
 }
 
 .add-btn:hover {
-    background-color: #d0d1d3;
+    background-color: #e1e1e1;
     color: #fff;
 }
 
@@ -38,7 +38,7 @@
 }
 
 .dropdown-item:hover {
-    background-color: #bdc1c7;
+    background-color: #e1e1e1;
 }
 
 .form-wrapper {
