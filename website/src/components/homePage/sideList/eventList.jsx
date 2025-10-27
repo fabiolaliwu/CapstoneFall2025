@@ -1,24 +1,8 @@
 import { useState, useEffect } from 'react';
 import './eventList.css';
 
-function EventList({ events, onClose }) {
-    const [userLocation, setUserLocation] = useState(null);
+function EventList({ events, onClose, userLocation }) {
     const [distances, setDistances] = useState({}); // Store distances per event
-
-    // Get user location
-    useEffect(() => {
-        if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-            setUserLocation({
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-            });
-            },
-            (error) => console.error('Error getting location:', error)
-        );
-        }
-    }, []);
 
     // Calculate distances everytime user location or events change
     useEffect(() => {
@@ -37,6 +21,8 @@ function EventList({ events, onClose }) {
             }
         });
         setDistances(newDistances);
+    } else{
+        setDistances({})
     }
     }, [userLocation, events]);
 
