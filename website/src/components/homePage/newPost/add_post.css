@@ -1,7 +1,7 @@
 .add-btn {
     height: 42px;
-    font-family: 'Afacad', sans-serif;
-    font-size: 20px; 
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 16px; 
     font-weight: normal;
     background-color: #f3f5f9;
     border: 1px solid rgb(182, 182, 182);
@@ -52,6 +52,7 @@
     margin-bottom:5px;
     border-radius:10px;
     margin-right:20px;
+    margin-top: 45px;
 }
 
 .form-wrapper form {
@@ -62,7 +63,6 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding:20px;
     border-radius:10px;
-    margin-top: 15px;
 }
 
 .form-wrapper input,

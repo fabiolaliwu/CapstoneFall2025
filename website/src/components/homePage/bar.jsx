@@ -24,10 +24,13 @@ function Bar({ currentUser }) {
 
     return (
         <div className="bar">
+
+            <div className="left-bar">            
             <div className="logo">
                 <Link to="/home"><img src={Logo} alt="Stay in the Loop" /></Link>
             </div>
-            <div className="about">
+                            <hr className="divider" />
+                <div className="about">
                     <NavLink to="/about" className={({ isActive }) => (isActive ? 'active-link' : '')}>
                         About
                     </NavLink>
@@ -38,6 +41,8 @@ function Bar({ currentUser }) {
                         Help
                     </NavLink>
                 </div>
+            </div>
+
             {isLoggedIn && (
                 <div className="search-bar">
                     <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="Search" className="search-icon"/>

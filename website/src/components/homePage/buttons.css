@@ -12,6 +12,7 @@
 
 .all-buttons button {
   background: rgba(160, 160, 160, 0.8);
+  backdrop-filter: blur(8px);
   color: rgb(255, 255, 255);
   border: 0.6px solid #000000;
   border-radius: 30px;
