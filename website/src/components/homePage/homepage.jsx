@@ -7,6 +7,7 @@ import EventList from './sideList/eventList.jsx';
 import IncidentList from './sideList/incidentList.jsx';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import GlobalChat from './live-chat/chatRoom.jsx';
 
 function Homepage({currentUser}) {
     const [openList, setOpenList] = useState('');
@@ -74,8 +75,10 @@ function Homepage({currentUser}) {
                 openEvents={() => toggleList('events')}
                 openSummary={() => toggleList('summary')}
                 openIncidents={() => toggleList('incidents')}
+                openMessages={() => toggleList('chat')}
             />
 
+            {openList === 'chat' && <GlobalChat currentUser={currentUser} onClose={() => setOpenList('')} />}
             {openList === 'events' && <EventList events={events} userLocation={userLocation} onClose={() => setOpenList('')} />}
             {openList === 'incidents' && <IncidentList incidents={incidents} userLocation={userLocation} onClose={() => setOpenList('')} />}
         </div>
