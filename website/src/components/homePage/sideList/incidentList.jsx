@@ -1,24 +1,8 @@
 import { useState, useEffect } from 'react';
 import './incidentList.css';
 
-function IncidentList({ incidents, onClose }) {
-    const [userLocation, setUserLocation] = useState(null);
+function IncidentList({ incidents, onClose, userLocation }) {
     const [distances, setDistances] = useState({}); // Store distances per incident
-
-    // Get user location
-    useEffect(() => {
-        if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-            setUserLocation({
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-            });
-            },
-            (error) => console.error('Error getting location:', error)
-        );
-        }
-    }, []);
 
     // Calculate distances whenever user location or incidents change
     useEffect(() => {
@@ -37,6 +21,9 @@ function IncidentList({ incidents, onClose }) {
             }
         });
         setDistances(newDistances);
+        }
+        else{
+            setDistances({});
         }
     }, [userLocation, incidents]);
 

@@ -3,11 +3,14 @@ import mongoose from "mongoose";
 import express from "express";
 import cors from "cors";
 import path from "path";
+import http from "http";
+import { Server } from "socket.io";
 import { fileURLToPath } from "url";
 import incidentRoutes from "./routes/incidents.js";
 import eventRoutes from "./routes/events.js";
 import contactRoutes from "./routes/contacts.js";
 import userRoutes from "./routes/users.js";
+import messageRoutes from "./routes/messages.js";
 
 dotenv.config();
 
@@ -27,6 +30,35 @@ app.use("/api/incidents", incidentRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/messages", messageRoutes);
+
+// Create HTTP server and setup socket.io
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
+app.set("io", io);
+
+io.on("connection", (socket) => {
+  // EMIT: welcome emit event
+  socket.emit("welcome", "Hello from server!");
+
+  socket.on('joinRoom', (room) => {
+    socket.join(room);
+    console.log(`Client ${socket.id} joined room: ${room}`);
+  });
+  socket.on('leaveRoom', (room) => {
+    socket.leave(room);
+    console.log(`Client ${socket.id} left room: ${room}`);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected:", socket.id);
+  });
+
+});
 
 // wait for database connection before starting server --> needed for authentication
 const startServer = async () => {
@@ -34,7 +66,7 @@ const startServer = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB");
 
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
   } catch (err) {
