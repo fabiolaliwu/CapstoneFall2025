@@ -8,7 +8,7 @@ import IncidentList from './sideList/incidentList.jsx';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function Homepage() {
+function Homepage({currentUser}) {
     const [openList, setOpenList] = useState('');
     const [events, setEvents] = useState([]);
     const [incidents, setIncidents] = useState([]);
@@ -68,7 +68,7 @@ function Homepage() {
                 <Map />
             </div>
             <div className='content'>
-                <Bar />
+                <Bar currentUser={currentUser} />
             </div>
             <Buttons 
                 openEvents={() => toggleList('events')}
@@ -76,8 +76,8 @@ function Homepage() {
                 openIncidents={() => toggleList('incidents')}
             />
 
-            {openList === 'events' && <EventList events={events} onClose={() => setOpenList('')} />}
-            {openList === 'incidents' && <IncidentList incidents={incidents} onClose={() => setOpenList('')} />}
+            {openList === 'events' && <EventList events={events} userLocation={userLocation} onClose={() => setOpenList('')} />}
+            {openList === 'incidents' && <IncidentList incidents={incidents} userLocation={userLocation} onClose={() => setOpenList('')} />}
         </div>
     );
 }
