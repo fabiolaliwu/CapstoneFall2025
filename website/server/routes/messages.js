@@ -1,5 +1,5 @@
 import express from "express";
-import { getMessages, createMessage } from "../controllers/messages.js";
+import { getMessages, createMessage } from "../controllers/messageControllers.js";
 
 const router = express.Router();
 

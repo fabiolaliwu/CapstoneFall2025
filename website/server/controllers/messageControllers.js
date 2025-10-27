@@ -29,32 +29,35 @@ export const getMessages = async (req, res) => {
 // CREATE
 export const createMessage = async (req, res) => {
     console.log("POST /messages body:", req.body);
-    const { text, sender, chat_type='global', ref_id=null } = req.body;
+    const { text, sender, chat_type = 'global', ref_id = null } = req.body;
+    
     if (!text || !sender) {
         return res.status(400).json({ error: "Text and sender are required" });
     }
-    if (chat_type !== 'global' && !ref_id) {
-        return res.status(400).json({ error: "ref_id is required for non-global chats" });
-    }
-
     try {
+        // Create message
         const newMessage = await Message.create({
             text,
             sender,
             chat_type,
-            ref_id
+            ref_id: ref_id || null
         });
-        const populatedMessage = await newMessage.populate("sender", "username");
 
-        //EMIT
-        const io = req.app.get('io');
+        // Then populate the sender field
+        const savedMessage = await Message.findById(newMessage._id)
+            .populate("sender", "username");
+
+        const io = req.app.get("io");
         const room = chat_type === 'global' ? 'global' : `${chat_type}-${ref_id}`;
-        io.to(room).emit('newMessage', populatedMessage);
-        
-        res.status(200).json(populatedMessage);
+
+        console.log(`Emitting new message to room: ${room}`);
+        io.to(room).emit("newMessage", savedMessage);
+
+        res.status(200).json(savedMessage);
     } catch (err) {
+        console.error("Error creating message:", err);
         res.status(500).json({ error: err.message });
     }
 };
 
-// AI modified statement - to generate controllers for messages
+// AI modified statement to generate controllers for messages

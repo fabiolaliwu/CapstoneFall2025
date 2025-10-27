@@ -39,18 +39,19 @@ const io = new Server(server, {
     origin: "*",
   },
 });
+app.set("io", io);
 
 io.on("connection", (socket) => {
-  console.log("New client connected");
-
   // EMIT: welcome emit event
   socket.emit("welcome", "Hello from server!");
 
-  // ON: listen for messages
-  socket.on("sendMessage", (data) => {
-    console.log("Received message:", data);
-    // emit back to all clients
-    io.emit("receiveMessage", data);
+  socket.on('joinRoom', (room) => {
+    socket.join(room);
+    console.log(`Client ${socket.id} joined room: ${room}`);
+  });
+  socket.on('leaveRoom', (room) => {
+    socket.leave(room);
+    console.log(`Client ${socket.id} left room: ${room}`);
   });
 
   socket.on("disconnect", () => {
@@ -65,7 +66,7 @@ const startServer = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB");
 
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
   } catch (err) {

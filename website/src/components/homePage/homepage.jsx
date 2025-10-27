@@ -12,9 +12,7 @@ import GlobalChat from './live-chat/chatRoom.jsx';
 function Homepage({currentUser}) {
     const [openList, setOpenList] = useState('');
     const [events, setEvents] = useState([]);
-    const [incidents, setIncidents] = useState([]);
-    const [messages, setMessages] = useState([]);
-    
+    const [incidents, setIncidents] = useState([]);    
 
     const toggleList = (listName) => {
         if (openList === listName) {
