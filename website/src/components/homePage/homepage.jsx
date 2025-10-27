@@ -12,7 +12,8 @@ import GlobalChat from './live-chat/chatRoom.jsx';
 function Homepage({currentUser}) {
     const [openList, setOpenList] = useState('');
     const [events, setEvents] = useState([]);
-    const [incidents, setIncidents] = useState([]);    
+    const [incidents, setIncidents] = useState([]);
+    const [userLocation, setUserLocation] = useState(null);
 
     const toggleList = (listName) => {
         if (openList === listName) {
@@ -21,6 +22,23 @@ function Homepage({currentUser}) {
             setOpenList(listName); // Open the selected list
         }
     };
+
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    console.log('Location enabled');
+                    setUserLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    });
+                },
+                (error) => {
+                    console.error('Error getting location', error);
+                }
+            );
+        }
+    }, []);
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -51,7 +69,7 @@ function Homepage({currentUser}) {
                 <Map />
             </div>
             <div className='content'>
-                <Bar />
+                <Bar currentUser={currentUser} />
             </div>
             <Buttons 
                 openEvents={() => toggleList('events')}
@@ -60,12 +78,13 @@ function Homepage({currentUser}) {
                 openMessages={() => toggleList('chat')}
             />
 
-            {openList === 'events' && <EventList events={events} onClose={() => setOpenList('')} />}
-            {openList === 'incidents' && <IncidentList incidents={incidents} onClose={() => setOpenList('')} />}
             {openList === 'chat' && <GlobalChat currentUser={currentUser} onClose={() => setOpenList('')} />}
+            {openList === 'events' && <EventList events={events} userLocation={userLocation} onClose={() => setOpenList('')} />}
+            {openList === 'incidents' && <IncidentList incidents={incidents} userLocation={userLocation} onClose={() => setOpenList('')} />}
         </div>
     );
 }
 export default Homepage;
 
+// https://dev.to/choiruladamm/how-to-use-geolocation-api-using-reactjs-ndk  https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API/Using_the_Geolocation_API 
 /* Citation: referenced how to use axios from https://levelup.gitconnected.com/fetch-api-data-with-axios-and-display-it-in-a-react-app-with-hooks-3f9c8fa89e7b */
