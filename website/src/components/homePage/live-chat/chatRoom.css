@@ -1,113 +1,148 @@
 @import url('https://fonts.googleapis.com/earlyaccess/jejugothic.css');
 
-/* reference part of css from eventList.jsx */
 .chat-room-container {
     display: flex;
     height: 100%;
-    width: auto;
-    background-color: #d9e1e3;
+    width: 100%;
+    background-color: #F7F9FC;
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     overflow: hidden;    
 }
 
-/* Main Chat Box */
+/* Chat panel */
 .chat-room {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: #d9e1e3;
-    border-radius: 5px;
-    padding: 10px;
+    background-color: #FFFFFF;
+    padding: 15px;
+    border-radius: 0 10px 10px 0;
     overflow: hidden;
 }
 
+/* Header */
+.chat-header {
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    text-align: left;
+    font-weight: 600;
+    color: #334155;
+    border-bottom: 2px solid #4A6CF7;
+    padding-bottom: 8px;
+    font-family: 'Jeju Gothic', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+/* Messages area */
 .chat-messages {
     flex: 1;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    padding-right: 5px;
 }
 
-.chat-header {
-    margin: 0;
-    margin-bottom: 5px;
-    font-size: 20px;
-    text-align: left;
-    letter-spacing: 0.8px;
-    border-bottom: 1px solid black;
-    font-family: 'Jeju Gothic', sans-serif;
-}
-
+/* Generic message bubble */
 .chat-message {
     position: relative;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 8px 10px;
+    background-color: #F9FAFB;
+    border: 1px solid #E2E8F0;
+    border-radius: 15px;
+    padding: 10px 14px;
     width: fit-content;
-    max-width: 80%;
+    max-width: 70%;
+    margin-top: 6px;
+    font-size: 15px;
+    color: #1E293B;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
 }
 
-/* my messages */
+/* My messages */
 .chat-message.my-message {
     margin-left: auto;
-    background-color: #acc9d0;
-    color: #1d3035;
+    background-color: #4A6CF7;
+    color: #FFFFFF;
+    border: 1px solid #4A6CF7;
+    box-shadow: 0 2px 6px rgba(74, 108, 247, 0.3);
 }
 
-/* Other user msg */
-.other-username {
-    color: #333;
-    font-weight: bold;
-}
+/* Hover timestamp */
 .timestamp {
     position: absolute;
     font-size: 10px;
-    color: #666;
+    color: #94A3B8;
     white-space: nowrap;
     opacity: 0;
     transition: opacity 0.2s ease;
 }
 
-/* Show timestamp on hover */
 .chat-message:hover .timestamp {
     opacity: 1;
 }
+
 .chat-message.my-message .timestamp {
     left: -80px; 
     top: 50%;
     transform: translateY(-50%);
+    color: #94A3B8;
 }
+
 .chat-message:not(.my-message) .timestamp {
     right: -82px;
     top: 50%;
     transform: translateY(-50%);
 }
 
+/* Username for other messages */
+.other-username {
+    color: #475569;
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 3px;
+}
+
+/* Input area */
 .chat-input {
     display: flex;
-    padding: 10px 0;
-    border-top: 1px solid #ccc;
-    background-color: #d9e1e3;
+    padding: 12px 12px;
+    border-top: 1px solid #E2E8F0;
+    background-color: #f9fafb;
     margin-top: 10px;
-
+    gap: 10px;
 }
 
 .chat-input input {
+    height: 45px;
     flex: 1;
-    padding: 8px 12px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+    padding: 8px 14px;
+    border-radius: 25px;
+    border: 1px solid #CBD5E1;
+    font-size: 15px;
+    background-color: #FFFFFF;
+    transition: all 0.2s ease;
+}
+
+.chat-input input:focus {
+    border-color: #4A6CF7;
+    box-shadow: 0 0 4px rgba(74, 108, 247, 0.3);
+    outline: none;
 }
 
 .chat-input button {
-    margin-left: 8px;
-    padding: 8px 12px;
+    width: 80px;
+    background-color: #4A6CF7;
+    color: #FFFFFF;
     border: none;
-    background-color: #6e98a3;
-    color: white;
-    border-radius: 4px;
+    border-radius: 25px;
     cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.chat-input button:hover {
+    background-color: #3652C9;
+    box-shadow: 0 2px 8px rgba(54, 82, 201, 0.4);
 }
