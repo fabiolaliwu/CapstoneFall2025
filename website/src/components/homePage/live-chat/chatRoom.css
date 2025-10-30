@@ -1,55 +1,112 @@
 @import url('https://fonts.googleapis.com/earlyaccess/jejugothic.css');
 
-/* Reference css from eventList.css  */
-.chat-room {    
-    position: fixed;
-    top: 80px;
-    right: 0;
-    width: 300px;
-    height: 80%;
+/* reference part of css from eventList.jsx */
+.chat-room-container {
     display: flex;
-    flex-direction: column;
-    z-index: 1000;
-    background-color: #EBEBEB;
-    border: 1px solid #ccc;
-    border-radius: 5px 0 0 5px;
-    box-shadow: -1px 0 8px rgba(0,0,0,0.1);
+    height: 100%;
+    width: auto;
+    background-color: #d9e1e3;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    overflow: hidden;    
 }
 
-.chat-header {
+/* Main Chat Box */
+.chat-room {
+    flex: 1;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    background-color: #d9e1e3;
+    border-radius: 5px;
     padding: 10px;
-    background-color: #ddd;
-    border-bottom: 1px solid #ccc;
-    font-weight: bold;
+    overflow: hidden;
 }
 
 .chat-messages {
     flex: 1;
-    padding: 10px;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chat-header {
+    margin: 0;
+    margin-bottom: 5px;
+    font-size: 20px;
+    text-align: left;
+    letter-spacing: 0.8px;
+    border-bottom: 1px solid black;
+    font-family: 'Jeju Gothic', sans-serif;
+}
+
+.chat-message {
+    position: relative;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 8px 10px;
+    width: fit-content;
+    max-width: 80%;
+}
+
+/* my messages */
+.chat-message.my-message {
+    margin-left: auto;
+    background-color: #acc9d0;
+    color: #1d3035;
+}
+
+/* Other user msg */
+.other-username {
+    color: #333;
+    font-weight: bold;
+}
+.timestamp {
+    position: absolute;
+    font-size: 10px;
+    color: #666;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* Show timestamp on hover */
+.chat-message:hover .timestamp {
+    opacity: 1;
+}
+.chat-message.my-message .timestamp {
+    left: -80px; 
+    top: 50%;
+    transform: translateY(-50%);
+}
+.chat-message:not(.my-message) .timestamp {
+    right: -82px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .chat-input {
     display: flex;
-    padding: 10px;
+    padding: 10px 0;
     border-top: 1px solid #ccc;
+    background-color: #d9e1e3;
+    margin-top: 10px;
+
 }
 
 .chat-input input {
     flex: 1;
-    padding: 5px 10px;
+    padding: 8px 12px;
     border-radius: 4px;
     border: 1px solid #ccc;
 }
 
 .chat-input button {
-    margin-left: 5px;
-    padding: 5px 10px;
+    margin-left: 8px;
+    padding: 8px 12px;
     border: none;
-    background-color: #555;
+    background-color: #6e98a3;
     color: white;
     border-radius: 4px;
     cursor: pointer;
