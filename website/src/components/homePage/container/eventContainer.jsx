@@ -32,7 +32,7 @@ function EventContainer({ currentUser, userLocation, onClose }) {
                     onSelect={setSelectedEventId}
                 />
             </div>
-
+            <hr className="container-divider" />
             {/* Right side: Chat Room for selected event */}
             <div className="chat-room-container">
                 {selectedEventId ? (

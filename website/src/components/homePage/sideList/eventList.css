@@ -7,71 +7,90 @@
     align-items: flex-start;
     z-index: 1;
     margin: 0;
-    width:auto;
+    width: auto;
+    background-color: #F7F9FC; /* light neutral background */
 }
 
+/* Sidebar Panel */
 .event-list {
     width: 300px;
     height: 100%;
-    background-color: #d9e1e3;
-    border-radius: 5px;
-    box-shadow: rgb(136, 136, 136) 0px 2px 3px 0px;
+    background-color: #FFFFFF;
     padding: 20px;
     overflow-y: auto;
-    transition: transform 0.3s ease-in-out;
-    
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
 }
+
 
 /* Heading */
 .event-list header {
     font-family: 'Jeju Gothic', sans-serif;
     margin-top: 0;
-    margin-bottom: 5px;
-    font-size: 20px;
+    margin-bottom: 10px;
+    font-size: 22px;
     text-align: left;
     letter-spacing: 0.8px;
-    border-bottom: 1px solid rgb(0, 0, 0);
+    color: #334155;
+    border-bottom: 2px solid #4A6CF7;
+    padding-bottom: 8px;
 }
 
 /* Each event item */
 .event-item {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
+    background-color: #F9FAFB;
+    border: 1px solid #E2E8F0;
     border-radius: 15px;
     padding: 15px 18px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    margin-bottom: 12px;
+    cursor: pointer;
 }
 
-/* event name */
+/* Hover & Active States */
+.event-item:hover {
+    background-color: #EEF4FF;
+    border-color: #4A6CF7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(74, 108, 247, 0.15);
+}
+
+.event-item.active {
+    background-color: #DDE7FF;
+    border-color: #4A6CF7;
+    box-shadow: 0 4px 12px rgba(74, 108, 247, 0.25);
+}
+
+/* Event name */
 .event-item h3 {
     margin: 0;
-    font-size: 16px;
-    color: #333;
+    font-size: 17px;
+    font-weight: 600;
+    color: #1E293B;
 }
 
-/* event description */
+/* Event description */
 .event-item p {
-    margin: 5px 0;
+    margin: 6px 0;
     font-size: 14px;
-    color: #666;
+    color: #475569;
 }
 
-/* event start date */
+/* Event start date */
 .event-item span {
     font-size: 12px;
-    color: #999;
+    color: #64748B;
 }
 
+/* Distance badge */
 .event-distance-bar {
-    background-color: #6e98a3;
+    background-color: #4A6CF7;
     color: white;
     font-size: 12px;
-    padding: 4px 8px;
-    border-radius: 15px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 12px;
     margin-bottom: 8px;
     width: fit-content;
+    box-shadow: 0 2px 5px rgba(74, 108, 247, 0.2);
 }
-  
