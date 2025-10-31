@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './eventList.css';
 
-function EventList({ events, onClose, userLocation }) {
+function EventList({ events, onClose, userLocation, onSelect }) {
     const [distances, setDistances] = useState({}); // Store distances per event
 
     // Calculate distances everytime user location or events change
@@ -43,12 +43,16 @@ function EventList({ events, onClose, userLocation }) {
 
     return (
         <div className="event-list-container">
-        <button className="close-btn" onClick={onClose}>►</button>
+        {/* <button className="close-btn" onClick={onClose}>►</button> */}
         <div className="event-list">
             <header>EVENTS</header>
             <div className="event-items">
             {events.map((event) => (
-                <div key={event._id} className="event-item">
+                <div 
+                    key={event._id} 
+                    className="event-item" 
+                    onClick={() => onSelect(event._id)}
+                >
                     <div className="event-distance-bar"> {distances[event._id] ?? 0} mi </div>  
                     <h3>{event.title}</h3>
                     <p>{event.description}</p>

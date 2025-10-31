@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './incidentList.css';
 
-function IncidentList({ incidents, onClose, userLocation }) {
+function IncidentList({ incidents, onClose, userLocation, onSelect }) {
     const [distances, setDistances] = useState({}); // Store distances per incident
 
     // Calculate distances whenever user location or incidents change
@@ -44,12 +44,17 @@ function IncidentList({ incidents, onClose, userLocation }) {
 
     return (
         <div className="incident-list-container">
-        <button className="close-btn" onClick={onClose}>►</button>
+        {/* <button className="close-btn" onClick={onClose}>►</button> */}
         <div className="incident-list">
             <header>INCIDENTS</header>
             <div className="incident-items">
             {incidents.map((incident) => (
-                <div key={incident._id} className="incident-item">
+                // <div key={incident._id} className="incident-item">
+                <div 
+                    key={incident._id} 
+                    className="incident-item" 
+                    onClick={() => onSelect(incident._id)}
+                >
                 {(
                     <div className="incident-distance-bar">{distances[incident._id] ?? 0} mi</div> // Show 0 if distance is undefined
                 )}
