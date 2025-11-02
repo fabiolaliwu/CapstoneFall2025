@@ -66,7 +66,7 @@ function Homepage({currentUser}) {
     return (
         <div className='homepage'>
             <div className = 'background'>
-                <Map />
+                <Map userLocation={userLocation} />
             </div>
             <div className='content'>
                 <Bar currentUser={currentUser} />

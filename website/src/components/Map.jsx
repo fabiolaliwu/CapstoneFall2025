@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 
-const Map = () => {
+const Map = ({userLocation}) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const [events, setEvents] = useState([]);
@@ -46,7 +46,7 @@ const Map = () => {
       if (mapRef.current) {
         const mapInstance = new Map(mapRef.current, {
           center: { lat: 40.7128, lng: -74.0060 },
-          zoom: 12.25,
+          zoom: 12,
           mapId: 'ba9f438e91bcc80eeddbc99c'
         });
         setMap(mapInstance);
@@ -58,6 +58,27 @@ const Map = () => {
         const incidentMarkerIcon = document.createElement('div');
         incidentMarkerIcon.style.fontSize = '2rem';
         incidentMarkerIcon.innerHTML = '⚠️';
+
+        if (userLocation) {
+          const userMarkerIcon = document.createElement('div');
+          // blue dot created by google gemini
+          userMarkerIcon.style.width = '16px'; 
+          userMarkerIcon.style.height = '16px';
+          userMarkerIcon.style.backgroundColor = '#1A73E8';
+          userMarkerIcon.style.borderRadius = '50%';
+          userMarkerIcon.style.border = '2px solid #FFFFFF'; 
+          userMarkerIcon.style.boxShadow = '0 0 5px rgba(0, 0, 0, 0.5)';
+
+          const userMarker = new AdvancedMarkerElement({
+            map: mapInstance,
+            position: userLocation,
+            title: "Current Location",
+            content: userMarkerIcon,
+          });
+      
+          mapInstance.setCenter(userLocation);
+          mapInstance.setZoom(15); 
+        }
 
         // --- Add Event Markers ---
         events.forEach(event => {
@@ -108,7 +129,7 @@ const Map = () => {
         });
       }
     });
-  }, [events, incidents]);
+  }, [events, incidents, userLocation]);
 
   return <div ref={mapRef} style={{ height: '100%', width: '100%' }} />;
 };
