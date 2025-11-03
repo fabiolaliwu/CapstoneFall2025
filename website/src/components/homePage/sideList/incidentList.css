@@ -59,6 +59,16 @@
     background-color: #DDE7FF;
     border-color: #6e98a3;
     box-shadow: 0 4px 12px rgba(74, 108, 247, 0.25);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.incident-item:hover {
+    transform: translateY(-3px) scale(1.01); 
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); 
+    cursor: pointer;
 }
 
 /* incident name */

@@ -14,7 +14,7 @@
 /* Sidebar Panel */
 .event-list {
     width: 300px;
-    height: 100%;
+    height: 95%;
     background-color: #FFFFFF;
     padding: 20px;
     overflow-y: auto;
@@ -59,6 +59,12 @@
     background-color: #DDE7FF;
     border-color: #6e98a3;
     box-shadow: 0 4px 12px rgba(74, 108, 247, 0.25);
+}
+
+.event-item:hover {
+    transform: translateY(-3px) scale(1.01); 
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); 
+    cursor: pointer;
 }
 
 /* Event name */
