@@ -89,5 +89,5 @@ export default EventList;
 
 /* Citation: 
     - referenced how to use axios from https://levelup.gitconnected.com/fetch-api-data-with-axios-and-display-it-in-a-react-app-with-hooks-3f9c8fa89e7b
-    - use ChatGPT to help with getting user location and calculating the distance between user and event/incident locations
+    - used ChatGPT to help with getting user location and calculating the distance between user and incident locations
 */

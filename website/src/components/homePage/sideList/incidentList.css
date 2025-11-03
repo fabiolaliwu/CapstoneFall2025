@@ -1,63 +1,63 @@
 @import url('https://fonts.googleapis.com/earlyaccess/jejugothic.css');
 
 .incident-list-container {
-    position: fixed;
+    position: relative; 
     display: flex;
-    top: 80px;
-    right: 0;
-    height: 80%;
-    display: flex;
-    align-items: center;
-    z-index: 1000;
+    height: 100%;
+    align-items: flex-start;
+    z-index: 1;
+    margin: 0;
+    width: auto;
+    background-color: #F7F9FC; /* light neutral background */
 }
 
+/* Sidebar Panel */
 .incident-list {
     width: 300px;
-    height: 100%;
-    margin-top: 35px;
-    background-color: #d9e1e3;
-    border-radius: 5px;
-    box-shadow: rgb(136, 136, 136) 0px 2px 3px 0px;
+    height: 95%;
+    background-color: #FFFFFF; /* #d9e1e3 */
     padding: 20px;
     overflow-y: auto;
-    transition: transform 0.2s ease-in-out;
-}
-
-.close-btn {
-    top: 50%;
-    margin-right: -1px;
-    background-color: #cecece;
-    color: rgb(0, 0, 0);
-    border: none;
-    padding: 15px 6px;
-    cursor: pointer;
-    border-radius: 4px;
-    box-shadow: rgb(136, 136, 136) 0px 2px 2px 0px;
-    font-size: 14px;
-    z-index: 1001;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
 }
 
 /* Heading */
 .incident-list header {
     font-family: 'Jeju Gothic', sans-serif;
     margin-top: 0;
-    margin-bottom: 5px;
-    font-size: 20px;
+    margin-bottom: 10px;
+    font-size: 22px;
     text-align: left;
     letter-spacing: 0.8px;
-    border-bottom: 1px solid rgb(0, 0, 0);
+    color: #334155;
+    border-bottom: 2px solid #6e98a3;
+    padding-bottom: 8px;
 }
 
-/* Each incident */
+/* Each incident item */
 .incident-item {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
+    background-color: #F9FAFB;
+    border: 1px solid #E2E8F0;
     border-radius: 15px;
     padding: 15px 18px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+/* Hover & Active States */
+.incident-item:hover {
+    background-color: #EEF4FF;
+    border-color: #6e98a3;  /* #4A6CF7 */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(74, 108, 247, 0.15);
+}
+
+.incident-item.active {
+    background-color: #DDE7FF;
+    border-color: #6e98a3;  /* #4A6CF7 */
+    box-shadow: 0 4px 12px rgba(74, 108, 247, 0.25);
 }
 
 .incident-item:hover {
@@ -66,27 +66,36 @@
     cursor: pointer;
 }
 
-/* incident name */
+/* Incident name */
 .incident-item h3 {
     margin: 0;
-    font-size: 16px;
-    color: #333;
+    font-size: 17px;
+    font-weight: 600;
+    color: #1E293B;
 }
 
-/* incident description */
+/* Incident description */
 .incident-item p {
-    margin: 5px 0;
+    margin: 6px 0;
     font-size: 14px;
-    color: #666;
+    color: #475569;
 }
 
+/* Incident start/end date */
+.incident-item span {
+    font-size: 12px;
+    color: #64748B;
+}
+
+/* Distance badge */
 .incident-distance-bar {
-    background-color: #6e98a3;
+    background-color: #6e98a3; /* #4A6CF7 */
     color: white;
     font-size: 12px;
-    padding: 4px 8px;
-    border-radius: 15px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 12px;
     margin-bottom: 8px;
     width: fit-content;
+    box-shadow: 0 2px 5px rgba(74, 108, 247, 0.2);
 }
-  

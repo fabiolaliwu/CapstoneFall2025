@@ -125,6 +125,7 @@
 }
 
 .chat-input input:focus {
+    border-color: #6e98a3;;
     border-color: #6e98a3; 
     box-shadow: 0 0 4px rgba(74, 108, 247, 0.3);
     outline: none;
@@ -143,6 +144,6 @@
 }
 
 .chat-input button:hover {
-    background-color: #3652C9;
+    background-color: #5b828b;;
     box-shadow: 0 2px 8px rgba(54, 82, 201, 0.4);
 }

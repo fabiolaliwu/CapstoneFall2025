@@ -1,4 +1,4 @@
-.event-container {
+.incident-container {
     display: flex;
     flex-direction: row;
     width: 80%;
@@ -7,11 +7,11 @@
     border-radius: 10px;
     overflow: hidden;
     position: relative;
-    top: 75px;
+    top: 100px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
-.event-list {
+.incident-list {
     flex: 1;
     width: 300px;
     height: 100%;
@@ -40,7 +40,6 @@
     text-align: center;
     flex: 2;
     font-size: 36px;
-    color:#6e98a3;
 }
 .chat-placeholder p{
     color: #6e98a3;
@@ -48,5 +47,4 @@
 .container-divider {
   border-left: 1px solid rgb(206, 206, 206);
   height: 80vh;
-  color:#6e98a3;
 }
