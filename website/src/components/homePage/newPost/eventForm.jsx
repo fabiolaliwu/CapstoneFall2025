@@ -3,7 +3,10 @@ import './add_post.css';
 import { useLocationInput } from './LocationInput.jsx';
 
 function EventForm({categoriesFetchStartAsync,currentUser }) {
-  const [userId, setUserId] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [image, setImage] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [eventTypes] = useState(['Free', 'Paid']);
 
   const [eventInfo, setEventInfo] = useState({
     title: '',
@@ -17,12 +20,8 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
     },
     description: '',
     host: '',
-    userId: ''
+    userId: currentUser?._id || ''
   });
-  const [categories, setCategories] = useState([]);
-  const [image, setImage] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [eventTypes] = useState(['Free', 'Paid']);
 
   // mapping the category to include emoji to the frontend
   const categoryMap = {
@@ -43,9 +42,9 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
   // set user id when currentUser load
   useEffect(() => {
     if (currentUser?._id) {
-      setUserId(currentUser._id);
-      setEventInfo(prev => ({ ...prev, userId: currentUser._id }));
+      setEventInfo(prev => ({ ...prev, userId: currentUser?._id }));
     }
+    
   }, [currentUser]);
 
   // Location input autofill
@@ -112,6 +111,11 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
       alert('Location is required');
       return false;
     }
+    if (!eventInfo.category.length) {
+      alert('Please select a category');
+      return false;
+    }
+    
     return true;
   };    
 
@@ -135,11 +139,8 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
       formData.append('location', JSON.stringify(eventInfo.location));
       formData.append('description', eventInfo.description);
       formData.append('host', eventInfo.host);
-      formData.append('user_id', currentUser?._id || '');
-      if (!currentUser?._id) {
-        alert("You must log in to submit an event.");
-        return false;
-      }
+      formData.append('user_id', currentUser._id);
+      
       eventInfo.category.forEach(cat => formData.append('category', cat));
       
       if (image) {
@@ -168,7 +169,7 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
         },
         description: '',
         host: '',
-        userId: userId
+        userId: currentUser?._id || ''
       });
       setImage(null);
       if(locationInputRef.current){

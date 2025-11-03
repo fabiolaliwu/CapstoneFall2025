@@ -56,7 +56,7 @@ function Homepage({currentUser}) {
     return (
         <div className='homepage'>
             <div className = 'background'>
-                <Map searchQuery={searchQuery}/>
+                <Map searchQuery={searchQuery} userLocation={userLocation} />
             </div>
             <div className='content'>
                 <Bar currentUser={currentUser} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />

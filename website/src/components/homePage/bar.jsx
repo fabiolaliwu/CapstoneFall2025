@@ -72,7 +72,15 @@ function Bar({ currentUser, searchQuery, setSearchQuery }) {
                     <hr className="divider" />
                 )}
                 {isLoggedIn ? (
-                    <button onClick={handleLogout} className="logout-button">Log Out</button>
+                    <>
+                    {/* Profile button */}
+                    <NavLink to="/profile" className="profile-btn" title="Profile">
+                        :D
+                    </NavLink>
+
+                    {/* Logout button */}
+                    <button onClick={handleLogout} className="logout-button">Logout</button>
+                    </>
                 ) : 
                     <NavLink to="/login" className="login">
                         Sign In

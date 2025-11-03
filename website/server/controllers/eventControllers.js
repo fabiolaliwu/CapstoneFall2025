@@ -75,3 +75,13 @@ export const deleteEvent = async (req, res) => {
     }
   };
   
+// Events By User
+export const getEventsByUser = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const events = await Event.find({ user_id: userId });
+        res.status(200).json(events);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};

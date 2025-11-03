@@ -15,7 +15,7 @@
 .event-list {
     width: 300px;
     height: 95%;
-    background-color: #FFFFFF;
+    background-color: #FFFFFF; /* #d9e1e3 */
     padding: 20px;
     overflow-y: auto;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
@@ -31,7 +31,7 @@
     text-align: left;
     letter-spacing: 0.8px;
     color: #334155;
-    border-bottom: 2px solid #4A6CF7;
+    border-bottom: 2px solid #6e98a3;
     padding-bottom: 8px;
 }
 
@@ -50,14 +50,14 @@
 /* Hover & Active States */
 .event-item:hover {
     background-color: #EEF4FF;
-    border-color: #4A6CF7;
+    border-color: #6e98a3;  /* #4A6CF7 */
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(74, 108, 247, 0.15);
 }
 
 .event-item.active {
     background-color: #DDE7FF;
-    border-color: #4A6CF7;
+    border-color: #6e98a3;  /* #4A6CF7 */
     box-shadow: 0 4px 12px rgba(74, 108, 247, 0.25);
 }
 
@@ -90,7 +90,7 @@
 
 /* Distance badge */
 .event-distance-bar {
-    background-color: #4A6CF7;
+    background-color: #6e98a3; /* #4A6CF7 */
     color: white;
     font-size: 12px;
     font-weight: 500;
