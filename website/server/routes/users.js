@@ -6,6 +6,7 @@ import {
     makeAdmin,
     deleteUser,
     loginUser,
+    getUserById,
 } from "../controllers/userControllers.js";
 
 const router = express.Router();
@@ -25,4 +26,6 @@ router.delete("/:id", deleteUser);
 // POST login user
 router.post("/login", loginUser);
 
+// GET user by id
+router.get("/:id", getUserById);
 export default router;

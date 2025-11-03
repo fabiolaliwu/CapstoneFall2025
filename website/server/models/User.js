@@ -2,6 +2,10 @@
 
 import mongoose from "mongoose";
 const UserSchema = new mongoose.Schema({
+  _id: {
+    type: mongoose.Schema.Types.UUID, // use UUID for user IDs
+    default: () => mongoose.Types.UUID(),
+  },
   username: {
     type: String,
     required: true,
