@@ -4,6 +4,7 @@ import Login from "./components/loginPage/login";
 import Signup from "./components/signupPage/signup";
 import About from "./components/aboutPage/about";
 import Help from "./components/helpPage/help";
+import Profile from "./components/profilePage/profile";
 import './index.css'
 import { useState, useEffect } from "react";
 
@@ -27,6 +28,7 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/help" element={<Help />} />
+                <Route path="/profile" element={<Profile currentUser={currentUser}/>} />
             </Routes>
         </Router>
     );
