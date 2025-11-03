@@ -61,3 +61,8 @@ router.post("/", upload.single("image"), createNewEvent);
 router.delete("/:id", deleteEvent);
 
 export default router;
+
+
+/* Citation: referenced how to connect search bar to backend from: 
+https://medium.com/@aniagudo.godson/running-a-simple-search-query-on-mongodb-atlas-using-express-nodejs-1-making-basic-queries-a426e2bd9478 
+*/

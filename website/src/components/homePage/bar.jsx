@@ -26,11 +26,7 @@ function Bar({ currentUser, searchQuery, setSearchQuery }) {
     const handleSearch = async (e) => {
         e.preventDefault();
     };
-
-    // search incident
-
-
-
+    
     return (
         <div className="bar">
 
