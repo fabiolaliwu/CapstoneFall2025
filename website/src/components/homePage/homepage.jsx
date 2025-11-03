@@ -52,9 +52,9 @@ function Homepage({currentUser}) {
                 openEvents={() => toggleList('events')}
                 openSummary={() => toggleList('summary')}
                 openIncidents={() => toggleList('incidents')}
-                openMessages={() => toggleList('chat')}
+                // openMessages={() => toggleList('chat')}
             />
-            {openList === 'chat' && <GlobalChat currentUser={currentUser} onClose={() => setOpenList('')} />}
+            {/* {openList === 'chat' && <GlobalChat currentUser={currentUser} onClose={() => setOpenList('')} />} */}
             {openList === 'events' && < EventContainer currentUser={currentUser} events={events} userLocation={userLocation} onClose={() => setOpenList('')} /> }
             {openList === 'incidents' && < IncidentContainer currentUser={currentUser} incidents={incidents} userLocation={userLocation} onClose={() => setOpenList('')} /> }
         </div>

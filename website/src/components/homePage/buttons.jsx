@@ -18,11 +18,6 @@ function Buttons({ openEvents, openSummary, openIncidents, openMessages }) {
         className="incident-btn"
       >Incidents</button>
 
-      <button 
-        onClick={openMessages} 
-        className="message-btn"
-      > Chat
-      </button>
     </div>
   );
 }

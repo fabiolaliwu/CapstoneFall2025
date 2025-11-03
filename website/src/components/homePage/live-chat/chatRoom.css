@@ -27,7 +27,7 @@
     text-align: left;
     font-weight: 600;
     color: #334155;
-    border-bottom: 2px solid #4A6CF7;
+    border-bottom: 2px solid #6e98a3;
     padding-bottom: 8px;
     font-family: 'Jeju Gothic', sans-serif;
     letter-spacing: 0.5px;
@@ -62,9 +62,9 @@
 /* My messages */
 .chat-message.my-message {
     margin-left: auto;
-    background-color: #4A6CF7;
+    background-color: #6e98a3;;
     color: #FFFFFF;
-    border: 1px solid #4A6CF7;
+    border: 1px solid #6e98a3;
     box-shadow: 0 2px 6px rgba(74, 108, 247, 0.3);
 }
 
@@ -125,14 +125,14 @@
 }
 
 .chat-input input:focus {
-    border-color: #4A6CF7;
+    border-color: #6e98a3;;
     box-shadow: 0 0 4px rgba(74, 108, 247, 0.3);
     outline: none;
 }
 
 .chat-input button {
     width: 80px;
-    background-color: #4A6CF7;
+    background-color: #6e98a3;;
     color: #FFFFFF;
     border: none;
     border-radius: 25px;
@@ -143,6 +143,6 @@
 }
 
 .chat-input button:hover {
-    background-color: #3652C9;
+    background-color: #5b828b;;
     box-shadow: 0 2px 8px rgba(54, 82, 201, 0.4);
 }

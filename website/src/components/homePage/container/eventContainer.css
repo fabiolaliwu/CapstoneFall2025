@@ -40,11 +40,13 @@
     text-align: center;
     flex: 2;
     font-size: 36px;
+    color:#6e98a3;
 }
 .chat-placeholder p{
-    color: #4A6CF7;
+    color: #6e98a3;;
 }
 .container-divider {
   border-left: 1px solid rgb(206, 206, 206);
   height: 80vh;
+  color:#6e98a3;
 }
