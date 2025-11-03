@@ -4,7 +4,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Logo from '/titlelogo.png';
 
-function Bar({ currentUser }) {
+function Bar({ currentUser, searchQuery, setSearchQuery }) {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     useEffect(() => {
@@ -22,12 +22,20 @@ function Bar({ currentUser }) {
         navigate('/home');
     };
 
+    // search for event and incident
+    const handleSearch = async (e) => {
+        e.preventDefault();
+    };
+    
     return (
         <div className="bar">
+
+            <div className="left-bar">            
             <div className="logo">
                 <Link to="/home"><img src={Logo} alt="Stay in the Loop" /></Link>
             </div>
-            <div className="about">
+                            <hr className="divider" />
+                <div className="about">
                     <NavLink to="/about" className={({ isActive }) => (isActive ? 'active-link' : '')}>
                         About
                     </NavLink>
@@ -38,11 +46,20 @@ function Bar({ currentUser }) {
                         Help
                     </NavLink>
                 </div>
+            </div>
             {isLoggedIn && (
-                <div className="search-bar">
+                <>
+                <form className="search-bar" onSubmit={handleSearch}>
                     <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="Search" className="search-icon"/>
-                    <input type="text" className="search-input"/>
-                </div>
+                    <input 
+                        type="text" 
+                        className="search-input"
+                        placeholder="Enter a keyword"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    </form>
+                </>
             )}
 
             <div className="information">

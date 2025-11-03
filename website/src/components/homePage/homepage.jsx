@@ -3,17 +3,18 @@ import Bar from './bar';
 import Body from './body';
 import Map from '../Map';
 import Buttons from './buttons';
-import EventList from './sideList/eventList.jsx';   
 import IncidentList from './sideList/incidentList.jsx';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import GlobalChat from './live-chat/chatRoom.jsx';
+import EventContainer from './container/eventContainer.jsx';
 
 function Homepage({currentUser}) {
     const [openList, setOpenList] = useState('');
     const [events, setEvents] = useState([]);
     const [incidents, setIncidents] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const toggleList = (listName) => {
         if (openList === listName) {
@@ -41,15 +42,6 @@ function Homepage({currentUser}) {
     }, []);
 
     useEffect(() => {
-        const fetchEvents = async () => {
-            try {
-                const response = await axios.get('http://localhost:4000/api/events')
-                setEvents(response.data);
-            } catch (error) {
-                console.error('Error fetching events:', error);
-            }
-        };
-    
         const fetchIncidents = async () => {
             try {
                 const response = await axios.get('http://localhost:4000/api/incidents')
@@ -58,18 +50,16 @@ function Homepage({currentUser}) {
                 console.error('Error fetching incidents:', error);
             }
         };
-    
-        fetchEvents();
         fetchIncidents();
     }, []);
 
     return (
         <div className='homepage'>
             <div className = 'background'>
-                <Map userLocation={userLocation} />
+                <Map searchQuery={searchQuery} userLocation={userLocation} />
             </div>
             <div className='content'>
-                <Bar currentUser={currentUser} />
+                <Bar currentUser={currentUser} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             </div>
             <Buttons 
                 openEvents={() => toggleList('events')}
@@ -77,9 +67,8 @@ function Homepage({currentUser}) {
                 openIncidents={() => toggleList('incidents')}
                 openMessages={() => toggleList('chat')}
             />
-
             {openList === 'chat' && <GlobalChat currentUser={currentUser} onClose={() => setOpenList('')} />}
-            {openList === 'events' && <EventList events={events} userLocation={userLocation} onClose={() => setOpenList('')} />}
+            {openList === 'events' && < EventContainer currentUser={currentUser} events={events} userLocation={userLocation} onClose={() => setOpenList('')} /> }
             {openList === 'incidents' && <IncidentList incidents={incidents} userLocation={userLocation} onClose={() => setOpenList('')} />}
         </div>
     );

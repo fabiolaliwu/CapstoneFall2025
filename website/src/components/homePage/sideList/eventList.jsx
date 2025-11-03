@@ -23,7 +23,7 @@ const calculateDistance = (loc1, loc2) => {
     return distance;
 };
 
-function EventList({ events, onClose, userLocation }) {
+function EventList({ events, onClose, userLocation, onSelect }) {
     const sortedEvents = [...events].sort((a, b) => {
         const locA = a.location ? a.location.coordinates : null;
         const locB = b.location ? b.location.coordinates : null;
@@ -36,7 +36,7 @@ function EventList({ events, onClose, userLocation }) {
 
     return (
         <div className="event-list-container">
-        <button className="close-btn" onClick={onClose}>►</button>
+        {/* <button className="close-btn" onClick={onClose}>►</button> */}
         <div className="event-list">
             <header>EVENTS</header>
             <div className="event-items">
@@ -45,7 +45,11 @@ function EventList({ events, onClose, userLocation }) {
                 const distance = calculateDistance(userLocation, eventLocation);
 
                 return(
-                <div key={event._id} className="event-item">
+                <div 
+                    key={event._id} 
+                    className="event-item" 
+                    onClick={() => onSelect(event._id)}
+                >
                     <div className="event-distance-bar"> {distance.toFixed(2)} mi </div>  
                     <h3>{event.title}</h3>
                     <p>{event.description}</p>
