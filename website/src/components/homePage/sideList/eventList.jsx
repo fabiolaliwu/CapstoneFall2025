@@ -1,45 +1,38 @@
 import { useState, useEffect } from 'react';
 import './eventList.css';
 
+const calculateDistance = (loc1, loc2) => {
+    if (!loc1 || !loc2) return Infinity; 
+
+    const toRad = (degree) => degree * (Math.PI / 180);
+
+    const R = 3958.8;
+    const dLat = toRad(loc2.lat - loc1.lat);
+    const dLon = toRad(loc2.lng - loc1.lng);
+    
+    const lat1Rad = toRad(loc1.lat);
+    const lat2Rad = toRad(loc2.lat);
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; 
+
+    return distance;
+};
+
 function EventList({ events, onClose, userLocation }) {
-    const [distances, setDistances] = useState({}); // Store distances per event
+    const sortedEvents = [...events].sort((a, b) => {
+        const locA = a.location ? a.location.coordinates : null;
+        const locB = b.location ? b.location.coordinates : null;
 
-    // Calculate distances everytime user location or events change
-    useEffect(() => {
-    if (userLocation) {
-        const newDistances = {};
-        events.forEach((event) => {
-            const coords = event.location?.coordinates;
-            if (userLocation && coords?.lat != null && coords?.lng != null) {
-            const distance = calculateDistance(
-                userLocation.lat,
-                userLocation.lng,
-                coords.lat,
-                coords.lng
-            ).toFixed(1);
-            newDistances[event._id] = distance;
-            }
-        });
-        setDistances(newDistances);
-    } else{
-        setDistances({})
-    }
-    }, [userLocation, events]);
+        const distA = calculateDistance(userLocation, locA);
+        const distB = calculateDistance(userLocation, locB);
 
-
-    // formula to calculate distance between user location and event location in miles
-    const calculateDistance = (lat1, lon1, lat2, lon2) => {
-        const R = 3958.8; // radius of earth in miles
-        const dLat = ((lat2 - lat1) * Math.PI) / 180; // convert latitudes from degrees to radians
-        const dLon = ((lon2 - lon1) * Math.PI) / 180;
-        const a =
-            Math.sin(dLat / 2) ** 2 +
-            Math.cos((lat1 * Math.PI) / 180) *
-            Math.cos((lat2 * Math.PI) / 180) *
-            Math.sin(dLon / 2) ** 2; // Haversine formula 
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // find central angle, how far apart in radians
-        return R * c;
-    };
+        return distA - distB;
+    });
 
     return (
         <div className="event-list-container">
@@ -47,9 +40,13 @@ function EventList({ events, onClose, userLocation }) {
         <div className="event-list">
             <header>EVENTS</header>
             <div className="event-items">
-            {events.map((event) => (
+            {sortedEvents.map((event, index) => {
+                const eventLocation = event.location ? event.location.coordinates : null;
+                const distance = calculateDistance(userLocation, eventLocation);
+
+                return(
                 <div key={event._id} className="event-item">
-                    <div className="event-distance-bar"> {distances[event._id] ?? 0} mi </div>  
+                    <div className="event-distance-bar"> {distance.toFixed(2)} mi </div>  
                     <h3>{event.title}</h3>
                     <p>{event.description}</p>
                     <span>
@@ -76,7 +73,8 @@ function EventList({ events, onClose, userLocation }) {
                         : 'None'}
                     </span>
                 </div>
-            ))}
+                );
+            })}
             </div>
         </div>
         </div>

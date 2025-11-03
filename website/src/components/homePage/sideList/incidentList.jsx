@@ -1,46 +1,38 @@
 import { useState, useEffect } from 'react';
 import './incidentList.css';
 
+const calculateDistance = (loc1, loc2) => {
+    if (!loc1 || !loc2) return Infinity; 
+
+    const toRad = (degree) => degree * (Math.PI / 180);
+
+    const R = 3958.8;
+    const dLat = toRad(loc2.lat - loc1.lat);
+    const dLon = toRad(loc2.lng - loc1.lng);
+    
+    const lat1Rad = toRad(loc1.lat);
+    const lat2Rad = toRad(loc2.lat);
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; 
+
+    return distance;
+};
+
 function IncidentList({ incidents, onClose, userLocation }) {
-    const [distances, setDistances] = useState({}); // Store distances per incident
+    const sortedIncidents = [...incidents].sort((a, b) => {
+        const locA = a.location ? a.location.coordinates : null;
+        const locB = b.location ? b.location.coordinates : null;
 
-    // Calculate distances whenever user location or incidents change
-    useEffect(() => {
-        if (userLocation) {
-        const newDistances = {};
-        incidents.forEach((incident) => {
-            const coords = incident.location?.coordinates;
-            if (coords?.lat != null && coords?.lng != null) {
-            const distance = calculateDistance(
-                userLocation.lat,
-                userLocation.lng,
-                coords.lat,
-                coords.lng
-            ).toFixed(1);
-            newDistances[incident._id] = distance;
-            }
-        });
-        setDistances(newDistances);
-        }
-        else{
-            setDistances({});
-        }
-    }, [userLocation, incidents]);
+        const distA = calculateDistance(userLocation, locA);
+        const distB = calculateDistance(userLocation, locB);
 
-
-    // formula to calculate distance between user location and incident location in miles
-    const calculateDistance = (lat1, lon1, lat2, lon2) => {
-        const R = 3958.8; // radius of earth in miles
-        const dLat = ((lat2 - lat1) * Math.PI) / 180; // convert latitudes from degrees to radians
-        const dLon = ((lon2 - lon1) * Math.PI) / 180;
-        const a =
-            Math.sin(dLat / 2) ** 2 +
-            Math.cos((lat1 * Math.PI) / 180) *
-            Math.cos((lat2 * Math.PI) / 180) *
-            Math.sin(dLon / 2) ** 2; // Haversine formula 
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // find central angle, how far apart in radians
-        return R * c;
-    };
+        return distA - distB;
+    });
 
     return (
         <div className="incident-list-container">
@@ -48,15 +40,20 @@ function IncidentList({ incidents, onClose, userLocation }) {
         <div className="incident-list">
             <header>INCIDENTS</header>
             <div className="incident-items">
-            {incidents.map((incident) => (
+            {sortedIncidents.map((incident, index) => {
+                const incidentLocation = incident.location ? incident.location.coordinates : null;
+                const distance = calculateDistance(userLocation, incidentLocation);
+
+                return(
                 <div key={incident._id} className="incident-item">
                 {(
-                    <div className="incident-distance-bar">{distances[incident._id] ?? 0} mi</div> // Show 0 if distance is undefined
+                    <div className="incident-distance-bar">{distance.toFixed(2)} mi</div> // Show 0 if distance is undefined
                 )}
                 <h3>{incident.title}</h3>
                 <p>{incident.description}</p>
                 </div>
-            ))}
+                );
+            })}
             </div>
         </div>
         </div>
