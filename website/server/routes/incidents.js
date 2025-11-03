@@ -7,6 +7,7 @@ import {
     getIncidents,
     createNewIncident,
     deleteIncident,
+    getIncidentsByUser
   } from "../controllers/incidentControllers.js";
 
 const router = express.Router();
@@ -43,5 +44,8 @@ router.post("/", upload.single("image"), createNewIncident);
 
 // DELETE
 router.delete("/:id", deleteIncident);
+
+// GET incidents by user
+router.get("/user/:userId", getIncidentsByUser);
 
 export default router;

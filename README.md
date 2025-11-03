@@ -29,6 +29,8 @@
 6. In another terminal, run the backend
     ```sh 
     cd website/server
+    npm install socket.io
+    npm install express cors
     node backend.js
     ```
 

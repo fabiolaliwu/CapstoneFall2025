@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import {useRef } from 'react';
 import './add_post.css';
 import { useLocationInput } from './LocationInput';
 
 function IncidentForm({ currentUser}) {
-
-  const [userId, setUserId] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [image, setImage] = useState(null);
 
   const [incidentInfo, setIncidentInfo] = useState({
     title: '',
@@ -15,10 +14,8 @@ function IncidentForm({ currentUser}) {
     },
     description: '',
     category: [],
-    userId: ''
+    userId: currentUser?._id || ''
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [image, setImage] = useState(null);
 
   const incidentCategories = [
     'Train Delayed',
@@ -34,9 +31,9 @@ function IncidentForm({ currentUser}) {
   // set user id when currentUser load
   useEffect(() => {
     if (currentUser?._id) {
-      setUserId(currentUser._id);
       setIncidentInfo(prev => ({ ...prev, userId: currentUser._id }) );
     }
+    
   }, [currentUser]);
   
   // Location input handle
@@ -90,10 +87,7 @@ function IncidentForm({ currentUser}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!currentUser?._id) {
-      alert("You must log in to submit an incident.");
-      return;
-    }
+
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -104,11 +98,7 @@ function IncidentForm({ currentUser}) {
         formData.append("title", incidentInfo.title);
         formData.append("location", JSON.stringify(incidentInfo.location));
         formData.append("description", incidentInfo.description)
-        formData.append('user_id', currentUser?._id || '');
-        if (!currentUser?._id) {
-          alert("You must log in to submit an event.");
-          return false;
-        }
+        formData.append('user_id', currentUser._id);
 
         formData.append("category", incidentInfo.category[0] || "");
         if (image) formData.append("image", image);  
@@ -129,7 +119,7 @@ function IncidentForm({ currentUser}) {
             },
             description: '',
             category: [],
-            userId: userId
+            userId: currentUser?._id || ''
         });
         setImage(null);
 

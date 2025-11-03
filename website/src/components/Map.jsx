@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 
-const Map = ({ searchQuery }) => {
+const Map = ({ searchQuery, userLocation }) => {
   const mapRef = useRef(null);
-  const mapInstanceRef = useRef(null); 
   const [events, setEvents] = useState([]);
-  const [incidents, setIncidents] = useState([]);
+  const [incidents, setIncidents] = useState([]);  
+  const mapInstanceRef = useRef(null);
+  const markerLibRef = useRef(null); 
   const eventMarkersRef = useRef([]); 
   const incidentMarkersRef = useRef([]);
 
@@ -13,22 +14,24 @@ const Map = ({ searchQuery }) => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch('http://localhost:4000/api/events');
-        const data = await res.json();
+        const response = await fetch('http://localhost:4000/api/events');
+        const data = await response.json();
         setEvents(data);
-      } catch (err) {
-        console.error('Error fetching events:', err);
+      } catch (error) {
+        console.error('Error fetching events:', error);
       }
     };
+
     const fetchIncidents = async () => {
       try {
-        const res = await fetch('http://localhost:4000/api/incidents');
-        const data = await res.json();
+        const response = await fetch('http://localhost:4000/api/incidents');
+        const data = await response.json();
         setIncidents(data);
-      } catch (err) {
-        console.error('Error fetching incidents:', err);
+      } catch (error) {
+        console.error('Error fetching incidents:', error);
       }
     };
+
     fetchEvents();
     fetchIncidents();
   }, []);
@@ -43,12 +46,18 @@ const Map = ({ searchQuery }) => {
 
     loader.load().then(async () => {
       const { Map } = await google.maps.importLibrary("maps");
-      const map = new Map(mapRef.current, {
-        center: { lat: 40.7128, lng: -74.0060 },
-        zoom: 12.25,
-        mapId: 'ba9f438e91bcc80eeddbc99c'
-      });
-      mapInstanceRef.current = map;
+      const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+      markerLibRef.current = { AdvancedMarkerElement };
+
+      if (mapRef.current && !mapInstanceRef.current) {
+        const map = new Map(mapRef.current, {
+          center: { lat: 40.7128, lng: -74.0060 },
+          zoom: 12,
+          mapId: 'ba9f438e91bcc80eeddbc99c'
+        });
+        mapInstanceRef.current = map;
+      }
     });
   }, []);
 
@@ -80,14 +89,37 @@ const Map = ({ searchQuery }) => {
     const filteredIncidents = searchQuery
       ? incidents.filter(incident =>
           incident.title.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+        )
       : incidents;
-      
+
+    // User location marker
+    if (userLocation) {
+      const userMarkerIcon = document.createElement('div');
+      userMarkerIcon.style.width = '16px'; 
+      userMarkerIcon.style.height = '16px';
+      userMarkerIcon.style.backgroundColor = '#1A73E8';
+      userMarkerIcon.style.borderRadius = '50%';
+      userMarkerIcon.style.border = '2px solid #FFFFFF'; 
+      userMarkerIcon.style.boxShadow = '0 0 5px rgba(0, 0, 0, 0.5)';
+
+      const { AdvancedMarkerElement } = markerLibRef.current || {};
+      if (AdvancedMarkerElement && userLocation) {
+        const userMarker = new AdvancedMarkerElement({
+          map,
+          position: userLocation,
+          title: "Current Location",
+          content: userMarkerIcon,
+        });
+      }
+
+      map.setCenter(userLocation);
+      map.setZoom(15);
+    }
 
     // Add Event markers
     filteredEvents.forEach(event => {
       if (event.location?.coordinates) {
-        const marker = new google.maps.marker.AdvancedMarkerElement({
+        const marker = new markerLibRef.current.AdvancedMarkerElement({
           map,
           position: event.location.coordinates,
           title: event.title,
@@ -106,7 +138,7 @@ const Map = ({ searchQuery }) => {
     // Add Incident markers
     filteredIncidents.forEach(incident => {
       if (incident.location?.coordinates) {
-        const marker = new google.maps.marker.AdvancedMarkerElement({
+        const marker = new markerLibRef.current.AdvancedMarkerElement({
           map,
           position: incident.location.coordinates,
           title: incident.title,
@@ -121,7 +153,7 @@ const Map = ({ searchQuery }) => {
         incidentMarkersRef.current.push(marker);
       }
     });
-  }, [events, incidents, searchQuery]);
+  }, [events, incidents, searchQuery, userLocation]);
 
   return <div ref={mapRef} style={{ height: '100%', width: '100%' }} />;
 };
