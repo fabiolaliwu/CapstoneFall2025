@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import './incidentList.css';
 
-// Helper function to calculate distance in miles using the Haversine formula
 const calculateDistance = (loc1, loc2) => {
     if (!loc1 || !loc2) return Infinity;
 
     const toRad = (degree) => degree * (Math.PI / 180);
-    const R = 3958.8; // Earth radius in miles
-
+    const R = 3958.8;
     const dLat = toRad(loc2.lat - loc1.lat);
     const dLon = toRad(loc2.lng - loc1.lng);
     const lat1Rad = toRad(loc1.lat);
@@ -18,11 +16,12 @@ const calculateDistance = (loc1, loc2) => {
         Math.cos(lat1Rad) * Math.cos(lat2Rad) *
         Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
+    const distance = R * c;
+
+    return distance;
 };
 
 function IncidentList({ incidents, onClose, userLocation, onSelect }) {
-    // Compute and sort incidents by distance
     const sortedIncidents = [...incidents].sort((a, b) => {
         const locA = a.location ? a.location.coordinates : null;
         const locB = b.location ? b.location.coordinates : null;
@@ -46,13 +45,36 @@ function IncidentList({ incidents, onClose, userLocation, onSelect }) {
                             <div
                                 key={incident._id}
                                 className="incident-item"
-                                onClick={() => onSelect && onSelect(incident._id)}
+                                onClick={() => onSelect(incident._id)}
                             >
                                 <div className="incident-distance-bar">
-                                    {distance === Infinity ? 'N/A' : `${distance.toFixed(2)} mi`}
+                                    {distance.toFixed(2)} mi
                                 </div>
                                 <h3>{incident.title}</h3>
                                 <p>{incident.description}</p>
+                                <span>
+                                    Start Date:{' '}
+                                    {new Date(incident.start_date).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                    })}
+                                </span>
+                                <br />
+                                <span>
+                                    End Date:{' '}
+                                    {incident.end_date
+                                        ? new Date(incident.end_date).toLocaleDateString('en-US', {
+                                              year: 'numeric',
+                                              month: 'short',
+                                              day: 'numeric',
+                                              hour: '2-digit',
+                                              minute: '2-digit',
+                                          })
+                                        : 'None'}
+                                </span>
                             </div>
                         );
                     })}
@@ -64,7 +86,7 @@ function IncidentList({ incidents, onClose, userLocation, onSelect }) {
 
 export default IncidentList;
 
-/* Citation:
+/* Citation: 
     - referenced how to use axios from https://levelup.gitconnected.com/fetch-api-data-with-axios-and-display-it-in-a-react-app-with-hooks-3f9c8fa89e7b
-    - used ChatGPT to assist with location distance calculation logic
+    - used ChatGPT to help with getting user location and calculating the distance between user and incident locations
 */
