@@ -1,6 +1,6 @@
 import './buttons.css';
 
-function Buttons({ openEvents, openSummary, openIncidents }) {
+function Buttons({ openEvents, openSummary, openIncidents, openMessages }) {
   return (
     <div className="all-buttons">
       <button 
@@ -17,6 +17,12 @@ function Buttons({ openEvents, openSummary, openIncidents }) {
         onClick={openIncidents} 
         className="incident-btn"
       >Incidents</button>
+
+      <button 
+        onClick={openMessages} 
+        className="message-btn"
+      > Chat
+      </button>
     </div>
   );
 }
