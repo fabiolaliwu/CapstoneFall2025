@@ -14,6 +14,7 @@ function Homepage({currentUser}) {
     const [events, setEvents] = useState([]);
     const [incidents, setIncidents] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const toggleList = (listName) => {
         if (openList === listName) {
@@ -55,10 +56,10 @@ function Homepage({currentUser}) {
     return (
         <div className='homepage'>
             <div className = 'background'>
-                <Map />
+                <Map searchQuery={searchQuery}/>
             </div>
             <div className='content'>
-                <Bar currentUser={currentUser} />
+                <Bar currentUser={currentUser} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             </div>
             <Buttons 
                 openEvents={() => toggleList('events')}

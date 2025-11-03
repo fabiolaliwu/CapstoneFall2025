@@ -4,7 +4,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Logo from '/titlelogo.png';
 
-function Bar({ currentUser }) {
+function Bar({ currentUser, searchQuery, setSearchQuery }) {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     useEffect(() => {
@@ -21,6 +21,15 @@ function Bar({ currentUser }) {
         setIsLoggedIn(false);
         navigate('/home');
     };
+
+    // search for event and incident
+    const handleSearch = async (e) => {
+        e.preventDefault();
+    };
+
+    // search incident
+
+
 
     return (
         <div className="bar">
@@ -42,12 +51,19 @@ function Bar({ currentUser }) {
                     </NavLink>
                 </div>
             </div>
-
             {isLoggedIn && (
-                <div className="search-bar">
+                <>
+                <form className="search-bar" onSubmit={handleSearch}>
                     <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="Search" className="search-icon"/>
-                    <input type="text" className="search-input"/>
-                </div>
+                    <input 
+                        type="text" 
+                        className="search-input"
+                        placeholder="Enter a keyword"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    </form>
+                </>
             )}
 
             <div className="information">

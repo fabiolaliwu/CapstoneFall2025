@@ -2,6 +2,7 @@ import express from "express";
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
+import Event from "../models/Event.js";
 import {
     getAllEvents,
     getEventById,
@@ -32,6 +33,20 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
+// Search events by keyword
+router.get("/search", async (req, res) => {
+    const { keyword } = req.query;
+    try {
+        const regex = new RegExp(keyword, "i");
+        const events = await Event.find({
+            $or: [{ title: regex }, { description: regex }, { "location.address": regex }],
+        });
+        res.status(200).json(events);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 // GET all events:
 router.get("/", getAllEvents);
