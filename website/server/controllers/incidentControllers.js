@@ -72,6 +72,17 @@ export const deleteIncident = async (req, res) => {
     }
 };
 
+// Incidents by User
+export const getIncidentsByUser = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const userIncidents = await Incident.find({ user_id: userId });
+        res.status(200).json(userIncidents);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+
 
   
 /**

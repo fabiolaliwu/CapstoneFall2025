@@ -1,10 +1,12 @@
 //define schema for user
 
 import mongoose from "mongoose";
+import { v4 as uuidv4 } from 'uuid';
+
 const UserSchema = new mongoose.Schema({
   _id: {
-    type: mongoose.Schema.Types.UUID, // use UUID for user IDs
-    default: () => mongoose.Types.UUID(),
+    type: String, // use UUID for user IDs
+    default: uuidv4,
   },
   username: {
     type: String,
