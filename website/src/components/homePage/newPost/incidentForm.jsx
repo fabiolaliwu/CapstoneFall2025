@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import './add_post.css';
 import { useLocationInput } from './LocationInput';
 
-function IncidentForm({ currentUser}) {
+function IncidentForm({ currentUser, onSubmitSuccess }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [image, setImage] = useState(null);
 
@@ -109,6 +109,8 @@ function IncidentForm({ currentUser}) {
           body: formData,
         });
         if (!response.ok) throw new Error("Failed to submit incident");
+
+        onSubmitSuccess();
         
         // Reset form to default state
         setIncidentInfo({

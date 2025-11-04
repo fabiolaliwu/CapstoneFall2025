@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './add_post.css';
 import { useLocationInput } from './LocationInput.jsx';
 
-function EventForm({categoriesFetchStartAsync,currentUser }) {
+function EventForm({categoriesFetchStartAsync,currentUser , onSubmitSuccess}) {
   const [categories, setCategories] = useState([]);
   const [image, setImage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -154,6 +154,7 @@ function EventForm({categoriesFetchStartAsync,currentUser }) {
       });
 
       if (!response.ok) throw new Error("Failed to submit event"); // error in event controller
+      onSubmitSuccess();
 
 
       // empty data after submit

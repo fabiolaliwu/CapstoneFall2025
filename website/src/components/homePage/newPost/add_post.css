@@ -123,3 +123,29 @@ p, .reminder{
     margin-bottom: 0px;
     color:#86a1b4
 }
+
+
+.popup-message {
+  position: fixed;
+  top: 70px; /* adjust for navbar height */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #4caf50;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: fadeIn 0.3s ease;
+  z-index: 2000;
+}
+
+.popup button.popup-close {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
