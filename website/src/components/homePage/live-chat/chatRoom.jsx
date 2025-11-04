@@ -1,11 +1,7 @@
-import {use, useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import io from "socket.io-client";
 import './chatRoom.css';
 import axios from "axios";
-import { set } from "mongoose";
-
-//This chatroom side list implementation is for testing purpose only
-//Will route under event/incident page later
 
 const socket = io("http://localhost:4000");
 
@@ -13,38 +9,44 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null, onClose }) 
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const [loading, setLoading] = useState(true);
+    
+    const getSenderId = (user) => user?.uuid || user?._id || user;
+    // Get username from sender
+    const getUsername = (sender) => {
+        if (!sender) return "Unknown";
+        return sender.username || "Unknown";
+    };
 
-    // choose room for API and socket
+    // Determine room
     const room = chatType === "global" ? "global" : `${chatType}-${chatId}`;
 
     // fetch chat title for selected event/incident
     const [chatTitle, setChatTitle] = useState(
         chatType === "global" ? "Global Chat" : `${chatType.charAt(0).toUpperCase() + chatType.slice(1)} Chat`
-    )
+    );
 
     // pull previous chat messages
     useEffect(() => {
         const fetchMessages = async () => {
             try {
                 const response = await axios.get(`http://localhost:4000/api/messages?chat_type=${chatType}&ref_id=${chatId}`);
-                
+
                 if (chatType !== "global" && chatId) {
                     const resTitle = await axios.get(`http://localhost:4000/api/${chatType}s/${chatId}`);
                     setChatTitle(resTitle.data.title || `${chatType} Chat`);
                 }
-
                 // if the event/incident has no message yet
-                if(response.data.length === 0 && chatType !== 'global'){
+                if (response.data.length === 0 && chatType !== 'global') {
                     const initMessage = {
                         text: `${chatType} chat started.`,
-                        sender: currentUser._id,
+                        sender: getSenderId(currentUser),
                         chat_type: chatType,
                         ref_id: chatId,
+                        createdAt: new Date().toISOString(),
                     };
                     await axios.post('http://localhost:4000/api/messages', initMessage);
                     setMessages([initMessage]);
-                }
-                else{
+                } else {
                     setMessages(response.data);
                 }
                 setLoading(false);
@@ -56,16 +58,14 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null, onClose }) 
         if(chatType === "global" || chatId){
             fetchMessages();
         }
-    }, [chatType, chatId, currentUser._id]);
+    },[chatType, chatId, currentUser]);
 
     // Setup socket listeners
     useEffect(() => {
         socket.emit('joinRoom', room);
 
         const handleNewMessage = (message) => {
-            console.log('Received new message:', message);
             setMessages(prev => {
-                // Avoid duplicates by checking message ID
                 if (!prev.find(msg => msg._id === message._id)) {
                     return [...prev, message];
                 }
@@ -81,11 +81,11 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null, onClose }) 
 
     // Send message
     const sendMessage = async () => {
-        if (newMessage.trim() === "" || !currentUser?._id) return;
+        if (newMessage.trim() === "" || !getSenderId(currentUser)) return;
 
         const messageData = {
             text: newMessage,
-            sender: currentUser._id,
+            sender: getSenderId(currentUser),
             chat_type: chatType,
             ref_id: chatType !== "global" ? chatId : null,
         };
@@ -99,40 +99,33 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null, onClose }) 
         }
     }
     const handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter'){
             sendMessage();
         }
     }
     return (
         <div className="chat-room-container">
             <div className="chat-room">
-            <div className="chat-header">
-                {chatTitle}
-            </div>
+                <div className="chat-header">{chatTitle}</div>
 
                 <div className="chat-messages">
                     {loading ? (
                         <p>Loading messages...</p>
-                    ): messages.map((msg, index) => (
+                    ) : messages.map((msg, index) => (
                         <div
                             key={msg._id || index}
-                            className={`chat-message ${msg.sender?._id === currentUser?._id ? "my-message" : ""}`}
+                            className={`chat-message ${getSenderId(msg.sender) === getSenderId(currentUser) ? "my-message" : ""}`}
                         >
-                            {msg.sender?._id !== currentUser?._id && (
+                            {getSenderId(msg.sender) !== getSenderId(currentUser) && (
                                 <strong className="other-username">
-                                    {(msg.sender?.username || "Unknown") + ": "}
+                                    {getUsername(msg.sender) + ": "}
                                 </strong>
                             )}
                             <span className="message-text">{msg.text}</span>
                             <span className="timestamp">
-                                {new Date(msg.createdAt).toLocaleDateString([], {
-                                    month: "short",
-                                    day: "numeric"
-                                })}{" - "}
-                                {new Date(msg.createdAt).toLocaleTimeString([], {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                })}
+                                {new Date(msg.createdAt).toLocaleDateString([], { month: "short", day: "numeric" })}
+                                {" - "}
+                                {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                             </span>
                         </div>
                     ))}
@@ -152,7 +145,7 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null, onClose }) 
         </div>
     );
 }
-    
+
 export default ChatRoom;
 
 // reference the workflow at this doc:
