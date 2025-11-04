@@ -5,7 +5,6 @@ import Map from '../Map';
 import Buttons from './buttons';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import GlobalChat from './live-chat/chatRoom.jsx';
 import EventContainer from './container/eventContainer.jsx';
 import IncidentContainer from './container/incidentContainer.jsx';
 
@@ -53,9 +52,7 @@ function Homepage({currentUser}) {
                 openEvents={() => toggleList('events')}
                 openSummary={() => toggleList('summary')}
                 openIncidents={() => toggleList('incidents')}
-                // openMessages={() => toggleList('chat')}
             />
-            {/* {openList === 'chat' && <GlobalChat currentUser={currentUser} onClose={() => setOpenList('')} />} */}
             {openList === 'events' && < EventContainer currentUser={currentUser} events={events} userLocation={userLocation} onClose={() => setOpenList('')} /> }
             {openList === 'incidents' && < IncidentContainer currentUser={currentUser} incidents={incidents} userLocation={userLocation} onClose={() => setOpenList('')} /> }
         </div>
