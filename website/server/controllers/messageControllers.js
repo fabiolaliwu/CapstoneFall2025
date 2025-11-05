@@ -34,6 +34,9 @@ export const createMessage = async (req, res) => {
     if (!text || !sender) {
         return res.status(400).json({ error: "Text and sender are required" });
     }
+    if (!mongoose.Types.ObjectId.isValid(sender)) {
+        return res.status(400).json({ error: "Invalid sender ID" });
+    }
     try {
         // Create message
         const newMessage = await Message.create({
