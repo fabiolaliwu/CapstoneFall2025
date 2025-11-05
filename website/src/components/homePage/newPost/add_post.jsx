@@ -6,6 +6,7 @@ import IncidentForm from './incidentForm';
 function AddPost( {currentUser} ) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showForm, setShowForm] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
 
   // toggle dropdown
   const toggleDropdown = () => {
@@ -22,6 +23,14 @@ function AddPost( {currentUser} ) {
   const closeForm = () => {
     setShowForm(null);
   };
+
+  const handleFormSubmit = () => {
+    setShowPopup(true);
+    setShowForm(null);
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 5000); // popup disappears after 5 seconds
+  }
 
   return (
     <div className="add">
@@ -54,8 +63,16 @@ function AddPost( {currentUser} ) {
         </div>
       )}
 
-      {showForm === 'event' && <EventForm onClose={closeForm}  currentUser={currentUser}/>}
-      {showForm === 'incident' && <IncidentForm onClose={closeForm} currentUser={currentUser} />}
+      {showForm === 'event' && <EventForm onClose={closeForm}  onSubmitSuccess={handleFormSubmit}  currentUser={currentUser}/>}
+      {showForm === 'incident' && <IncidentForm onClose={closeForm}  onSubmitSuccess={handleFormSubmit} currentUser={currentUser} />}
+
+      {showPopup && (
+        <div className="popup-message">
+          <span>Your post has been submitted. Thank you for contributing!</span>
+          <button className="popup-close" onClick={() => setShowPopup(false)}>✕</button>
+
+        </div>
+      )}
       
     </div>
   );

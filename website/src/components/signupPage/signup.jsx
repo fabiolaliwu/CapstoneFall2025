@@ -1,11 +1,15 @@
 import './signup.css';
 import Bar from '../homePage/bar';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 function Signup(){
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -37,7 +41,9 @@ function Signup(){
             } else {
                 // Signup succeeded
                 setMessage(`Account created! Welcome, ${data.user.username}`);
-                alert('Account created successfully! You can now log in.');
+                // alert('Account created successfully! You can now log in.');
+                navigate('/login');
+
             }
         } catch (error) {
             console.error('Error during signup:', error);
