@@ -1,13 +1,13 @@
 .incident-container {
     display: flex;
     flex-direction: row;
-    width: 70%;
+    width: 65%;
     height: 80vh;
     margin: auto;
     border-radius: 10px;
     overflow: hidden;
     position: relative;
-    top: 70px;
+    top: 68px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
