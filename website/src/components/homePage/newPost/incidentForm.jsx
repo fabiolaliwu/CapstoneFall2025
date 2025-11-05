@@ -14,6 +14,7 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
     },
     description: '',
     category: [],
+    train_line: [],
     userId: currentUser?._id || ''
   });
 
@@ -27,6 +28,13 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
     'Gun',
     'Crime',
     'Other' ];
+
+  const trainMap = [
+    '1','2','3','4','5','6',
+    '7','A','B','C','D','E',
+    'F','G','J','L','M','N',
+    'Q','R','S','W','Z'
+  ]
 
   // set user id when currentUser load
   useEffect(() => {
@@ -99,6 +107,7 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
         formData.append("location", JSON.stringify(incidentInfo.location));
         formData.append("description", incidentInfo.description)
         formData.append('user_id', currentUser._id);
+        formData.append("train_line", JSON.stringify(incidentInfo.train_line));
 
         formData.append("category", incidentInfo.category[0] || "");
         if (image) formData.append("image", image);  
@@ -121,6 +130,7 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
             },
             description: '',
             category: [],
+            train_line: [],
             userId: currentUser?._id || ''
         });
         setImage(null);
@@ -187,6 +197,31 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
           ))}
         </div>
         <p>Selected category: {incidentInfo.category[0] || 'None'}</p>
+        {incidentInfo.category[0] === 'Train Delayed' && (
+          <>
+            <label>Train Line(s)</label>
+            <div className="train-line-grid">
+              {trainMap.map((line) => (
+                <button
+                  key={line}
+                  type="button"
+                  className={`train-line-option ${incidentInfo.train_line.includes(line) ? 'selected' : ''}`}
+                  onClick={() =>
+                    // toggle train line selection
+                    setIncidentInfo((prev) => ({
+                      ...prev,
+                      train_line: prev.train_line.includes(line)
+                        ? prev.train_line.filter((l) => l !== line)
+                        : [...prev.train_line, line],
+                    }))
+                  }
+                >
+                  {line}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
 
         <label>Description</label>
         <input

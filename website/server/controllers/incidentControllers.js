@@ -28,6 +28,18 @@ export const getIncidents = async (req, res) => {
 // POST
 export const createNewIncident = async (req, res) => {
     const { title, description, location, category, user_id } = req.body;
+    let train_line = [];
+    if (req.body.train_line){
+        try {
+            // parse train_line
+            train_line = typeof req.body.train_line === "string"
+                ? JSON.parse(req.body.train_line)
+                : req.body.train_line;
+        } catch (err) {
+            console.warn("TRAIN LINE PARSE ERROR:", err);
+        }
+    }
+    // Handle image
     let image_url = "";
     if (req.file) {
         image_url = `/uploads/${req.file.filename}`;
@@ -51,6 +63,7 @@ export const createNewIncident = async (req, res) => {
             description,
             location: locationData,
             category,
+            train_line,
             user_id,
             image_url,
         });
