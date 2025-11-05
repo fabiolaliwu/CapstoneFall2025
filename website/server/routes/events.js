@@ -61,6 +61,9 @@ router.post("/", upload.single("image"), createNewEvent);
 // DELETE
 router.delete("/:id", deleteEvent);
 
+// GET events by user
+router.get("/user/:userId", getEventsByUser);
+
 export default router;
 
 
