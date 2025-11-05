@@ -44,44 +44,45 @@
 .logo img{
     height: 55px;
 }
+
+/* handle left side of the bar */
 .left-bar{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
     gap: 15px;
-  }
+}
 
 /* search bar */
-.search-bar{
+.search-bar {
     display: flex;
     align-items: center;
-    margin-left: 4vw;
-    margin-right: 5vw;
-}
-.search-input{
-    width: 500px;
-    padding: 12px 12px 12px 55px;
-    margin-left: 25px;
-    font-size: 16px;
     background: rgba(255, 255, 255, 0.8);
     border: 1px solid rgb(126, 126, 126);
     border-radius: 30px;
     box-shadow: rgb(156, 156, 156) 0px 1px 2px 0px;
-    outline: none;
-    transition: all 0.3s ease;
+    padding: 8px 16px;
+    margin-left: 4vw;
+    margin-right: 5vw;
+    margin-top: 0.5vh;
+    margin-bottom: 0.5vh;
+    flex: 200px;
 }
 
 .search-icon {
-    position: relative;
-    left: 4.5vw; 
-    top: 18%;
-    transform: translateY(-50%);
-    color:  rgb(182, 182, 182);
     width: 20px;
     height: 20px;
-    pointer-events: none; /* allows icon to not block typing */
-    cursor: pointer;
+    opacity: 0.7;
+    margin-right: 10px;
+}
+
+.search-input {
+    flex: 1;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    background: transparent;
 }
 
 .information {
