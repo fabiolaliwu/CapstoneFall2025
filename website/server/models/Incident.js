@@ -19,6 +19,11 @@ const IncidentSchema = new mongoose.Schema({
     default: 'Other',
     enum:['Train Delayed', 'Car Collision', 'Fire', 'Road Construction', 'Medical Emergency', 'Protest', 'Gun','Crime', 'Other']
   },
+  train_line:{
+    type: [String],
+    default: 'N/A',
+    enum:['1','2','3','4','5','6','7','A','B','C','D','E','F','G','J','L','M','N','Q','R','S','W','Z','N/A']
+  },
   location: {
     address: { type: String, required: true },
     coordinates: {
