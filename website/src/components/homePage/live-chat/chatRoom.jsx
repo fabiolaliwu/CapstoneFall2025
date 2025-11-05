@@ -3,19 +3,11 @@ import io from "socket.io-client";
 import './chatRoom.css';
 import axios from "axios";
 
-const socket = io("http://localhost:4000");
-
-function ChatRoom({ currentUser, chatType = "global", chatId = null, onClose }) {
+function ChatRoom({ currentUser, chatType = "global", chatId = null }) {
+    const [socket, setSocket] = useState(null);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const [loading, setLoading] = useState(true);
-    
-    const getSenderId = (user) => user?.uuid || user?._id || user;
-    // Get username from sender
-    const getUsername = (sender) => {
-        if (!sender) return "Unknown";
-        return sender.username || "Unknown";
-    };
 
     // Determine room
     const room = chatType === "global" ? "global" : `${chatType}-${chatId}`;
@@ -35,18 +27,18 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null, onClose }) 
                     const resTitle = await axios.get(`http://localhost:4000/api/${chatType}s/${chatId}`);
                     setChatTitle(resTitle.data.title || `${chatType} Chat`);
                 }
-                // if the event/incident has no message yet
-                if (response.data.length === 0 && chatType !== 'global') {
+                // if the chat has no message yet
+                if (response.data.length === 0) {
                     const initMessage = {
                         text: `${chatType} chat started.`,
-                        sender: getSenderId(currentUser),
+                        sender: currentUser._id,
                         chat_type: chatType,
                         ref_id: chatId,
                         createdAt: new Date().toISOString(),
                     };
                     await axios.post('http://localhost:4000/api/messages', initMessage);
                     setMessages([initMessage]);
-                } else {
+                } else{
                     setMessages(response.data);
                 }
                 setLoading(false);
@@ -58,13 +50,17 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null, onClose }) 
         if(chatType === "global" || chatId){
             fetchMessages();
         }
-    },[chatType, chatId, currentUser]);
+    }, [chatType, chatId, currentUser._id]);
 
     // Setup socket listeners
     useEffect(() => {
+        const socket = io("http://localhost:4000");
+        setSocket(socket);
         socket.emit('joinRoom', room);
 
         const handleNewMessage = (message) => {
+            console.log("Received new message:", message);
+            // avoid duplicate message
             setMessages(prev => {
                 if (!prev.find(msg => msg._id === message._id)) {
                     return [...prev, message];
@@ -76,16 +72,17 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null, onClose }) 
         return () => {
             socket.off('newMessage', handleNewMessage);
             socket.emit('leaveRoom', room);
+            // socket.disconnect();
         };
     }, [room]);
 
     // Send message
     const sendMessage = async () => {
-        if (newMessage.trim() === "" || !getSenderId(currentUser)) return;
+        if (newMessage.trim() === "" || !currentUser?._id) return;
 
         const messageData = {
             text: newMessage,
-            sender: getSenderId(currentUser),
+            sender: currentUser._id,
             chat_type: chatType,
             ref_id: chatType !== "global" ? chatId : null,
         };
@@ -114,18 +111,23 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null, onClose }) 
                     ) : messages.map((msg, index) => (
                         <div
                             key={msg._id || index}
-                            className={`chat-message ${getSenderId(msg.sender) === getSenderId(currentUser) ? "my-message" : ""}`}
+                            className={`chat-message ${msg.sender?._id === currentUser?._id ? "my-message" : ""}`}
                         >
-                            {getSenderId(msg.sender) !== getSenderId(currentUser) && (
+                            {msg.sender?._id !== currentUser?._id && (
                                 <strong className="other-username">
-                                    {getUsername(msg.sender) + ": "}
+                                    {(msg.sender?.username || "Unknown") + ": "}
                                 </strong>
-                            )}
+                                )}
                             <span className="message-text">{msg.text}</span>
                             <span className="timestamp">
-                                {new Date(msg.createdAt).toLocaleDateString([], { month: "short", day: "numeric" })}
-                                {" - "}
-                                {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                                {new Date(msg.createdAt).toLocaleDateString([], {
+                                    month: "short",
+                                    day: "numeric"
+                                })}{" - "}
+                                {new Date(msg.createdAt).toLocaleTimeString([], {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                })}
                             </span>
                         </div>
                     ))}
