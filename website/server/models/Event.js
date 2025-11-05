@@ -43,7 +43,8 @@ const EventSchema = new mongoose.Schema({
     default: ""
   },
   user_id:{
-    type: String, 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true
   },
   image_url: {
