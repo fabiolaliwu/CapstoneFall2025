@@ -66,8 +66,8 @@
     margin-left: 4vw;
     margin-right: 5vw;
     margin-top: 0.5vh;
-    flex: 1 1 200px;
-    height: 5vh;
+    margin-bottom: 0.5vh;
+    flex: 200px;
 }
 
 .search-icon {
