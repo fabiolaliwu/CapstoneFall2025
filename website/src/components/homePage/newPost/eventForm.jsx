@@ -271,8 +271,8 @@ function EventForm({categoriesFetchStartAsync,currentUser , onSubmitSuccess}) {
           />
         )}
         <p className="reminder">Reminder: only available in NYC</p>
-        <p style={{ fontSize: '14px', color: '#666', marginTop: '-1px' }}>
-          Selected: {eventInfo.location.address || 'None'}
+        <p style={{ color: '#666', marginTop: '-1px' }}>
+          Selected address: {eventInfo.location.address || 'None'}
         </p>
 
         <label>Organiser</label>

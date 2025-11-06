@@ -181,7 +181,9 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
           />
         )}
         <p className="reminder">Reminder: only available in NYC</p>
-        <p>Selected address: {incidentInfo.location.address || 'None'}</p>
+        <p style={{ color: '#666', marginTop: '-1px' }}>
+          Selected address: {incidentInfo.location.address || 'None'}
+        </p>
 
         <label>Category <span className="required">*</span></label>
         <div className="category-toggle">

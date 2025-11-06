@@ -1,28 +1,35 @@
+/* Container for the new sidebar buttons */
 .all-buttons {
-  position: fixed;
-  bottom: 5px;
   display: flex;
-  gap: 16px;
-  left: 0;
-  right: 0;
-  margin: auto;
-  width: max-content;
-  z-index: 1000;
+  flex-direction: column; /* Stack buttons vertically */
+  gap: 12px;
+  width: 100%;
 }
 
 .all-buttons button {
-  background: rgba(160, 160, 160, 0.8);
+  /* --- Appearance (Matches Dark Theme) --- */
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(8px);
-  color: rgb(255, 255, 255);
-  border: 0.6px solid #000000;
-  border-radius: 30px;
-  width: 150px;
-  height: 50px;
-  font-size: 20px;
+  color: #f0f0f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  /* --- Sizing & Font (Matches Sidebar) --- */
+  width: 100%;
+  height: 42px;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  
+  /* --- Interaction --- */
   cursor: pointer;
-  font-family: 'Afacad', sans-serif;
+  transition: all 0.3s ease;
 }
+
 .all-buttons button:hover {
-  color: black;
-  background: #e4e4e4;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
