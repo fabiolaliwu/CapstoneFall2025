@@ -19,7 +19,6 @@
     padding: 20px; 
     border-radius: 0px;
     overflow-y: auto;
-    /* position:relative; */
 }
 
 .chat-room-container {
@@ -31,7 +30,7 @@
     padding-left: 10px;
     padding-top: 13px;
     background-color: #FFFFFF;
-    overflow: hidden;      /* prevents chat from exceeding container */
+    overflow: hidden;  
 }
 
 .chat-placeholder{

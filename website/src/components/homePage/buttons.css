@@ -1,7 +1,7 @@
-/* Container for the new sidebar buttons */
+/* Handles event/incident/summary on the sidebar */
 .all-buttons {
   display: flex;
-  flex-direction: column; /* Stack buttons vertically */
+  flex-direction: column;
   gap: 10px;
   width: 100%;
 }

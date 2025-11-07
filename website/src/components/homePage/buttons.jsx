@@ -1,5 +1,4 @@
 import './buttons.css';
-// Import icons (example)
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { IoBarChartSharp } from "react-icons/io5";
 import { IoWarningOutline } from "react-icons/io5";

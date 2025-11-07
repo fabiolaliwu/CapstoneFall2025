@@ -8,7 +8,7 @@
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    gap: 100px;
+    gap: 75px;
     background-color:#cdcdcd;
 }
 .left-container{
@@ -26,8 +26,8 @@
     font-family: 'Jomolhari', serif;
     font-size: 36px;
     justify-content: center;
-    margin-top: 40vh;
-    margin-left: 20vw;
+    margin-top: 35vh;
+    margin-left: 18vw;
 }
 .help-description{
     color: black;
@@ -35,14 +35,14 @@
     font-size: 20px;
     justify-content: center;
     margin-top: 8px;
-    margin-left: 7vw;
+    margin-left: 5vw;
 }
 .help-logo-container{
     flex-direction: row;
     display: flex;
     justify-content: center;
     gap: 30px;
-    margin-left: 5vw;
+    margin-left: 3vw;
 }
 .help-logo{
     width: 50px;
@@ -57,7 +57,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: 15vh;
+    margin-top: 9vh;
     margin-bottom: 50px;
     border-radius: 10px;
 }

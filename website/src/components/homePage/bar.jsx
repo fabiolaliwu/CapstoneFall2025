@@ -1,10 +1,11 @@
 import './bar.css';
 import AddPost from './newPost/add_post'; 
-import { Link, NavLink, useNavigate } from "react-router-dom"; 
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom"; 
 import { useEffect, useState } from "react";
 import Logo from '/logo.png';
 import Buttons from './buttons'; 
 import { FaInfoCircle, FaQuestionCircle, FaUserCircle } from "react-icons/fa"; // Import icons
+import { IoLogInOutline } from "react-icons/io5";
 
 function Bar({ 
     currentUser, 
@@ -15,7 +16,9 @@ function Bar({
     openIncidents 
 }) {
     const navigate = useNavigate();
+    const location = useLocation();    
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const isHomePage = location.pathname === '/home' || location.pathname === '/';
     
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -38,17 +41,17 @@ function Bar({
     
     return (
         <>
-            {/* --- THE SIDEBAR --- */}
+            {/* Sidebar */}
             <div className="bar">       
                 
-                {/* --- TOP SECTION --- */}
+                {/* Top Section */}
                 <div className="top-section">
                     <div className="logo">
                         <Link to="/home"><img src={Logo} alt="Stay in the Loop" /></Link>
                     </div>
                 </div>
                 
-                {/* --- MIDDLE SECTION --- */}
+                {/* Middle Section */}
                 <div className="middle-section">
                     {isLoggedIn && (
                         <Buttons
@@ -57,8 +60,9 @@ function Bar({
                             openIncidents={openIncidents}
                         />
                     )}
-
-                    <hr className="divider" />
+                    {isLoggedIn && (
+                        <hr className="divider" />
+                    )}
                     <div className="nav-links">
                         <NavLink to="/about" className="nav-link-button">
                             <FaInfoCircle size={20} />
@@ -71,12 +75,11 @@ function Bar({
                     </div>
                 </div>
 
-                {/* --- BOTTOM SECTION --- */}
+                {/* Bottom Section */}
                 <div className="bottom-section">
                     {isLoggedIn ? (
                         <div className="user-actions">
                             <NavLink to="/profile" className="profile-btn" title="Profile">
-                                {/* 4. Replaced :D with an icon */}
                                 <FaUserCircle size={22} />
                             </NavLink>
                             <button onClick={handleLogout} className="logout-button" title="Logout">
@@ -84,15 +87,16 @@ function Bar({
                             </button>
                         </div>
                     ) : 
-                        <NavLink to="/login" className="login">
-                            Sign In
-                        </NavLink>
+                    <NavLink to="/login" className="login">
+                        <IoLogInOutline size={20} />
+                        <span className="btn-text">Sign In</span>
+                    </NavLink>
                     }
                 </div>
             </div>
             
-            {/* --- FLOATING CONTROLS (Unaffected) --- */}
-            {isLoggedIn && (
+            {/* --- Handle elements on map --- */}
+            {isLoggedIn && isHomePage && (
                 <div className="floating-controls">
                     <form className="search-bar" onSubmit={handleSearch}>
                         <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="Search" className="search-icon"/>

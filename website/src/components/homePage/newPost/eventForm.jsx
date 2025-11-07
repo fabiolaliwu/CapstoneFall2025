@@ -255,7 +255,7 @@ function EventForm({categoriesFetchStartAsync,currentUser , onSubmitSuccess}) {
               type="text"
               placeholder="Enter location or use my location"
             />
-            <button type="button" onClick={handleUseMyLocation}>
+            <button type="button" className="my-location-btn" onClick={handleUseMyLocation}>
               Use My Location
             </button>
           </>

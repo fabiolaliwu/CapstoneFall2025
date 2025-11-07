@@ -1,4 +1,3 @@
-/* --- ADD POST BUTTON --- */
 .add-btn {
     height: 40px;
     font-family: 'Lucida Sans', 'Lucida Grande', Geneva, Verdana, sans-serif;
@@ -32,7 +31,7 @@
 }
 
 
-/* --- DROPDOWN MENU --- */
+/* Dropdown Menu */
 .dropdown-menu {
     position: absolute;
     top: 100%;
@@ -61,7 +60,7 @@
     }
 }
 
-/* --- DROPDOWN ITEMS --- */
+/* Dropdown Items */
 .dropdown-item {
     padding: 10px 14px;
     font-size: 14px;
@@ -77,7 +76,7 @@
     gap: 8px;
 }
 
-/* optional icon before each item */
+/* icon before each item */
 .dropdown-item::before {
     content: '•';
     font-size: 14px;
@@ -91,7 +90,7 @@
     transform: translateX(3px);
 }
 
-/* --- FORM CONTAINER --- */
+/* Form Container */
 .form-wrapper {
   position: fixed;
   width: 40%;
@@ -108,7 +107,7 @@
 }
 
   
-/* --- FORM LAYOUT --- */
+/* Form Layout */
 .form-wrapper form {
     display: flex;
     flex-direction: column;
@@ -116,7 +115,6 @@
     font-family: 'Lucida Sans', 'Lucida Grande', Geneva, Verdana, sans-serif;
 }
   
-/* --- INPUTS --- */
 .form-wrapper input,
 .form-wrapper textarea,
 .form-wrapper select {
@@ -136,7 +134,7 @@
     box-shadow: 0 0 8px rgba(110, 152, 163, 0.3);
 }
   
-/* --- LABELS --- */
+/* Labels */
 .form-wrapper label {
     font-weight: 600;
     font-size: 15px;
@@ -144,14 +142,14 @@
     margin-bottom: 2px;
 }
   
-/* --- REQUIRED MARK --- */
+/* Required Mark */
 .required {
     color: #e53935;
     margin-left: 4px;
     font-weight: 600;
 }
   
-/* --- CATEGORY & COST TOGGLES --- */
+/* Handle Category and Cost */
 .category-toggle,
 .cost-toggle {
     display: flex;
@@ -163,6 +161,7 @@
 .cost-toggle button {
     border-radius: 20px;
     border: 1px solid #ccc;
+    background-color: white;
     color: #333;
     font-size: 13px;
     padding: 6px 14px;
@@ -183,9 +182,10 @@ div button.selected {
     border: none;
 }
   
-/* --- LOCATION BUTTON --- */
-.form-wrapper button[type="button"] {
-    margin-top: 6px;
+/* Location Button */
+.my-location-btn {
+    margin-top: 5px;
+    margin-left: 2vw;
     background-color: #6e98a3;
     border: none;
     color: white;
@@ -196,14 +196,14 @@ div button.selected {
     transition: all 0.25s ease;
 }
   
-.form-wrapper button[type="button"]:hover {
+.my-location-btn:hover {
     background-color: #4b7b86;
     transform: translateY(-1px);
 }
   
 /* --- SUBMIT BUTTON --- */
 .form-wrapper button[type="submit"] {
-    margin-top: 12px;
+    margin-top: 5px;
     margin-left: 2vw;
     background: linear-gradient(135deg, #6e98a3, #4b7b86);
     border: none;
@@ -235,7 +235,7 @@ div button.selected {
 
 .popup-message {
     position: fixed;
-    top: 70px; /* adjust for navbar height */
+    top: 70px;
     left: 50%;
     transform: translateX(-50%);
     background: #4caf50;
@@ -268,7 +268,8 @@ div button.selected {
   .train-line-option {
       height: 30px;
       border-radius: 20px;
-      background-color: #f5f5f5;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
       cursor: pointer;
       font-size: 12px;
   }
