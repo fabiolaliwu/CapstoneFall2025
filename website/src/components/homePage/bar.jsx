@@ -3,8 +3,17 @@ import AddPost from './newPost/add_post';
 import { Link, NavLink, useNavigate } from "react-router-dom"; 
 import { useEffect, useState } from "react";
 import Logo from '/logo.png';
+import Buttons from './buttons'; 
+import { FaInfoCircle, FaQuestionCircle, FaUserCircle } from "react-icons/fa"; // Import icons
 
-function Bar({ currentUser, searchQuery, setSearchQuery, showForm, closeForm }) {
+function Bar({ 
+    currentUser, 
+    searchQuery, 
+    setSearchQuery,
+    openEvents,
+    openSummary,
+    openIncidents 
+}) {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     
@@ -15,7 +24,7 @@ function Bar({ currentUser, searchQuery, setSearchQuery, showForm, closeForm }) 
         } else {
             setIsLoggedIn(false);
         }
-    }, []);        
+    }, [currentUser]); 
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -31,24 +40,35 @@ function Bar({ currentUser, searchQuery, setSearchQuery, showForm, closeForm }) 
         <>
             {/* --- THE SIDEBAR --- */}
             <div className="bar">       
+                
+                {/* --- TOP SECTION --- */}
                 <div className="top-section">
                     <div className="logo">
                         <Link to="/home"><img src={Logo} alt="Stay in the Loop" /></Link>
                     </div>
-                    
-                    <div className="nav-links">
-                        <NavLink to="/about" className={({ isActive }) => (isActive ? 'active-link' : '')}>
-                            About
-                        </NavLink>
-                        <NavLink to="/help" className={({ isActive }) => (isActive ? 'active-link' : '')}>
-                            Help
-                        </NavLink>
-                    </div>
                 </div>
                 
-
-                {/* --- MIDDLE SCROLLABLE SECTION --- */}
+                {/* --- MIDDLE SECTION --- */}
                 <div className="middle-section">
+                    {isLoggedIn && (
+                        <Buttons
+                            openEvents={openEvents}
+                            openSummary={openSummary}
+                            openIncidents={openIncidents}
+                        />
+                    )}
+
+                    <hr className="divider" />
+                    <div className="nav-links">
+                        <NavLink to="/about" className="nav-link-button">
+                            <FaInfoCircle size={20} />
+                            <span className="btn-text">About</span>
+                        </NavLink>
+                        <NavLink to="/help" className="nav-link-button">
+                            <FaQuestionCircle size={20} />
+                            <span className="btn-text">Help</span>
+                        </NavLink>
+                    </div>
                 </div>
 
                 {/* --- BOTTOM SECTION --- */}
@@ -56,7 +76,8 @@ function Bar({ currentUser, searchQuery, setSearchQuery, showForm, closeForm }) 
                     {isLoggedIn ? (
                         <div className="user-actions">
                             <NavLink to="/profile" className="profile-btn" title="Profile">
-                                :D
+                                {/* 4. Replaced :D with an icon */}
+                                <FaUserCircle size={22} />
                             </NavLink>
                             <button onClick={handleLogout} className="logout-button" title="Logout">
                                 <img src="https://cdn-icons-png.flaticon.com/512/1828/1828479.png" alt="Logout" className="logout-icon"/>
@@ -70,6 +91,7 @@ function Bar({ currentUser, searchQuery, setSearchQuery, showForm, closeForm }) 
                 </div>
             </div>
             
+            {/* --- FLOATING CONTROLS (Unaffected) --- */}
             {isLoggedIn && (
                 <div className="floating-controls">
                     <form className="search-bar" onSubmit={handleSearch}>
@@ -82,7 +104,9 @@ function Bar({ currentUser, searchQuery, setSearchQuery, showForm, closeForm }) 
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </form>
+                    <div className="addpost">
                         <AddPost currentUser={currentUser} />
+                    </div>
                 </div>
             )}
         </>

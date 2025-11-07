@@ -2,26 +2,21 @@
 .all-buttons {
   display: flex;
   flex-direction: column; /* Stack buttons vertically */
-  gap: 12px;
+  gap: 10px;
   width: 100%;
 }
 
 .all-buttons button {
-  /* --- Appearance (Matches Dark Theme) --- */
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(8px);
   color: #f0f0f0;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  
-  /* --- Sizing & Font (Matches Sidebar) --- */
   width: 100%;
-  height: 42px;
+  height: 60px;
   border-radius: 20px;
-  font-size: 15px;
+  font-size: 12px;
   font-weight: 500;
   font-family: 'Inter', sans-serif;
-  
-  /* --- Interaction --- */
   cursor: pointer;
   transition: all 0.3s ease;
 }
