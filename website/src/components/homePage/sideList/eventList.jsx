@@ -36,7 +36,6 @@ function EventList({ events, onClose, userLocation, onSelect }) {
 
     return (
         <div className="event-list-container">
-        {/* <button className="close-btn" onClick={onClose}>►</button> */}
         <div className="event-list">
             <header>EVENTS</header>
             <div className="event-items">

@@ -2,16 +2,12 @@ import './homepage.css';
 import Bar from './bar';
 import Body from './body';
 import Map from '../Map';
-import Buttons from './buttons';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import EventContainer from './container/eventContainer.jsx';
 import IncidentContainer from './container/incidentContainer.jsx';
 
 function Homepage({currentUser}) {
     const [openList, setOpenList] = useState('');
-    const [events, setEvents] = useState([]);
-    const [incidents, setIncidents] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -46,13 +42,16 @@ function Homepage({currentUser}) {
                 <Map searchQuery={searchQuery} userLocation={userLocation} />
             </div>
             <div className='content'>
-                <Bar currentUser={currentUser} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                <Bar 
+                    currentUser={currentUser} 
+                    searchQuery={searchQuery} 
+                    setSearchQuery={setSearchQuery}
+                    openEvents={() => toggleList('events')}
+                    openSummary={() => toggleList('summary')}
+                    openIncidents={() => toggleList('incidents')}
+                />
             </div>
-            <Buttons 
-                openEvents={() => toggleList('events')}
-                openSummary={() => toggleList('summary')}
-                openIncidents={() => toggleList('incidents')}
-            />
+
             {openList === 'events' && < EventContainer currentUser={currentUser} events={events} userLocation={userLocation} onClose={() => setOpenList('')} /> }
             {openList === 'incidents' && < IncidentContainer currentUser={currentUser} incidents={incidents} userLocation={userLocation} onClose={() => setOpenList('')} /> }
         </div>

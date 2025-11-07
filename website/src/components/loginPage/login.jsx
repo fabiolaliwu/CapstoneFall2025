@@ -35,7 +35,6 @@ function Login( {setCurrentUser} ) {
 
                 setCurrentUser(data.user);
                 // alert('Login successful! thank you');
-                // alert('Login successful! thank you');
                 navigate('/home'); // redirect to home page
             }
     

@@ -45,10 +45,10 @@ function AddPost( {currentUser} ) {
             toggleDropdown();
           }
         }}
-        style={{ width: 160}}
+        style={{ width: 170}}
       >
-        <span style={{ display: 'inline-block', color: 'rgb(66, 66, 66)' }}>
-          {showForm ? 'Close Form' : '+ Add Post ▾'}
+        <span style={{ display: 'inline-block' }}>
+          {showForm ? 'Close Form' : 'Add Post ▾'}
         </span>
       </button>
       
@@ -73,7 +73,6 @@ function AddPost( {currentUser} ) {
 
         </div>
       )}
-      
     </div>
   );
 }

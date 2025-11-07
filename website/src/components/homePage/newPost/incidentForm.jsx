@@ -167,7 +167,7 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
               type="text"
               placeholder="Enter location or use my location"
             />
-            <button type="button" onClick={handleUseMyLocation}>Use My Location</button>
+            <button type="button" className="my-location-btn" onClick={handleUseMyLocation}>Use My Location</button>
           </>
         ) : (
           <input
@@ -181,7 +181,9 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
           />
         )}
         <p className="reminder">Reminder: only available in NYC</p>
-        <p>Selected address: {incidentInfo.location.address || 'None'}</p>
+        <p style={{ color: '#666', marginTop: '-1px' }}>
+          Selected address: {incidentInfo.location.address || 'None'}
+        </p>
 
         <label>Category <span className="required">*</span></label>
         <div className="category-toggle">
@@ -234,6 +236,7 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
 
         <label>Image</label>
         <input
+            className="image-file"
             type="file"
             name="image"
             accept="image/*"

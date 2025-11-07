@@ -1,12 +1,13 @@
 .event-container {
     display: flex;
     flex-direction: row;
-    width: 80%;
+    width: 65%;
     height: 80vh;
     margin: auto;
     border-radius: 10px;
     overflow: hidden;
     position: relative;
+    left: 3vw;
     top: 75px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
@@ -18,7 +19,6 @@
     padding: 20px; 
     border-radius: 0px;
     overflow-y: auto;
-    /* position:relative; */
 }
 
 .chat-room-container {
@@ -30,7 +30,7 @@
     padding-left: 10px;
     padding-top: 13px;
     background-color: #FFFFFF;
-    overflow: hidden;      /* prevents chat from exceeding container */
+    overflow: hidden;  
 }
 
 .chat-placeholder{
@@ -39,7 +39,7 @@
     justify-content: center;
     text-align: center;
     flex: 2;
-    font-size: 36px;
+    font-size: 30px;
     color:#6e98a3;
 }
 .chat-placeholder p{

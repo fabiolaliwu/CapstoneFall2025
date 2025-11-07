@@ -155,7 +155,7 @@ const Map = ({ searchQuery, userLocation }) => {
     });
   }, [events, incidents, searchQuery, userLocation]);
 
-  return <div ref={mapRef} style={{ height: '100%', width: '100%' }} />;
+  return <div ref={mapRef} style={{ height: '100%', width: '94%', marginLeft: '6%'}} />;
 };
 
 export default Map;
