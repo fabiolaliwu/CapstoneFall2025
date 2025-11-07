@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
+import './Map.css';
 
 const Map = ({ searchQuery, userLocation }) => {
   const mapRef = useRef(null);
@@ -9,6 +10,7 @@ const Map = ({ searchQuery, userLocation }) => {
   const markerLibRef = useRef(null); 
   const eventMarkersRef = useRef([]); 
   const incidentMarkersRef = useRef([]);
+  const infoWindowRef = useRef(null);
 
   // Fetch events and incidents
   useEffect(() => {
@@ -115,6 +117,12 @@ const Map = ({ searchQuery, userLocation }) => {
       map.setCenter(userLocation);
       map.setZoom(15);
     }
+    if (!infoWindowRef.current) {
+      infoWindowRef.current = new google.maps.InfoWindow();
+    }
+    map.addListener('click', () => {
+      infoWindowRef.current.close();
+    });  
 
     // Add Event markers
     filteredEvents.forEach(event => {
@@ -126,11 +134,22 @@ const Map = ({ searchQuery, userLocation }) => {
           content: eventIcon.cloneNode(true)
         });
 
-        const infoWindow = new google.maps.InfoWindow({
-          content: `<h3>${event.title}</h3><p>${event.description}</p>`
+        marker.addListener('click', () => {
+          const content = `
+            <div class="info-window-content">
+              <h3>${event.title}</h3>
+              <p>${event.description}</p>
+              <a class="map-link"
+                href="https://www.google.com/maps/search/?api=1&query=${event.location.coordinates.lat},${event.location.coordinates.lng}"
+                target="_blank">
+                Show in Map
+              </a>
+            </div>
+          `;
+          infoWindowRef.current.close();
+          infoWindowRef.current.setContent(content);
+          infoWindowRef.current.open(map, marker);
         });
-
-        marker.addListener('click', () => infoWindow.open(map, marker));
         eventMarkersRef.current.push(marker);
       }
     });
@@ -145,13 +164,24 @@ const Map = ({ searchQuery, userLocation }) => {
           content: incidentIcon.cloneNode(true)
         });
 
-        const infoWindow = new google.maps.InfoWindow({
-          content: `<h3>${incident.title}</h3><p>${incident.description}</p>`
-        });
-
-        marker.addListener('click', () => infoWindow.open(map, marker));
-        incidentMarkersRef.current.push(marker);
-      }
+        marker.addListener('click', () => {
+          const content = `
+            <div class="info-window-content">
+              <h3>${incident.title}</h3>
+              <p>${incident.description}</p>
+              <a class="map-link"
+                  href="https://www.google.com/maps/search/?api=1&query=${incident.location.coordinates.lat},${incident.location.coordinates.lng}"
+                  target="_blank">
+                  Show in Map
+              </a>
+            </div>
+            `;
+            infoWindowRef.current.close();
+            infoWindowRef.current.setContent(content);
+            infoWindowRef.current.open(map, marker);
+          });
+          incidentMarkersRef.current.push(marker);
+        }
     });
   }, [events, incidents, searchQuery, userLocation]);
 
