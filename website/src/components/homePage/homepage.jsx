@@ -8,6 +8,8 @@ import IncidentContainer from './container/incidentContainer.jsx';
 
 function Homepage({currentUser}) {
     const [openList, setOpenList] = useState('');
+    const [events, setEvents] = useState([]);
+    const [incidents, setIncidents] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
 
