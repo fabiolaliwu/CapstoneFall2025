@@ -2,7 +2,7 @@ import './bar.css';
 import AddPost from './newPost/add_post'; 
 import { Link, NavLink, useNavigate } from "react-router-dom"; 
 import { useEffect, useState } from "react";
-import Logo from '/titlelogo.png';
+import Logo from '/logo.png';
 
 function Bar({ currentUser, searchQuery, setSearchQuery, showForm, closeForm }) {
     const navigate = useNavigate();
@@ -28,46 +28,31 @@ function Bar({ currentUser, searchQuery, setSearchQuery, showForm, closeForm }) 
     };
     
     return (
-        // Use a Fragment to return the sidebar AND the new floating controls
         <>
-            {/* --- 1. THE SIDEBAR --- */}
-            <div className="bar">
-
-                {/* --- TOP SECTION --- */}
-                <div className="left-bar">
-                    
-                    <div className="top-row">
-                        <div className="logo">
-                            <Link to="/home"><img src={Logo} alt="Stay in the Loop" /></Link>
-                        </div>
-                        
-                        <div className="nav-links">
-                            <NavLink to="/about" className={({ isActive }) => (isActive ? 'active-link' : '')}>
-                                About
-                            </NavLink>
-                            <NavLink to="/help" className={({ isActive }) => (isActive ? 'active-link' : '')}>
-                                Help
-                            </NavLink>
-                        </div>
+            {/* --- THE SIDEBAR --- */}
+            <div className="bar">       
+                <div className="top-section">
+                    <div className="logo">
+                        <Link to="/home"><img src={Logo} alt="Stay in the Loop" /></Link>
                     </div>
                     
-                    {/* Search bar and Add Post are MOVED OUT */}
+                    <div className="nav-links">
+                        <NavLink to="/about" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+                            About
+                        </NavLink>
+                        <NavLink to="/help" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+                            Help
+                        </NavLink>
+                    </div>
                 </div>
+                
 
                 {/* --- MIDDLE SCROLLABLE SECTION --- */}
-                <div className="center-bar-content">
-                    {showForm && (
-                        <div className="form-wrapper">
-                            {/* Your form content goes here */}
-                            <button onClick={closeForm}>Close Form</button>
-                        </div>
-                    )}
+                <div className="middle-section">
                 </div>
 
                 {/* --- BOTTOM SECTION --- */}
-                <div className="information">
-                    {/* Divider and Add Post are MOVED OUT */}
-                    
+                <div className="bottom-section">
                     {isLoggedIn ? (
                         <div className="user-actions">
                             <NavLink to="/profile" className="profile-btn" title="Profile">
@@ -85,10 +70,8 @@ function Bar({ currentUser, searchQuery, setSearchQuery, showForm, closeForm }) 
                 </div>
             </div>
             
-            {/* --- 2. NEW FLOATING CONTROLS (Search + Add Post) --- */}
             {isLoggedIn && (
                 <div className="floating-controls">
-                    {/* SEARCH BAR (MOVED HERE) */}
                     <form className="search-bar" onSubmit={handleSearch}>
                         <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="Search" className="search-icon"/>
                         <input 
@@ -99,8 +82,6 @@ function Bar({ currentUser, searchQuery, setSearchQuery, showForm, closeForm }) 
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </form>
-                    
-                    {/* ADD POST (MOVED HERE) */}
                         <AddPost currentUser={currentUser} />
                 </div>
             )}

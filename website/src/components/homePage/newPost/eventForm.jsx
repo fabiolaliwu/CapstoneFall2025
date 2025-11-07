@@ -316,6 +316,7 @@ function EventForm({categoriesFetchStartAsync,currentUser , onSubmitSuccess}) {
 
         <label>Image</label>
         <input
+        className="image-file"
           type="file"
           name="image"
           accept="image/*"
