@@ -204,40 +204,86 @@
 }
 
 /* Search Bar */
+.search-bar-wrapper {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    width: 500px;
+    background: rgba(255, 255, 255);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 10px 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+}
+.search-bar-wrapper:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    background: rgba(45, 48, 53, 0.9);
+}
+.search-bar-wrapper:focus-within {
+    box-shadow: 0 0 0 3px rgba(110, 152, 163, 0.5);
+    background: rgba(45, 48, 53, 0.9);
+    border-color: rgba(110, 152, 163, 0.5);
+}
+
 .search-bar {
-  display: flex;
-  align-items: center;
-  width: 500px;
-  background: rgba(255, 255, 255);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 10px 14px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    width: 500px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
 }
-.search-bar:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-  background: rgba(45, 48, 53, 0.9);
-}
-.search-bar:focus-within {
-  box-shadow: 0 0 0 3px rgba(110, 152, 163, 0.5);
-  background: rgba(45, 48, 53, 0.9);
-  border-color: rgba(110, 152, 163, 0.5);
-}
+
 .search-icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 10px;
-  opacity: 0.6;
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    opacity: 0.6;
 }
 .search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 15px;
-  color: #ffffff;
-  min-width: 0;
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 15px;
+    color: black;
+    min-width: 0;
 }
+.search-input:hover{
+    color: white;
+}
+.search-input:focus-within{
+    color: white;
+}
+
 .search-input::placeholder { color: #aaa; }
+
+/* Neighborhood Selection */
+.neighborhood-filter {
+    background: transparent;
+    border: none;
+    color: #6e6e6e;
+    font-size: 15px;
+    font-weight: 500;
+    height: 100%;
+    cursor: pointer;
+    padding-left: 15px;
+}
+.neighborhood-filter:focus {
+    outline: none;
+    color: rgb(230, 230, 230);
+}
+.neighborhood-filter option {
+    background: #333;
+    color: rgb(88, 88, 88);
+}
+  
+.search-divider {
+    width: 1px;
+    height: 24px;
+    background-color: rgba(0, 0, 0, 0.2);
+    margin-left: 8vw;
+}

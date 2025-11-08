@@ -13,7 +13,9 @@ function Bar({
     setSearchQuery,
     openEvents,
     openSummary,
-    openIncidents 
+    openIncidents,
+    neighborhood,
+    setNeighborhood
 }) {
     const navigate = useNavigate();
     const location = useLocation();    
@@ -98,16 +100,30 @@ function Bar({
             {/* --- Handle elements on map --- */}
             {isLoggedIn && isHomePage && (
                 <div className="floating-controls">
-                    <form className="search-bar" onSubmit={handleSearch}>
-                        <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="Search" className="search-icon"/>
-                        <input 
-                            type="text" 
-                            className="search-input"
-                            placeholder="Enter a keyword"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                    </form>
+                    <div className="search-bar-wrapper">
+                        <form className="search-bar" onSubmit={handleSearch}>
+                            <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="Search" className="search-icon"/>
+                            <input 
+                                type="text" 
+                                className="search-input"
+                                placeholder="Enter a keyword"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </form>
+                        <div className="search-divider"></div>
+                        <select
+                            className="neighborhood-filter"
+                            value={neighborhood}
+                            onChange={(e) => setNeighborhood(e.target.value)}
+                        >
+                            <option value="">All Neighborhoods</option>
+                            <option value="Downtown">Downtown</option>
+                            <option value="Uptown">Uptown</option>
+                            <option value="Midtown">Midtown</option>
+                            <option value="Suburbs">Suburbs</option>
+                        </select>
+                    </div>
                     <div className="addpost">
                         <AddPost currentUser={currentUser} />
                     </div>
