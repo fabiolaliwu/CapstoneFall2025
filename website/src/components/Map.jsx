@@ -11,6 +11,8 @@ const Map = ({ searchQuery, userLocation }) => {
   const eventMarkersRef = useRef([]); 
   const incidentMarkersRef = useRef([]);
   const infoWindowRef = useRef(null);
+  const directionsServiceRef = useRef(null);
+  const directionsRendererRef = useRef(null);
 
   // Fetch events and incidents
   useEffect(() => {
@@ -59,9 +61,44 @@ const Map = ({ searchQuery, userLocation }) => {
           mapId: 'ba9f438e91bcc80eeddbc99c'
         });
         mapInstanceRef.current = map;
+
+        // Direction route setup
+        directionsServiceRef.current = new google.maps.DirectionsService();
+        directionsRendererRef.current = new google.maps.DirectionsRenderer({
+          map: map,
+          suppressMarkers: true,
+          polylineOptions: {
+            strokeColor: '#0646cf',
+            strokeOpacity: 0.8,
+            strokeWeight: 6
+          }
+        
+        });
+
       }
     });
   }, []);
+
+  // Show route bettwen curren location and event/incident
+  const showRoute = (origin, destination) => {
+    if (!directionsServiceRef.current || !directionsRendererRef.current) return;
+
+    directionsServiceRef.current.route(
+      {
+        origin: origin,
+        destination: destination,
+        travelMode: google.maps.TravelMode.WALKING,
+      },
+      (result,status)=>{
+        if(status===google.maps.DirectionsStatus.OK){
+          directionsRendererRef.current.setDirections(result);
+        }
+        else{
+          console.error(`error fetching directions ${result}`);
+        }
+      }
+    );
+  };
 
   // Update markers when events, incidents, or searchQuery change
   useEffect(() => {
@@ -149,6 +186,11 @@ const Map = ({ searchQuery, userLocation }) => {
           infoWindowRef.current.close();
           infoWindowRef.current.setContent(content);
           infoWindowRef.current.open(map, marker);
+
+          // Button to show route
+          if (userLocation) {
+            showRoute(userLocation, event.location.coordinates);
+          }
         });
         eventMarkersRef.current.push(marker);
       }
