@@ -131,3 +131,25 @@ export const getUserById = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+// update user avatar
+export const updateAvatar = async (req, res) => {
+    const { avatar } = req.body; 
+    if(!avatar){
+        return res.status(400).json({ error: "Avatar is required" });
+    }
+    try{
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            { avatar: req.body.avatar },
+            { new: true}
+        );
+        if(!updatedUser){
+            return  res.status(404).json({ error: "User not found" });
+        }
+        res.status(200).json(updatedUser);
+    }
+    catch(err){
+        res.status(500).json({ error: err.message });
+    }
+}
