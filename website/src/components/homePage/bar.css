@@ -266,9 +266,9 @@
     position: relative;
     width: 40%;
     margin-left: 2vw;
-  }
+}
   
-  .filter-toggle-btn {
+.filter-toggle-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -281,15 +281,19 @@
     color: #828282;
     cursor: pointer;
     transition: all 0.3s ease;
-  }
-  .filter-toggle-btn .btn-text {
+}
+.filter-toggle-btn:hover {
+    color: white;
+    transform: translateY(-2px);
+}
+.filter-toggle-btn .btn-text {
     font-size: 12px;
     font-weight: 500;
     line-height: 1;
     text-transform: capitalize; 
-  }
+}
 
-  .filter-menu {
+.filter-menu {
     position: absolute;
     width: 10vw;
     background: #333;
@@ -301,9 +305,9 @@
     flex-direction: column;
     gap: 3px;
     z-index: 1020;
-  }
+}
   
-  .filter-option {
+.filter-option {
     background: transparent;
     border: none;
     color: #f0f0f0;
@@ -315,15 +319,15 @@
     font-family: 'Inter', sans-serif;
     font-size: 14px;
     width: 100%;
-  }
-  .filter-option:hover {
+}
+.filter-option:hover {
     background: rgba(255, 255, 255, 0.1);
-  }
-  .filter-option.active {
+}
+.filter-option.active {
     background: rgba(110, 152, 163, 0.5); 
     color: #fff;
     font-weight: 600;
-  }
+}
   
 .search-divider {
     width: 1px;
