@@ -26,11 +26,7 @@ export const getEventById = async (req, res) => {
 
 // POST
 export const createNewEvent = async (req, res) => {
-    const { title, description, start_date, end_date, cost, location, category, host, user_id } = req.body;
-    let image_url = "";
-    if (req.file) {
-        image_url = `/uploads/${req.file.filename}`;
-    }
+    const { title, description, start_date, end_date, cost, location, category, host, user_id, image } = req.body;
     if (user_id === '0' || !user_id) {
         return res.status(401).json({ error: "Unauthorized: User ID is required" });
     }
@@ -45,19 +41,21 @@ export const createNewEvent = async (req, res) => {
             coordinates: { lat: 40.7128, lng: -74.0060 }
             };
         }
-        const event = await Event.create({
+        const eventData = {
             title,
             description,
             start_date,
             end_date,
             cost,
             location: locationData,
-            category,
+            category: Array.isArray(category) ? category : [category],
             host,
             user_id,
-            image_url,
-        });
-        res.status(200).json(event);
+            image: image || "",
+          };
+
+        const event = await Event.create(eventData);
+        res.status(201).json(event);
     } catch (error) {
         console.error("EVENT CREATE ERROR:", error);
         res.status(400).json({ error: error.message });
