@@ -36,12 +36,18 @@ const IncidentSchema = new mongoose.Schema({
     ref: "User", 
     required: true 
   },
-  image_url: {
+  image: { 
     type: String,
     default: ""
   }
 }, { 
   timestamps: true 
 });
+
+// TTL index to auto-delete incidents after 5days
+IncidentSchema.index(
+  { createdAt: 1 }, 
+  { expireAfterSeconds: 5 * 24 * 60 * 60 } // 5 (days) * 24 (hrs) * 60 (mins) * 60 (secs)
+);
 
 export default mongoose.model("Incident", IncidentSchema);

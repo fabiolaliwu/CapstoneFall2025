@@ -29,12 +29,14 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
     'Crime',
     'Other' ];
 
-  const trainMap = [
-    '1','2','3','4','5','6',
-    '7','A','B','C','D','E',
-    'F','G','J','L','M','N',
-    'Q','R','S','W','Z'
-  ]
+  // Train color for each line
+  const trainMap = {
+    '1': '#D82233','2': '#D82233','3': '#D82233','4': '#009952','5': '#009952',
+    '6': '#009952','A': '#0062CF','C': '#0062CF','E': '#0062CF','7': '#9A38A1',
+    'B': '#EB6800','D': '#EB6800','F': '#EB6800','M': '#EB6800','G': '#6CBE45',
+    'N': '#F6BC26','Q': '#F6BC26','R': '#F6BC26','W': '#F6BC26','L': '#AAAAAA',
+    'S': '#808080','J': '#8E5C33','Z': '#8E5C33'
+  };
 
   // set user id when currentUser load
   useEffect(() => {
@@ -203,11 +205,15 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
           <>
             <label>Train Line(s)</label>
             <div className="train-line-grid">
-              {trainMap.map((line) => (
+              {Object.keys(trainMap).map((line) => (
                 <button
                   key={line}
                   type="button"
                   className={`train-line-option ${incidentInfo.train_line.includes(line) ? 'selected' : ''}`}
+                  style={{
+                    backgroundColor: trainMap[line] || '#000000',
+                    color: (line === 'N' || line === 'R' ||  line === 'Q' ||  line === 'W')? '#000000' : '#FFFFFF' 
+                }}
                   onClick={() =>
                     // toggle train line selection
                     setIncidentInfo((prev) => ({

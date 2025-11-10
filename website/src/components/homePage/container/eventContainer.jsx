@@ -4,9 +4,15 @@ import './eventContainer.css';
 import EventList from '../sideList/eventList.jsx';
 import ChatRoom from '../live-chat/chatRoom.jsx';
 
-function EventContainer({ currentUser, userLocation, onClose }) {
+function EventContainer({ currentUser, userLocation, onClose, initialSelectedId }) {
     const [events, setEvents] = useState([]);
     const [selectedEventId, setSelectedEventId] = useState(null);
+
+    useEffect(() => {
+        if (initialSelectedId) {
+            setSelectedEventId(initialSelectedId);
+        }
+    }, [initialSelectedId]);
 
     useEffect(() => {
         // Fetch all events

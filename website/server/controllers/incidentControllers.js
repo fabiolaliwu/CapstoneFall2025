@@ -27,7 +27,7 @@ export const getIncidents = async (req, res) => {
 
 // POST
 export const createNewIncident = async (req, res) => {
-    const { title, description, location, category, user_id } = req.body;
+    const { title, description, location, category, user_id, image } = req.body;
     let train_line = [];
     if (req.body.train_line){
         try {
@@ -39,11 +39,7 @@ export const createNewIncident = async (req, res) => {
             console.warn("TRAIN LINE PARSE ERROR:", err);
         }
     }
-    // Handle image
-    let image_url = "";
-    if (req.file) {
-        image_url = `/uploads/${req.file.filename}`;
-    }
+    
     if (user_id === '0' || !user_id) {
         return res.status(401).json({ error: "Unauthorized: User ID is required" });
     }
@@ -65,7 +61,7 @@ export const createNewIncident = async (req, res) => {
             category,
             train_line,
             user_id,
-            image_url,
+            image: image || "",
         });
         res.status(200).json(incident);
     }catch (error) {

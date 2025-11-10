@@ -4,9 +4,15 @@ import './incidentContainer.css';
 import IncidentList from '../sideList/incidentList.jsx';
 import ChatRoom from '../live-chat/chatRoom.jsx';
 
-function IncidentContainer({ currentUser, userLocation, onClose }) {
+function IncidentContainer({ currentUser, userLocation, onClose, initialSelectedId }) {
     const [incidents, setIncidents] = useState([]);
     const [selectedIncidentId, setSelectedIncidentId] = useState(null);
+
+    useEffect(() => {
+        if (initialSelectedId) {
+            setSelectedIncidentId(initialSelectedId);
+        }
+    }, [initialSelectedId]);
 
     useEffect(() => {
         // Fetch all incidents

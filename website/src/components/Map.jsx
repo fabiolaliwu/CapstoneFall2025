@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import './Map.css';
+import { useNavigate } from 'react-router-dom';
 
-const Map = ({ searchQuery, userLocation }) => {
+const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
   const mapRef = useRef(null);
   const [events, setEvents] = useState([]);
   const [incidents, setIncidents] = useState([]);  
@@ -11,6 +12,11 @@ const Map = ({ searchQuery, userLocation }) => {
   const eventMarkersRef = useRef([]); 
   const incidentMarkersRef = useRef([]);
   const infoWindowRef = useRef(null);
+  const navigate = useNavigate();
+
+  const directionsServiceRef = useRef(null);
+  const directionsRendererRef = useRef(null);
+
 
   // Fetch events and incidents
   useEffect(() => {
@@ -59,9 +65,44 @@ const Map = ({ searchQuery, userLocation }) => {
           mapId: 'ba9f438e91bcc80eeddbc99c'
         });
         mapInstanceRef.current = map;
+
+        // Direction route setup
+        directionsServiceRef.current = new google.maps.DirectionsService();
+        directionsRendererRef.current = new google.maps.DirectionsRenderer({
+          map: map,
+          suppressMarkers: true,
+          polylineOptions: {
+            strokeColor: '#0646cf',
+            strokeOpacity: 0.8,
+            strokeWeight: 6
+          }
+        
+        });
+
       }
     });
   }, []);
+
+  // Show route bettwen curren location and event/incident
+  const showRoute = (origin, destination) => {
+    if (!directionsServiceRef.current || !directionsRendererRef.current) return;
+
+    directionsServiceRef.current.route(
+      {
+        origin: origin,
+        destination: destination,
+        travelMode: google.maps.TravelMode.WALKING,
+      },
+      (result,status)=>{
+        if(status===google.maps.DirectionsStatus.OK){
+          directionsRendererRef.current.setDirections(result);
+        }
+        else{
+          console.error(`error fetching directions ${result}`);
+        }
+      }
+    );
+  };
 
   // Update markers when events, incidents, or searchQuery change
   useEffect(() => {
@@ -134,21 +175,43 @@ const Map = ({ searchQuery, userLocation }) => {
           content: eventIcon.cloneNode(true)
         });
 
+        const imageHtml = event.image ? `<img src="${event.image}" class="info-window-image" alt="Event Image" />` : '';
+
         marker.addListener('click', () => {
           const content = `
             <div class="info-window-content">
               <h3>${event.title}</h3>
               <p>${event.description}</p>
+              ${imageHtml}
               <a class="map-link"
                 href="https://www.google.com/maps/search/?api=1&query=${event.location.coordinates.lat},${event.location.coordinates.lng}"
                 target="_blank">
                 Show in Map
+              </a>
+              <a id="chat-link-event-${event._id}" class="map-link">
+                  <span class="chat-icon"></span> Chat
               </a>
             </div>
           `;
           infoWindowRef.current.close();
           infoWindowRef.current.setContent(content);
           infoWindowRef.current.open(map, marker);
+
+          google.maps.event.addListener(infoWindowRef.current, 'domready', () => { 
+            const chatLink = document.getElementById(`chat-link-event-${event._id}`);
+            if (chatLink) {
+              chatLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                openChatFromMap('event', event._id);
+                infoWindowRef.current.close();
+              });
+            }
+          });
+
+          // Button to show route
+          if (userLocation) {
+            showRoute(userLocation, event.location.coordinates);
+          }
         });
         eventMarkersRef.current.push(marker);
       }
@@ -164,26 +227,43 @@ const Map = ({ searchQuery, userLocation }) => {
           content: incidentIcon.cloneNode(true)
         });
 
+        const imageHtml = incident.image ? `<img src="${incident.image}" class="info-window-image" alt="Incident Image" />` : '';
+        
         marker.addListener('click', () => {
           const content = `
             <div class="info-window-content">
               <h3>${incident.title}</h3>
               <p>${incident.description}</p>
+              ${imageHtml}
               <a class="map-link"
                   href="https://www.google.com/maps/search/?api=1&query=${incident.location.coordinates.lat},${incident.location.coordinates.lng}"
                   target="_blank">
                   Show in Map
+              </a>
+              <a class="map-link" id="chat-link-incident-${incident._id}" >
+                    <span class="chat-icon"></span> Chat
               </a>
             </div>
             `;
             infoWindowRef.current.close();
             infoWindowRef.current.setContent(content);
             infoWindowRef.current.open(map, marker);
+
+            google.maps.event.addListener(infoWindowRef.current, 'domready', () => { 
+              const chatLink = document.getElementById(`chat-link-incident-${incident._id}`);
+              if (chatLink) {
+                chatLink.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  openChatFromMap('incident', incident._id);
+                  infoWindowRef.current.close();
+                });
+              }
+            });
           });
           incidentMarkersRef.current.push(marker);
         }
     });
-  }, [events, incidents, searchQuery, userLocation]);
+  }, [events, incidents, searchQuery, userLocation, openChatFromMap]);
 
   return <div ref={mapRef} style={{ height: '100%', width: '94%', marginLeft: '6%'}} />;
 };

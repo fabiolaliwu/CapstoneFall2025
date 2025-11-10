@@ -12,13 +12,23 @@ function Homepage({currentUser}) {
     const [incidents, setIncidents] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [mapSelectedId, setMapSelectedId] = useState(null);
     const [selectedNeighborhood, setSelectedNeighborhood] = useState('');
 
     const toggleList = (listName) => {
         if (openList === listName) {
             setOpenList(''); // Close the list if it's already open
+            setMapSelectedId(null);
         } else {
             setOpenList(listName); // Open the selected list
+        }
+    };
+    const openChatFromMap = (type, id) => {
+        setMapSelectedId(id);
+        if (type === 'event') {
+            setOpenList('events');
+        } else if (type === 'incident') {
+            setOpenList('incidents');
         }
     };
 
@@ -39,13 +49,18 @@ function Homepage({currentUser}) {
         }
     }, []);
 
+    const handleCloseContainer = () => {
+        setOpenList('');
+        setMapSelectedId(null);
+    }
+
     return (
         <div className='homepage'>
             <div className = 'background'>
                 <Map 
                     searchQuery={searchQuery} 
                     userLocation={userLocation}
-                    neighborhood={selectedNeighborhood} />
+                    neighborhood={selectedNeighborhood} openChatFromMap={openChatFromMap} />
             </div>
             <div className='content'>
                 <Bar 
@@ -60,8 +75,8 @@ function Homepage({currentUser}) {
                 />
             </div>
 
-            {openList === 'events' && < EventContainer currentUser={currentUser} events={events} userLocation={userLocation} onClose={() => setOpenList('')} /> }
-            {openList === 'incidents' && < IncidentContainer currentUser={currentUser} incidents={incidents} userLocation={userLocation} onClose={() => setOpenList('')} /> }
+            {openList === 'events' && < EventContainer currentUser={currentUser} events={events} userLocation={userLocation} onClose={handleCloseContainer} initialSelectedId={mapSelectedId} /> }
+            {openList === 'incidents' && < IncidentContainer currentUser={currentUser} incidents={incidents} userLocation={userLocation} onClose={handleCloseContainer} initialSelectedId={mapSelectedId} /> }
         </div>
     );
 }

@@ -67,7 +67,7 @@ function IncidentList({ incidents, onClose, userLocation, onSelect }) {
                                         key={line}
                                         style={{
                                             backgroundColor: trainColors[line] || '#000000',
-                                            color: line === 'N' ? '#000000' : '#FFFFFF' 
+                                            color: (line === 'N' || line === 'R' ||  line === 'Q' ||  line === 'W') ? '#000000' : '#FFFFFF' 
                                         }}
                                         >
                                         {line}

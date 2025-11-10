@@ -4,7 +4,7 @@ import { useLocationInput } from './LocationInput.jsx';
 
 function EventForm({categoriesFetchStartAsync,currentUser , onSubmitSuccess}) {
   const [categories, setCategories] = useState([]);
-  const [image, setImage] = useState(null);
+  const [imageData, setImageData] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [eventTypes] = useState(['Free', 'Paid']);
 
@@ -94,7 +94,16 @@ function EventForm({categoriesFetchStartAsync,currentUser , onSubmitSuccess}) {
 
   //  image file selection
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImageData(reader.result); 
+        };
+        reader.readAsDataURL(file); 
+    } else {
+        setImageData(null);
+    }
   };
 
   // Validate the form is filled out correctly
@@ -128,34 +137,37 @@ function EventForm({categoriesFetchStartAsync,currentUser , onSubmitSuccess}) {
     setIsSubmitting(true);
 
     try {
-      // currently using formData to submit multiple data type
-      const formData = new FormData();
-      
-      // Append all event info
-      formData.append('title', eventInfo.title);
-      formData.append('start_date', eventInfo.startDate);
-      formData.append('end_date', eventInfo.endDate);
-      formData.append('cost', eventInfo.cost);
-      formData.append('location', JSON.stringify(eventInfo.location));
-      formData.append('description', eventInfo.description);
-      formData.append('host', eventInfo.host);
-      formData.append('user_id', currentUser._id);
-      
-      eventInfo.category.forEach(cat => formData.append('category', cat));
-      
-      if (image) {
-        formData.append('image', image);
-      }
+      const dataToSend = {
+        title: eventInfo.title,
+        description: eventInfo.description,
+        start_date: eventInfo.startDate, 
+        end_date: eventInfo.endDate,   
+        cost: eventInfo.cost,
+        location: eventInfo.location,
+        category: eventInfo.category,
+        host: eventInfo.host,
+        user_id: eventInfo.userId,    
+        image: imageData, 
+      };
 
-      //connect to backend
       const response = await fetch("http://localhost:4000/api/events", {
         method: "POST",
-        body: formData,
+        headers: {
+            // Must specify content type for JSON body
+            "Content-Type": "application/json", 
+        },
+        body: JSON.stringify(dataToSend), // Send JSON body
       });
 
-      if (!response.ok) throw new Error("Failed to submit event"); // error in event controller
-      onSubmitSuccess();
+      if (!response.ok) {
+        const resText = await response.text(); // get response text to debug
+        throw new Error(`Failed to submit event: ${resText}`);
+      }
 
+      const data = await response.json();
+      console.log("Event created:", data);
+
+      onSubmitSuccess();
 
       // empty data after submit
       setEventInfo({
@@ -172,7 +184,7 @@ function EventForm({categoriesFetchStartAsync,currentUser , onSubmitSuccess}) {
         host: '',
         userId: currentUser?._id || ''
       });
-      setImage(null);
+      setImageData(null);
       if(locationInputRef.current){
         locationInputRef.current.value = '';
       }

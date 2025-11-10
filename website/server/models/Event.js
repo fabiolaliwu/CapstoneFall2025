@@ -18,7 +18,7 @@ const EventSchema = new mongoose.Schema({
   },
   end_date: { 
     type: Date,
-    default: null
+    required: true
   },
   cost: { 
     type: String, 
@@ -47,12 +47,18 @@ const EventSchema = new mongoose.Schema({
     ref: "User",
     required: true
   },
-  image_url: {
+  image: {
     type: String,
     default: ""
   }
 }, { 
   timestamps: true 
 });
+
+// autodelete events after 7days of end_date
+EventSchema.index(
+  { end_date: 1 }, 
+  { expireAfterSeconds: 7 * 24 * 60 * 60 },
+);
 
 export default mongoose.model("Event", EventSchema);
