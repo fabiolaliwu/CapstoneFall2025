@@ -4,7 +4,7 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Logo from '/logo.png';
 import Buttons from './buttons'; 
-import { FaInfoCircle, FaQuestionCircle, FaUserCircle } from "react-icons/fa"; // Import icons
+import { FaInfoCircle, FaQuestionCircle, FaUserCircle, FaFilter } from "react-icons/fa"; // Import icons
 import { IoLogInOutline } from "react-icons/io5";
 
 function Bar({ 
@@ -14,13 +14,14 @@ function Bar({
     openEvents,
     openSummary,
     openIncidents,
-    neighborhood,
-    setNeighborhood
+    filter,
+    setFilter
 }) {
     const navigate = useNavigate();
     const location = useLocation();    
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const isHomePage = location.pathname === '/home' || location.pathname === '/';
+    const [showFilterMenu, setShowFilterMenu] = useState(false);
     
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -112,18 +113,38 @@ function Bar({
                             />
                         </form>
                         <div className="search-divider"></div>
-                        <select
-                            className="neighborhood-filter"
-                            value={neighborhood}
-                            onChange={(e) => setNeighborhood(e.target.value)}
-                        >
-                            <option value="">All Neighborhoods</option>
-                            <option value="Downtown">Downtown</option>
-                            <option value="Uptown">Uptown</option>
-                            <option value="Midtown">Midtown</option>
-                            <option value="Suburbs">Suburbs</option>
-                        </select>
-                    </div>
+                        <div className="filter-dropdown-wrapper">
+                            <button 
+                                className="filter-toggle-btn" 
+                                onClick={() => setShowFilterMenu(!showFilterMenu)}
+                            >
+                                <FaFilter size={12} />
+                                <span className="btn-text">{filter || "Filter"}</span>
+                            </button>
+                            {showFilterMenu && (
+                                <div className="filter-menu">
+                                <button 
+                                    className={`filter-option ${filter === '' ? 'active' : ''}`}
+                                    onClick={() => { setFilter(''); setShowFilterMenu(false); }}
+                                >
+                                    All
+                                </button>
+                                <button 
+                                    className={`filter-option ${filter === 'neighborhood' ? 'active' : ''}`}
+                                    onClick={() => { setFilter('neighborhood'); setShowFilterMenu(false); }}
+                                >
+                                    Neighborhood
+                                </button>
+                                <button 
+                                    className={`filter-option ${filter === 'category' ? 'active' : ''}`}
+                                    onClick={() => { setFilter('category'); setShowFilterMenu(false); }}
+                                >
+                                    Category
+                                </button>
+                                </div>
+                            )}
+                            </div>
+                        </div>
                     <div className="addpost">
                         <AddPost currentUser={currentUser} />
                     </div>

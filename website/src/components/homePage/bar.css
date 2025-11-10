@@ -261,29 +261,73 @@
 
 .search-input::placeholder { color: #aaa; }
 
-/* Neighborhood Selection */
-.neighborhood-filter {
+/* Searchbar Filter Selection */
+.filter-dropdown-wrapper {
+    position: relative;
+    width: 40%;
+    margin-left: 2vw;
+  }
+  
+  .filter-toggle-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    padding: 12px 5px;
+    border-radius: 12px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0);
+    color: #828282;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .filter-toggle-btn .btn-text {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    text-transform: capitalize; 
+  }
+
+  .filter-menu {
+    position: absolute;
+    width: 10vw;
+    background: #333;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    z-index: 1020;
+  }
+  
+  .filter-option {
     background: transparent;
     border: none;
-    color: #6e6e6e;
-    font-size: 15px;
-    font-weight: 500;
-    height: 100%;
+    color: #f0f0f0;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-align: left;
     cursor: pointer;
-    padding-left: 15px;
-}
-.neighborhood-filter:focus {
-    outline: none;
-    color: rgb(230, 230, 230);
-}
-.neighborhood-filter option {
-    background: #333;
-    color: rgb(88, 88, 88);
-}
+    transition: background-color 0.2s ease;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    width: 100%;
+  }
+  .filter-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .filter-option.active {
+    background: rgba(110, 152, 163, 0.5); 
+    color: #fff;
+    font-weight: 600;
+  }
   
 .search-divider {
     width: 1px;
     height: 24px;
     background-color: rgba(0, 0, 0, 0.2);
-    margin-left: 8vw;
+    margin-left: 15vw;
 }
