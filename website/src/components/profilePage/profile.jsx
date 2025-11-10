@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 function Profile({ currentUser }) {
   const [eventsPosted, setEventsPosted] = useState([]);
   const [incidentsPosted, setIncidentsPosted] = useState([]);
+  const [selectEvent, setSelectEvent] = useState(null);
+  const [selectIncident, setSelectIncident] = useState(null);
 
   // fetch data once currentUser is available
   useEffect(() => {
@@ -36,6 +38,43 @@ function Profile({ currentUser }) {
     fetchUserData();
   }, [currentUser]);
 
+  // Delete event/incident handlers
+  const handleDeleteEvent = async (event) => {
+    const confirmDelete = window.confirm(`Delete event ${event.title}? This action cannot be undo.`);
+    if (!confirmDelete) return;
+    try {
+      const response = await fetch(`http://localhost:4000/api/events/${event._id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setEventsPosted(prev => prev.filter(e => e._id !== event._id));
+        alert(`Event "${event.title}" deleted successfully!`);
+      }else{
+        console.error('Failed to delete event');
+      }
+    } catch (error) {
+      console.error('Error deleting event:', error);
+    }
+  }
+  const handleDeleteIncident = async (incident) => {
+    const confirmDelete = window.confirm(`Delete incident ${incident.title}? This action cannot be undo.`);
+    if (!confirmDelete) return;
+    try {
+      const response = await fetch(`http://localhost:4000/api/incidents/${incident._id}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        setIncidentsPosted(prev => prev.filter(i => i._id !== incident._id));
+        alert(`Incident "${incident.title}" deleted successfully!`);
+      }else {
+        console.error('Failed to delete incident');
+      }
+    } catch (error) {
+      console.error('Error deleting incident:', error);
+    }
+  }
+
   return (
     <div className='profile-page'>
       <Bar currentUser={currentUser} />
@@ -54,7 +93,25 @@ function Profile({ currentUser }) {
               {eventsPosted.length > 0 ? (
                 <ul>
                   {eventsPosted.map(event => (
-                    <li key={event._id || event.id}>{event.title}</li>
+                    <li key={event._id || event.id}>
+                      <span
+                        className="title"
+                        onClick={() => setSelectEvent(selectEvent === event._id ? null : event._id)}
+                      >{event.title}</span>
+                      {
+                        selectEvent === event._id && (
+                          <div style={{marginTop: '5px'}}>
+
+                            <button 
+                              className="delete-button" 
+                              onClick={() =>
+                                handleDeleteEvent(event)
+                              }
+                            >Delete</button>
+                          </div>
+                        )
+                      }
+                    </li>
                   ))}
                 </ul>
               ) : (
@@ -67,7 +124,20 @@ function Profile({ currentUser }) {
               {incidentsPosted.length > 0 ? (
                 <ul>
                   {incidentsPosted.map(incident => (
-                    <li key={incident._id || incident.id}>{incident.title}</li>
+                    <li key={incident._id || incident.id}>
+                      <span
+                        className="title"
+                        onClick={() => setSelectIncident(selectIncident === incident._id ? null : incident._id)}
+                      >{incident.title}</span>
+
+                      {
+                        selectIncident === incident._id && (
+                          <div style={{marginTop: '5px'}}>
+                            <button className="delete-button" onClick={() => handleDeleteIncident(incident)}>Delete</button>
+                          </div>
+                        )
+                      }
+                    </li>
                   ))}
                 </ul>
               ) : (
