@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import './Map.css';
+import { useNavigate } from 'react-router-dom';
 
-const Map = ({ searchQuery, userLocation }) => {
+const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
   const mapRef = useRef(null);
   const [events, setEvents] = useState([]);
   const [incidents, setIncidents] = useState([]);  
@@ -11,6 +12,7 @@ const Map = ({ searchQuery, userLocation }) => {
   const eventMarkersRef = useRef([]); 
   const incidentMarkersRef = useRef([]);
   const infoWindowRef = useRef(null);
+  const navigate = useNavigate();
 
   // Fetch events and incidents
   useEffect(() => {
@@ -144,11 +146,24 @@ const Map = ({ searchQuery, userLocation }) => {
                 target="_blank">
                 Show in Map
               </a>
+              <a id="chat-link-event-${event._id}" class="map-link">
+                  <span class="chat-icon"></span> Chat
+              </a>
             </div>
           `;
           infoWindowRef.current.close();
           infoWindowRef.current.setContent(content);
           infoWindowRef.current.open(map, marker);
+          google.maps.event.addListener(infoWindowRef.current, 'domready', () => { 
+            const chatLink = document.getElementById(`chat-link-event-${event._id}`);
+            if (chatLink) {
+              chatLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                openChatFromMap('event', event._id);
+                infoWindowRef.current.close();
+              });
+            }
+          });
         });
         eventMarkersRef.current.push(marker);
       }
@@ -174,16 +189,30 @@ const Map = ({ searchQuery, userLocation }) => {
                   target="_blank">
                   Show in Map
               </a>
+              <a class="map-link" id="chat-link-incident-${incident._id}" >
+                    <span class="chat-icon"></span> Chat
+              </a>
             </div>
             `;
             infoWindowRef.current.close();
             infoWindowRef.current.setContent(content);
             infoWindowRef.current.open(map, marker);
+
+            google.maps.event.addListener(infoWindowRef.current, 'domready', () => { 
+              const chatLink = document.getElementById(`chat-link-incident-${incident._id}`);
+              if (chatLink) {
+                chatLink.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  openChatFromMap('incident', incident._id);
+                  infoWindowRef.current.close();
+                });
+              }
+            });
           });
           incidentMarkersRef.current.push(marker);
         }
     });
-  }, [events, incidents, searchQuery, userLocation]);
+  }, [events, incidents, searchQuery, userLocation, openChatFromMap]);
 
   return <div ref={mapRef} style={{ height: '100%', width: '94%', marginLeft: '6%'}} />;
 };
