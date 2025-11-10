@@ -175,11 +175,14 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
           content: eventIcon.cloneNode(true)
         });
 
+        const imageHtml = event.image ? `<img src="http://localhost:4000/${event.image}" class="info-window-image" alt="Event Image" />` : '';
+
         marker.addListener('click', () => {
           const content = `
             <div class="info-window-content">
               <h3>${event.title}</h3>
               <p>${event.description}</p>
+              ${imageHtml}
               <a class="map-link"
                 href="https://www.google.com/maps/search/?api=1&query=${event.location.coordinates.lat},${event.location.coordinates.lng}"
                 target="_blank">
@@ -224,11 +227,14 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
           content: incidentIcon.cloneNode(true)
         });
 
+        const imageHtml = incident.image ? `<img src="http://localhost:4000/${incident.image}" class="info-window-image" alt="Incident Image" />` : '';
+
         marker.addListener('click', () => {
           const content = `
             <div class="info-window-content">
               <h3>${incident.title}</h3>
               <p>${incident.description}</p>
+              ${imageHtml}
               <a class="map-link"
                   href="https://www.google.com/maps/search/?api=1&query=${incident.location.coordinates.lat},${incident.location.coordinates.lng}"
                   target="_blank">
