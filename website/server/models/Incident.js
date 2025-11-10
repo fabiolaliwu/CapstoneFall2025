@@ -36,7 +36,7 @@ const IncidentSchema = new mongoose.Schema({
     ref: "User", 
     required: true 
   },
-  image_url: {
+  image: { 
     type: String,
     default: ""
   }

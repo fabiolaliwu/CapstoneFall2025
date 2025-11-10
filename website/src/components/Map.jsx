@@ -175,7 +175,7 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
           content: eventIcon.cloneNode(true)
         });
 
-        const imageHtml = event.image ? `<img src="http://localhost:4000/${event.image}" class="info-window-image" alt="Event Image" />` : '';
+        const imageHtml = event.image ? `<img src="${event.image}" class="info-window-image" alt="Event Image" />` : '';
 
         marker.addListener('click', () => {
           const content = `
@@ -227,8 +227,8 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
           content: incidentIcon.cloneNode(true)
         });
 
-        const imageHtml = incident.image ? `<img src="http://localhost:4000/${incident.image}" class="info-window-image" alt="Incident Image" />` : '';
-
+        const imageHtml = incident.image ? `<img src="${incident.image}" class="info-window-image" alt="Incident Image" />` : '';
+        
         marker.addListener('click', () => {
           const content = `
             <div class="info-window-content">

@@ -40,7 +40,7 @@ router.get("/", getAllIncidents);
 router.get("/:id", getIncidents);
 
 // POST new incident with image
-router.post("/", upload.single("image"), createNewIncident);
+router.post("/", createNewIncident);
 
 // DELETE
 router.delete("/:id", deleteIncident);
