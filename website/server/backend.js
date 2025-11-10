@@ -31,6 +31,7 @@ app.use("/api/events", eventRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/messages", messageRoutes);
+app.use('/avatars', express.static(path.join(process.cwd(), 'avatars')));
 
 // Create HTTP server and setup socket.io
 const server = http.createServer(app);
