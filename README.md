@@ -13,15 +13,11 @@
     ```sh
     cd website
     ```
-4. Install Google Maps loader
-    ```sh
-    npm install @googlemaps/js-api-loader
-    ```
-4. First, download the dependencies in package.json:
+4. Download the dependencies in package.json:
     ```sh
     npm install
     ```
-5. Second, start the development server
+5. Start the development server
     ```sh
     npm run dev
     ```
@@ -29,8 +25,7 @@
 6. In another terminal, run the backend
     ```sh 
     cd website/server
-    npm install socket.io
-    npm install express cors
+    npm install   
     node backend.js
     ```
 
