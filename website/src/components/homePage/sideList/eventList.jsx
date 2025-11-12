@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './eventList.css';
+import {FaHeart} from 'react-icons/fa';
 
 const calculateDistance = (loc1, loc2) => {
     if (!loc1 || !loc2) return Infinity; 
@@ -23,7 +24,7 @@ const calculateDistance = (loc1, loc2) => {
     return distance;
 };
 
-function EventList({ events, onClose, userLocation, onSelect }) {
+function EventList({ events, onClose, userLocation, onSelect, currentUser }) {
     const sortedEvents = [...events].sort((a, b) => {
         const locA = a.location ? a.location.coordinates : null;
         const locB = b.location ? b.location.coordinates : null;
@@ -34,6 +35,75 @@ function EventList({ events, onClose, userLocation, onSelect }) {
         return distA - distB;
     });
 
+  const [savedEvents, setSavedEvents] = useState([]);
+  const [savingEventId, setSavingEventId] = useState(null);
+  const handleSaveEvent = async (event) => {
+    if (!currentUser?._id || savingEventId) return;
+    const eventId = String(event._id);
+    const wasSaved = savedEvents.includes(eventId);
+    
+    setSavingEventId(eventId);
+    // Optimistic update
+    setSavedEvents(prev => wasSaved
+      ? prev.filter(id => id !== eventId)
+      : [...prev, eventId]
+    );
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/users/${currentUser._id}/savedEvents`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ eventId: event._id }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error('Failed to save/unsave event');
+      }else{
+        alert(wasSaved ? 'Event unsaved successfully!' : 'Event saved successfully!');
+      }
+    } catch (error) {
+      console.error('Error saving/unsaving event:', error);
+      // Revert optimistic update on error
+      setSavedEvents(prev => wasSaved
+        ? [...prev, eventId]
+        : prev.filter(id => id !== eventId)
+      );
+    } finally {
+      setSavingEventId(null);
+    }
+  }
+
+  useEffect(() => {
+    const fetchSavedEvents = async () => {
+      if (!currentUser?._id) return;
+      try {
+        const response = await fetch(
+          `http://localhost:4000/api/users/${currentUser._id}/savedEvents`
+        );
+        if (response.ok) {
+          const userData = await response.json();
+          console.log('Full user data with savedEvents:', userData);
+          if (Array.isArray(userData)) {
+            const savedIds = userData.map(item => String(item._id || item));
+            setSavedEvents(savedIds);
+          } else {
+            setSavedEvents([]);
+          }
+          
+        } else {
+          console.log('Failed to fetch user data, status:', response.status);
+          setSavedEvents([]);
+        }
+      } catch (error) {
+        console.error('Error fetching saved events:', error);
+      }
+    };
+    fetchSavedEvents();
+  }, [currentUser._id]);
+  
+  
+
     return (
         <div className="event-list-container">
         <div className="event-list">
@@ -42,6 +112,7 @@ function EventList({ events, onClose, userLocation, onSelect }) {
             {sortedEvents.map((event, index) => {
                 const eventLocation = event.location ? event.location.coordinates : null;
                 const distance = calculateDistance(userLocation, eventLocation);
+                const isEventSaved = savedEvents.includes(String(event._id));
 
                 return(
                 <div 
@@ -49,7 +120,21 @@ function EventList({ events, onClose, userLocation, onSelect }) {
                     className="event-item" 
                     onClick={() => onSelect(event._id)}
                 >
-                    <div className="event-distance-bar"> {distance.toFixed(2)} mi </div>  
+                    <div className="distance-heart-container">
+                        <div className="event-distance-bar"> {distance.toFixed(2)} mi </div>  
+                        <div
+                            className="save-event-icon" 
+                            onClick={(e) => {
+                                e.stopPropagation(); 
+                                handleSaveEvent(event);
+                            }}
+                        >
+                          <FaHeart 
+                              color={savedEvents.includes(String(event._id)) ? '#f03e82' : 'grey'} 
+                          />
+                            {savingEventId === String(event._id) && '...'}
+                        </div>
+                    </div>
                     <h3>{event.title}</h3>
                     <p>{event.description}</p>
                     <span>

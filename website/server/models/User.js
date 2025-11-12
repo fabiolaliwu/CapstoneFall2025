@@ -32,7 +32,11 @@ const UserSchema = new mongoose.Schema({
       'avatar8.png',
     ],
     default: 'avatar8.png'
-  }
+  },
+  savedEvents: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Event'
+  }],
 
 }, {
   timestamps: true

@@ -100,3 +100,9 @@
     width: fit-content;
     box-shadow: 0 2px 5px rgba(74, 108, 247, 0.2);
 }
+
+.distance-heart-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

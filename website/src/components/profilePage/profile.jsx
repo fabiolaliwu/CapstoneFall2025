@@ -12,6 +12,8 @@ function Profile({ currentUser }) {
   const [incidentsPosted, setIncidentsPosted] = useState([]);
   const [selectEvent, setSelectEvent] = useState(null);
   const [selectIncident, setSelectIncident] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [savedEvents, setSavedEvents] = useState([]);
 
   // Avatr selection handling and update to DB
   const [showAvatarList, setShowAvatarList] = useState(false);
@@ -65,18 +67,24 @@ function Profile({ currentUser }) {
       try {
 
         // fetch events created by this user
-        const eventsResponse = await fetch(`http://localhost:4000/api/events/user/${currentUser._id}`);
-        const incidentsResponse = await fetch(`http://localhost:4000/api/incidents/user/${currentUser._id}`);
+        const [eventsResponse, incidentsResponse, savedEventsResponse] = await Promise.all([
+          fetch(`http://localhost:4000/api/events/user/${currentUser._id}`),
+          fetch(`http://localhost:4000/api/incidents/user/${currentUser._id}`),
+          fetch(`http://localhost:4000/api/users/${currentUser._id}/savedEvents`),
+        ]);
 
-        if (!eventsResponse.ok || !incidentsResponse.ok) {
+        if (!eventsResponse.ok || !incidentsResponse.ok || !savedEventsResponse.ok) {
           throw new Error('Failed to fetch user posts');
         }
 
         const eventsData = await eventsResponse.json();
         const incidentsData = await incidentsResponse.json();
+        const savedEventsData = await savedEventsResponse.json();
 
         setEventsPosted(eventsData || []);
         setIncidentsPosted(incidentsData || []);
+        setSavedEvents(savedEventsData || []);
+        
       } catch (error) {
         console.error('Error loading profile data:', error);
       } finally {
@@ -221,6 +229,22 @@ function Profile({ currentUser }) {
                 </ul>
               ) : (
                 <p>No incidents reported yet.</p>
+              )}
+            </div>
+
+            {/* Saved Event List */}
+            <div className='saved-event-box'>
+              <h3>Saved Events ({savedEvents.length})</h3>
+              {savedEvents.length > 0 ? (
+                <ul>
+                  {savedEvents.map(event => (
+                    <li key={event._id || event.id}>
+                      <span className="title">{event.title}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No saved events yet.</p>
               )}
             </div>
           </div>

@@ -36,6 +36,7 @@ function EventContainer({ currentUser, userLocation, onClose, initialSelectedId 
                     userLocation={userLocation}
                     onClose={onClose}
                     onSelect={setSelectedEventId}
+                    currentUser={currentUser}
                 />
             </div>
             <hr className="container-divider" />
