@@ -18,7 +18,26 @@ const UserSchema = new mongoose.Schema({
     type: String,
     enum: ['admin', 'user'],
     default: 'user'
-  }
+  },
+  avatar: {
+    type: String,
+    enum: [
+      'avatar1.png',
+      'avatar2.png',
+      'avatar3.png',
+      'avatar4.png',
+      'avatar5.png',
+      'avatar6.png',
+      'avatar7.png',
+      'avatar8.png',
+    ],
+    default: 'avatar8.png'
+  },
+  savedEvents: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Event'
+  }],
+
 }, {
   timestamps: true
 });

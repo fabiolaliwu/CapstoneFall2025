@@ -7,6 +7,9 @@ import {
     deleteUser,
     loginUser,
     getUserById,
+    updateAvatar,
+    eventSaveList,
+    getSavedEvents
 } from "../controllers/userControllers.js";
 
 const router = express.Router();
@@ -28,4 +31,14 @@ router.post("/login", loginUser);
 
 // GET user by id
 router.get("/:id", getUserById);
+
+// PUT /api/users/:id/avatar
+router.put('/:id/avatar', updateAvatar);
+
+// PUT /api/users/:id/savedEvents
+router.put('/:id/savedEvents', eventSaveList);
+
+// GET /api/users/:id/savedEvents
+router.get('/:id/savedEvents', getSavedEvents);
+
 export default router;

@@ -2,11 +2,62 @@ import './profile.css';
 import Bar from '../homePage/bar';
 import { useState, useEffect } from 'react';
 
+const AVATARS =[
+  'avatar1.png', 'avatar2.png', 'avatar3.png', 'avatar4.png',
+  'avatar5.png', 'avatar6.png', 'avatar7.png', 'avatar8.png',
+]
+
 function Profile({ currentUser }) {
   const [eventsPosted, setEventsPosted] = useState([]);
   const [incidentsPosted, setIncidentsPosted] = useState([]);
   const [selectEvent, setSelectEvent] = useState(null);
   const [selectIncident, setSelectIncident] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [savedEvents, setSavedEvents] = useState([]);
+
+  // Avatr selection handling and update to DB
+  const [showAvatarList, setShowAvatarList] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState(currentUser?.avatar || 'avatar8.png');
+
+  const handleAvatar = async (avatar) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/users/${currentUser._id}/avatar`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ avatar }),
+        }
+      );
+      if (response.ok) {
+        setSelectedAvatar(avatar);
+        setShowAvatarList(false);
+        currentUser.avatar = avatar;
+        alert('Avatar updated successfully!');
+        console.log('Avatar updated:', avatar);
+      } else {
+        console.error('Failed to update avatar');
+      }
+    } catch (error) {
+      console.error('Error updating avatar:', error);
+    }
+  };
+  // get current user avatar
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      if (!currentUser?._id) return;
+      try {
+        const res = await fetch(`http://localhost:4000/api/users/${currentUser._id}`);
+        if (!res.ok) 
+          throw new Error('Failed to fetch user');
+        const data = await res.json();
+        setSelectedAvatar(data.avatar || 'avatar8.png');
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchCurrentUser();
+  }, [currentUser?._id]);
 
   // fetch data once currentUser is available
   useEffect(() => {
@@ -16,18 +67,24 @@ function Profile({ currentUser }) {
       try {
 
         // fetch events created by this user
-        const eventsResponse = await fetch(`http://localhost:4000/api/events/user/${currentUser._id}`);
-        const incidentsResponse = await fetch(`http://localhost:4000/api/incidents/user/${currentUser._id}`);
+        const [eventsResponse, incidentsResponse, savedEventsResponse] = await Promise.all([
+          fetch(`http://localhost:4000/api/events/user/${currentUser._id}`),
+          fetch(`http://localhost:4000/api/incidents/user/${currentUser._id}`),
+          fetch(`http://localhost:4000/api/users/${currentUser._id}/savedEvents`),
+        ]);
 
-        if (!eventsResponse.ok || !incidentsResponse.ok) {
+        if (!eventsResponse.ok || !incidentsResponse.ok || !savedEventsResponse.ok) {
           throw new Error('Failed to fetch user posts');
         }
 
         const eventsData = await eventsResponse.json();
         const incidentsData = await incidentsResponse.json();
+        const savedEventsData = await savedEventsResponse.json();
 
         setEventsPosted(eventsData || []);
         setIncidentsPosted(incidentsData || []);
+        setSavedEvents(savedEventsData || []);
+        
       } catch (error) {
         console.error('Error loading profile data:', error);
       } finally {
@@ -80,11 +137,47 @@ function Profile({ currentUser }) {
       <Bar currentUser={currentUser} />
       <div className='profile-section'>
         <div className='profile-box-background'>
-            <div className='header-section'>
-                <div className='profile-username'>
-                    {currentUser?.username || 'idk why its not working'}
-                </div>
+
+          {/* Header section with avatar and username */}
+          <div className='header-section'>
+            {currentUser && (
+              <img
+                src={`http://localhost:4000/avatars/${selectedAvatar}?t=${Date.now()}`}
+                onClick={() => setShowAvatarList(!showAvatarList)}
+                alt="User Avatar"
+                className="avatar"
+              />
+            )}
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div className='profile-username' style={{ fontSize: '20px', fontWeight: 'bold' }}>
+                {currentUser?.username || 'idk why its not working'}
+              </div>
             </div>
+          </div>
+
+          {/* Avatar list when triggered */}
+          {showAvatarList && (
+            <div className='avatar-selection'>
+              <div className='avatars-map'>
+                {AVATARS.map(avatar => (
+                  <img
+                    key={avatar}
+                    src={`http://localhost:4000/avatars/${avatar}`}
+                    alt={avatar}
+                    className="avatar-option"
+                    onClick={() => setSelectedAvatar(avatar)}
+                  />
+                ))}
+              </div>
+              {selectedAvatar === 'avatar8.png' && <p>You're still a potato 🥔. Choose any avatar you like!</p>}
+              {/* Button to update avatar */}
+              <button 
+                className="avatar-button"
+                onClick={() => handleAvatar(selectedAvatar)}
+              >Save selection
+              </button>
+            </div>
+          )}
           
 
           <div className='profile-boxes'>
@@ -98,19 +191,15 @@ function Profile({ currentUser }) {
                         className="title"
                         onClick={() => setSelectEvent(selectEvent === event._id ? null : event._id)}
                       >{event.title}</span>
-                      {
-                        selectEvent === event._id && (
-                          <div style={{marginTop: '5px'}}>
-
+                      {/* Click title to delete or update event */}
+                      {selectEvent === event._id && (
+                          <div>
                             <button 
                               className="delete-button" 
-                              onClick={() =>
-                                handleDeleteEvent(event)
-                              }
-                            >Delete</button>
+                              onClick={() => handleDeleteEvent(event)}
+                            > Delete</button>
                           </div>
-                        )
-                      }
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -129,19 +218,33 @@ function Profile({ currentUser }) {
                         className="title"
                         onClick={() => setSelectIncident(selectIncident === incident._id ? null : incident._id)}
                       >{incident.title}</span>
-
-                      {
-                        selectIncident === incident._id && (
-                          <div style={{marginTop: '5px'}}>
+                      {/* Click title to delete or update incident */}
+                      {selectIncident === incident._id && (
+                          <div>
                             <button className="delete-button" onClick={() => handleDeleteIncident(incident)}>Delete</button>
                           </div>
-                        )
-                      }
+                      )}
                     </li>
                   ))}
                 </ul>
               ) : (
                 <p>No incidents reported yet.</p>
+              )}
+            </div>
+
+            {/* Saved Event List */}
+            <div className='saved-event-box'>
+              <h3>Saved Events ({savedEvents.length})</h3>
+              {savedEvents.length > 0 ? (
+                <ul>
+                  {savedEvents.map(event => (
+                    <li key={event._id || event.id}>
+                      <span className="title">{event.title}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No saved events yet.</p>
               )}
             </div>
           </div>

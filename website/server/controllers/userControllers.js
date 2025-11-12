@@ -131,3 +131,70 @@ export const getUserById = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+// update user avatar
+export const updateAvatar = async (req, res) => {
+    const { avatar } = req.body; 
+    if(!avatar){
+        return res.status(400).json({ error: "Avatar is required" });
+    }
+    try{
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            { avatar: req.body.avatar },
+            { new: true}
+        );
+        if(!updatedUser){
+            return  res.status(404).json({ error: "User not found" });
+        }
+        res.status(200).json(updatedUser);
+    }
+    catch(err){
+        res.status(500).json({ error: err.message });
+    }
+}
+
+// toggle saved event
+export const eventSaveList = async (req, res) => {
+    const userId = req.params.id;
+    const { eventId } = req.body;
+  
+    try {
+      const user = await User.findById(userId);
+      if (!user) return res.status(404).json({ error: "User not found" });
+  
+      const eventObjectId = new mongoose.Types.ObjectId(eventId);
+      const index = user.savedEvents.findIndex(
+        id => id.toString() === eventObjectId.toString()
+      );
+  
+      let message;
+      if (index > -1) {
+        user.savedEvents.splice(index, 1);
+        message = "Event unsaved successfully";
+      } else {
+        user.savedEvents.push(eventObjectId);
+        message = "Event saved successfully";
+      }
+  
+      await user.save();
+      
+      // Populate the saved events before sending response
+      await user.populate('savedEvents');
+      res.status(200).json({ user, message });
+    } catch (err) {
+      console.error("Error saving event:", err);
+      res.status(500).json({ error: err.message });
+    }
+};
+
+// GET saved events for a user
+export const getSavedEvents = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).populate('savedEvents', '-description');
+        if (!user) return res.status(404).json({ error: "User not found" });
+        res.status(200).json(user.savedEvents);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
