@@ -55,7 +55,7 @@
     max-width: 1200px; /* makes boxes wider */
     margin: 0 auto;
 }
-.event-box, .incident-box {
+.event-box, .incident-box, .saved-event-box {
     flex: 1 1 0; /* makes both boxes equal width */
     background-color: #ffffff;
     border-radius: 14px;
