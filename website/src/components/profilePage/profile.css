@@ -74,11 +74,12 @@
     background-color: #4b7b86;
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
-    width: 100px;
+    width: 80px;
+    margin-top: 5px;
 }
 li {
     display: list-item;
