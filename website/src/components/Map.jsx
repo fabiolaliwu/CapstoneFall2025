@@ -25,9 +25,9 @@ const Map = ({
   const directionsServiceRef = useRef(null);
   const directionsRendererRef = useRef(null);
 
-  // Fetch events and incidents when searchQuery or filterValues change
+// Fetch events and incidents when searchQuery or filterValues change
 useEffect(() => {
-  // Create base parameters for both events and incidents
+  // Create base parameters
   const baseParams = new URLSearchParams();
   if (searchQuery) baseParams.append('search', searchQuery);
   if (filterValues.dateRange !== 'Any') baseParams.append('dateRange', filterValues.dateRange);
@@ -41,7 +41,7 @@ useEffect(() => {
     try {
       const response = await fetch(`http://localhost:4000/api/events?${eventParams.toString()}`);
       const data = await response.json();
-      setEvents(data); // Call properties to send data UP to Homepage
+      setEvents(data);
     } catch (error) {
       console.error('Error fetching events:', error);
     }
@@ -226,6 +226,7 @@ useEffect(() => {
             } 
           });
         });
+        eventMarkersRef.current.push(marker);
       }
     });
 

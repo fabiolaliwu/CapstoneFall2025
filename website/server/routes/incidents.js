@@ -4,7 +4,6 @@ import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
 import {
-    getAllIncidents,
     getIncidents,
     createNewIncident,
     deleteIncident,
@@ -81,9 +80,6 @@ router.get("/", async (req, res) => {
       res.status(500).json({ error: err.message });
   }
 });
-
-// GET all incidents:
-router.get("/", getAllIncidents);
 
 // GET a single incident by id:
 router.get("/:id", getIncidents);

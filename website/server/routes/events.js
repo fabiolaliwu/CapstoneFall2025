@@ -1,7 +1,6 @@
 import express from "express";
 import Event from "../models/Event.js";
 import {
-    getAllEvents,
     getEventById,
     createNewEvent,
     deleteEvent,
@@ -9,7 +8,6 @@ import {
 }from "../controllers/eventControllers.js";
 
 const router = express.Router();
-
 router.get("/", async (req, res) => {
     try {
         const { search, category, dateRange } = req.query;
@@ -57,9 +55,6 @@ router.get("/", async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-
-// GET all events:
-router.get("/", getAllEvents);
 
 // GET a single event by id:
 router.get("/:id", getEventById);
