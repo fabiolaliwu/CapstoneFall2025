@@ -1,6 +1,8 @@
 import { useRef, useEffect } from 'react';
 import { useJsApiLoader } from '@react-google-maps/api';
 
+const LIBRARIES = ['places'];
+
 export function useLocationInput(onChange) {
   const autocompleteRef = useRef(null);
   const locationInputRef = useRef(null);
@@ -9,35 +11,38 @@ export function useLocationInput(onChange) {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    libraries: ['places'],
+    libraries: LIBRARIES,
   });
 
   // autocomplete form when Google Maps loads
   useEffect(() => {
     if(!isLoaded || !window.google) return;
 
-    if (locationInputRef.current) {
-      autocompleteRef.current = new window.google.maps.places.Autocomplete(
+    if (!autocompleteRef.current && locationInputRef.current) {
+      const autocomplete = new window.google.maps.places.Autocomplete(
         locationInputRef.current,
-        { 
+        {
           types: ['geocode', 'establishment'],
           componentRestrictions: { country: 'us' },
-          fields: ['formatted_address', 'geometry']
         }
       );
-      autocompleteRef.current.addListener('place_changed', () => {
-        const place = autocompleteRef.current.getPlace();
+    
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
         if (place && place.formatted_address) {
-          const location = place.geometry?.location;
-          const coordinates = location ? { 
-            lat: location.lat(), 
-            lng: location.lng() 
-          } : null;
+          const geometry = place.geometry?.location;
+          const coordinates = geometry
+            ? { lat: geometry.lat(), lng: geometry.lng() }
+            : null;
+    
           console.log('Coordinates:', coordinates);
           onChange(place.formatted_address, coordinates);
+        } else {
+          console.error('No formatted address found for the selected place.');
         }
       });
-    }
+      autocompleteRef.current = autocomplete;
+    }    
   }, [isLoaded, onChange]);
 
   // Handle "Use My Location"  click
@@ -75,6 +80,7 @@ export function useLocationInput(onChange) {
       );
     } else {
         alert('Geolocation is not supported by your browser.');
+        return;
     }
   };
 
