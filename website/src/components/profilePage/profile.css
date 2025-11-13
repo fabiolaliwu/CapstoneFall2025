@@ -54,6 +54,7 @@
     width: 90%;
     max-width: 1200px; /* makes boxes wider */
     margin: 0 auto;
+    margin-top: 5vh;
 }
 .event-box, .incident-box, .saved-event-box {
     flex: 1 1 0; /* makes both boxes equal width */
@@ -103,7 +104,12 @@ li {
     border: none;
     border-radius: 6px;
     font-size: 10px;
-    margin-bottom: 10px;
+    font-family: 'Silkscreen';
+    position: absolute;
+    display: flex;
+    margin-top: 10px;
+    left: 53%;
+    transform: translateX(-50%);
 }
 
 .avatars-map {
@@ -124,7 +130,7 @@ li {
 
 .avatar-selection p {
     font-style: italic;
-    font-size:10px;
+    font-size: 10px;
     color: #555;
     text-align: center;
     font-family: 'Silkscreen';
