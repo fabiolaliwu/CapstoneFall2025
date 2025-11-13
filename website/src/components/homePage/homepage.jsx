@@ -13,6 +13,14 @@ function Homepage({currentUser}) {
     const [userLocation, setUserLocation] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [mapSelectedId, setMapSelectedId] = useState(null);
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [filterValues, setFilterValues] = useState({
+        eventCategory: 'All',
+        incidentCategory: 'All',
+        dateRange: 'Any'
+      });
+    // Handles which filter dropdown is currently open
+    const [activeMenu, setActiveMenu] = useState(null);
 
     const toggleList = (listName) => {
         if (openList === listName) {
@@ -56,7 +64,15 @@ function Homepage({currentUser}) {
     return (
         <div className='homepage'>
             <div className = 'background'>
-                <Map searchQuery={searchQuery} userLocation={userLocation} openChatFromMap={openChatFromMap} />
+                <Map 
+                    searchQuery={searchQuery} 
+                    userLocation={userLocation}
+                    events={events}       
+                    setEvents={setEvents} 
+                    incidents={incidents}
+                    setIncidents={setIncidents}
+                    filterValues={filterValues}
+                    openChatFromMap={openChatFromMap} />
             </div>
             <div className='content'>
                 <Bar 
@@ -66,6 +82,12 @@ function Homepage({currentUser}) {
                     openEvents={() => toggleList('events')}
                     openSummary={() => toggleList('summary')}
                     openIncidents={() => toggleList('incidents')}
+                    isFilterOpen={isFilterOpen}
+                    setIsFilterOpen={setIsFilterOpen}
+                    filterValues={filterValues}
+                    setFilterValues={setFilterValues}
+                    activeMenu={activeMenu}
+                    setActiveMenu={setActiveMenu}
                 />
             </div>
 

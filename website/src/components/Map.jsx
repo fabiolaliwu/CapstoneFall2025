@@ -1,12 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import './Map.css';
 import { useNavigate } from 'react-router-dom';
 
-const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
-  const mapRef = useRef(null);
-  const [events, setEvents] = useState([]);
-  const [incidents, setIncidents] = useState([]);  
+// Accept 'events' and 'incidents' as properties
+const Map = ({ 
+    searchQuery, 
+    userLocation, 
+    openChatFromMap, 
+    filterValues, 
+    setEvents, 
+    setIncidents,
+    events, 
+    incidents 
+}) => {
+  const mapRef = useRef(null); 
   const mapInstanceRef = useRef(null);
   const markerLibRef = useRef(null); 
   const eventMarkersRef = useRef([]); 
@@ -17,32 +25,47 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
   const directionsServiceRef = useRef(null);
   const directionsRendererRef = useRef(null);
 
+// Fetch events and incidents when searchQuery or filterValues change
+useEffect(() => {
+  // Create base parameters
+  const baseParams = new URLSearchParams();
+  if (searchQuery) baseParams.append('search', searchQuery);
+  if (filterValues.dateRange !== 'Any') baseParams.append('dateRange', filterValues.dateRange);
 
-  // Fetch events and incidents
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch('http://localhost:4000/api/events');
-        const data = await response.json();
-        setEvents(data);
-      } catch (error) {
-        console.error('Error fetching events:', error);
-      }
-    };
+  const fetchEvents = async () => {
+    const eventParams = new URLSearchParams(baseParams);
+    if (filterValues.eventCategory !== 'All') {
+      eventParams.append('category', filterValues.eventCategory);
+    }
+    
+    try {
+      const response = await fetch(`http://localhost:4000/api/events?${eventParams.toString()}`);
+      const data = await response.json();
+      setEvents(data);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  };
 
-    const fetchIncidents = async () => {
-      try {
-        const response = await fetch('http://localhost:4000/api/incidents');
-        const data = await response.json();
-        setIncidents(data);
-      } catch (error) {
-        console.error('Error fetching incidents:', error);
-      }
-    };
+  const fetchIncidents = async () => {
+    const incidentParams = new URLSearchParams(baseParams);
+    if (filterValues.incidentCategory !== 'All') {
+      incidentParams.append('category', filterValues.incidentCategory);
+    }
 
-    fetchEvents();
-    fetchIncidents();
-  }, []);
+    try {
+      const response = await fetch(`http://localhost:4000/api/incidents?${incidentParams.toString()}`);
+      const data = await response.json();
+      setIncidents(data);
+    } catch (error) {
+      console.error('Error fetching incidents:', error);
+    }
+  };
+
+  fetchEvents();
+  fetchIncidents();
+  
+}, [searchQuery, filterValues, setEvents, setIncidents]);
 
   // Initialize map only once
   useEffect(() => {
@@ -66,7 +89,6 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
         });
         mapInstanceRef.current = map;
 
-        // Direction route setup
         directionsServiceRef.current = new google.maps.DirectionsService();
         directionsRendererRef.current = new google.maps.DirectionsRenderer({
           map: map,
@@ -76,14 +98,12 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
             strokeOpacity: 0.8,
             strokeWeight: 6
           }
-        
         });
-
       }
     });
   }, []);
 
-  // Show route bettwen curren location and event/incident
+  // Show route
   const showRoute = (origin, destination) => {
     if (!directionsServiceRef.current || !directionsRendererRef.current) return;
 
@@ -104,9 +124,9 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
     );
   };
 
-  // Update markers when events, incidents, or searchQuery change
+  // Update markers when properties change
   useEffect(() => {
-    if (!mapInstanceRef.current) return;
+    if (!mapInstanceRef.current || !markerLibRef.current) return;
     const map = mapInstanceRef.current;
 
     // Clear previous markers
@@ -123,18 +143,6 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
     incidentIcon.style.fontSize = '2rem';
     incidentIcon.innerHTML = '⚠️';
 
-    const filteredEvents = searchQuery
-      ? events.filter(event =>
-          event.title.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      : events;
-
-    const filteredIncidents = searchQuery
-      ? incidents.filter(incident =>
-          incident.title.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      : incidents;
-
     // User location marker
     if (userLocation) {
       const userMarkerIcon = document.createElement('div');
@@ -145,7 +153,7 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
       userMarkerIcon.style.border = '2px solid #FFFFFF'; 
       userMarkerIcon.style.boxShadow = '0 0 5px rgba(0, 0, 0, 0.5)';
 
-      const { AdvancedMarkerElement } = markerLibRef.current || {};
+      const { AdvancedMarkerElement } = markerLibRef.current;
       if (AdvancedMarkerElement && userLocation) {
         const userMarker = new AdvancedMarkerElement({
           map,
@@ -165,8 +173,8 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
       infoWindowRef.current.close();
     });  
 
-    // Add Event markers
-    filteredEvents.forEach(event => {
+    // Add Event markers using the events property
+    events.forEach(event => {
       if (event.location?.coordinates) {
         const marker = new markerLibRef.current.AdvancedMarkerElement({
           map,
@@ -218,11 +226,12 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
             } 
           });
         });
+        eventMarkersRef.current.push(marker);
       }
     });
 
-    // Add Incident markers
-    filteredIncidents.forEach(incident => {
+    // Add Incident markers using the incidents property
+    incidents.forEach(incident => {
       if (incident.location?.coordinates) {
         const marker = new markerLibRef.current.AdvancedMarkerElement({
           map,
@@ -267,7 +276,7 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
           incidentMarkersRef.current.push(marker);
         }
     });
-  }, [events, incidents, searchQuery, userLocation, openChatFromMap]);
+  }, [events, incidents, userLocation, openChatFromMap]);
 
   return <div ref={mapRef} style={{ height: '100%', width: '94%', marginLeft: '6%'}} />;
 };

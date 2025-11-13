@@ -4,7 +4,7 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Logo from '/logo.png';
 import Buttons from './buttons'; 
-import { FaInfoCircle, FaQuestionCircle, FaUserCircle } from "react-icons/fa"; // Import icons
+import { FaInfoCircle, FaQuestionCircle, FaUserCircle} from "react-icons/fa"; // Import icons
 import { IoLogInOutline } from "react-icons/io5";
 
 function Bar({ 
@@ -13,12 +13,27 @@ function Bar({
     setSearchQuery,
     openEvents,
     openSummary,
-    openIncidents 
+    openIncidents,
+    isFilterOpen,
+    setIsFilterOpen,
+    filterValues,
+    setFilterValues,
+    activeMenu,
+    setActiveMenu
 }) {
     const navigate = useNavigate();
     const location = useLocation();    
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const isHomePage = location.pathname === '/home' || location.pathname === '/';
+
+    const handleFilterClick = (menuName) => {
+        setActiveMenu(activeMenu === menuName ? null : menuName);
+    };
+    // Handles the selection of an item from inside a dropdown menu
+    const selectOption = (filterName, value) => {
+        setFilterValues(prev => ({ ...prev, [filterName]: value }));
+        setActiveMenu(null); // Close menu after you made your selection
+    };
     
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -95,19 +110,112 @@ function Bar({
                 </div>
             </div>
             
-            {/* --- Handle elements on map --- */}
+            {/* Handle elements on map */}
             {isLoggedIn && isHomePage && (
                 <div className="floating-controls">
-                    <form className="search-bar" onSubmit={handleSearch}>
-                        <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="Search" className="search-icon"/>
-                        <input 
-                            type="text" 
-                            className="search-input"
-                            placeholder="Enter a keyword"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                    </form>
+                    <div className="search-bar-wrapper">
+                        <div className="search-bar">
+                            <form className="search-form" onSubmit={handleSearch}>
+                                <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="Search" className="search-icon"/>
+                                <input 
+                                    type="text" 
+                                    className="search-input"
+                                    placeholder="Enter a keyword"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                            </form>
+                        <div className="search-divider"></div>
+                        {/* Filter Button */}
+                        <button 
+                                className={`filter-btn ${isFilterOpen ? 'active' : ''}`}
+                                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                            >
+                                <img 
+                                    src="/filter.png" 
+                                    className="filter-icon"
+                                    alt="Filter"
+                                />
+                            </button>
+                        </div>
+                        {/* Full filter bar appear after button is toggled */}
+                        {isFilterOpen && (
+                            <div className="filter-bar">
+                                {/* Filter 1: Event Category */}
+                                <div className="filter-item-wrapper">
+                                    <button className="filter-select-btn" onClick={() => handleFilterClick('eventCategory')}>
+                                        <span className="filter-label">event category</span>
+                                        <span className="filter-value">
+                                            {filterValues.eventCategory}
+                                            <span className="filter-arrow"></span>
+                                        </span>
+                                    </button>
+                                    {activeMenu === 'eventCategory' && (
+                                        <div className="filter-dropdown-menu">
+                                            <button onClick={() => selectOption('eventCategory', 'All')}>All</button>
+                                            <button onClick={() => selectOption('eventCategory', 'Street Fair')}>Street Fair</button>
+                                            <button onClick={() => selectOption('eventCategory', 'Food & Drink')}>Food & Drink</button>
+                                            <button onClick={() => selectOption('eventCategory', 'Pop-Up')}>Pop-Up</button>
+                                            <button onClick={() => selectOption('eventCategory', 'Networking')}>Networking</button>
+                                            <button onClick={() => selectOption('eventCategory', 'Concert/Live Music')}>Concert/Live Music</button>
+                                            <button onClick={() => selectOption('eventCategory', 'Neighborhood')}>Neighborhood</button>
+                                            <button onClick={() => selectOption('eventCategory', 'Job')}>Job</button>
+                                            <button onClick={() => selectOption('eventCategory', 'Sports')}>Sports</button>
+                                            <button onClick={() => selectOption('eventCategory', 'Pet/Animal')}>Pet/Animal</button>
+                                            <button onClick={() => selectOption('eventCategory', 'Promotions')}>Promotions</button>
+                                            <button onClick={() => selectOption('eventCategory', 'Education')}>Education</button>
+
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="filter-divider"></div>
+
+                                {/* Filter 2: Incident Category */}
+                                <div className="filter-item-wrapper">
+                                    <button className="filter-select-btn" onClick={() => handleFilterClick('incidentCategory')}>
+                                        <span className="filter-label">incident category</span>
+                                        <span className="filter-value">
+                                            {filterValues.incidentCategory}
+                                            <span className="filter-arrow"></span>
+                                        </span>
+                                    </button>
+                                    {activeMenu === 'incidentCategory' && (
+                                        <div className="filter-dropdown-menu">
+                                            <button onClick={() => selectOption('incidentCategory', 'All')}>All</button>
+                                            <button onClick={() => selectOption('incidentCategory', 'Train Delayed')}>Train Delayed</button>
+                                            <button onClick={() => selectOption('incidentCategory', 'Car Collision')}>Car Collision</button>
+                                            <button onClick={() => selectOption('incidentCategory', 'Fire')}>Fire</button>
+                                            <button onClick={() => selectOption('incidentCategory', 'Road Construction')}>Road Construction</button>
+                                            <button onClick={() => selectOption('incidentCategory', 'Medical Emergency')}>Medical Emergency</button>
+                                            <button onClick={() => selectOption('incidentCategory', 'Protest')}>Protest</button>
+                                            <button onClick={() => selectOption('incidentCategory', 'Gun')}>Gun</button>
+                                            <button onClick={() => selectOption('incidentCategory', 'Crime')}>Crime</button>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="filter-divider"></div>
+
+                                {/* Filter 3: Date Range */}
+                                <div className="filter-item-wrapper">
+                                    <button className="filter-select-btn" onClick={() => handleFilterClick('dateRange')}>
+                                        <span className="filter-label">date range</span>
+                                        <span className="filter-value">
+                                            {filterValues.dateRange}
+                                            <span className="filter-arrow"></span>
+                                        </span>
+                                    </button>
+                                    {activeMenu === 'dateRange' && (
+                                        <div className="filter-dropdown-menu">
+                                            <button onClick={() => selectOption('dateRange', 'Any')}>Any</button>
+                                            <button onClick={() => selectOption('dateRange', 'Today')}>Today</button>
+                                            <button onClick={() => selectOption('dateRange', 'Past 7 Days')}>Past 7 Days</button>
+                                            <button onClick={() => selectOption('dateRange', 'Last Month')}>Last Month</button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
                     <div className="addpost">
                         <AddPost currentUser={currentUser} />
                     </div>

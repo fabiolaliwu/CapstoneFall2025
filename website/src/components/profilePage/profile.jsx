@@ -178,8 +178,7 @@ function Profile({ currentUser }) {
               </button>
             </div>
           )}
-          
-
+          <br></br>
           <div className='profile-boxes'>
             <div className='event-box'>
               <h3>Events Posted ({eventsPosted.length})</h3>
