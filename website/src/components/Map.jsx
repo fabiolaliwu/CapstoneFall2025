@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react'; // Removed useState
+import React, { useEffect, useRef } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import './Map.css';
 import { useNavigate } from 'react-router-dom';
 
-// 1. Accept 'events' and 'incidents' as props
+// Accept 'events' and 'incidents' as properties
 const Map = ({ 
     searchQuery, 
     userLocation, 
@@ -27,8 +27,7 @@ const Map = ({
 
   // Fetch events and incidents when searchQuery or filterValues change
 useEffect(() => {
-    
-  // Create base parameters that's shared by both
+  // Create base parameters for both events and incidents
   const baseParams = new URLSearchParams();
   if (searchQuery) baseParams.append('search', searchQuery);
   if (filterValues.dateRange !== 'Any') baseParams.append('dateRange', filterValues.dateRange);
@@ -42,7 +41,7 @@ useEffect(() => {
     try {
       const response = await fetch(`http://localhost:4000/api/events?${eventParams.toString()}`);
       const data = await response.json();
-      setEvents(data); // Call prop to send data UP to Homepage
+      setEvents(data); // Call properties to send data UP to Homepage
     } catch (error) {
       console.error('Error fetching events:', error);
     }
@@ -125,7 +124,7 @@ useEffect(() => {
     );
   };
 
-  // Update markers when props change
+  // Update markers when properties change
   useEffect(() => {
     if (!mapInstanceRef.current || !markerLibRef.current) return;
     const map = mapInstanceRef.current;
@@ -174,7 +173,7 @@ useEffect(() => {
       infoWindowRef.current.close();
     });  
 
-    // 3. Add Event markers (using the 'events' prop)
+    // Add Event markers using the events property
     events.forEach(event => {
       if (event.location?.coordinates) {
         const marker = new markerLibRef.current.AdvancedMarkerElement({
@@ -226,7 +225,7 @@ useEffect(() => {
       }
     });
 
-    // 4. Add Incident markers (using the 'incidents' prop)
+    // Add Incident markers using the incidents property
     incidents.forEach(incident => {
       if (incident.location?.coordinates) {
         const marker = new markerLibRef.current.AdvancedMarkerElement({
@@ -272,7 +271,6 @@ useEffect(() => {
           incidentMarkersRef.current.push(marker);
         }
     });
-  // 5. Update dependency array (remove searchQuery)
   }, [events, incidents, userLocation, openChatFromMap]);
 
   return <div ref={mapRef} style={{ height: '100%', width: '94%', marginLeft: '6%'}} />;
