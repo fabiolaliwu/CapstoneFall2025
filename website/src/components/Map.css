@@ -5,9 +5,10 @@
 /* Title */
 .info-window-content h3 {
     margin: 0 0 6px 0;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 800;
     color: #222;
+    max-width: 250px;
 }
 
 /* Description */
@@ -34,3 +35,13 @@
     background-color: #1654ab;
     transform: translateY(-1px);
 }
+
+.info-window-image{
+    max-width: 100%;
+    height: 300px;  
+    width: auto;   
+    display: block;
+    margin: 8px 0;  
+    object-fit: cover; 
+    border-radius: 4px;
+} 
