@@ -4,7 +4,7 @@ import { useLocationInput } from './LocationInput';
 
 function IncidentForm({ currentUser, onSubmitSuccess }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [image, setImage] = useState(null);
+  const [imageData, setImageData] = useState(null);
 
   const [incidentInfo, setIncidentInfo] = useState({
     title: '',
@@ -75,7 +75,16 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
   
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImageData(reader.result); 
+        };
+        reader.readAsDataURL(file); 
+    } else {
+        setImageData(null);
+    }
   };
 
   // validate if user input is valid
@@ -104,23 +113,34 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
 
     try {
         // append all incident info to formData
-        const formData = new FormData();
-        formData.append("title", incidentInfo.title);
-        formData.append("location", JSON.stringify(incidentInfo.location));
-        formData.append("description", incidentInfo.description)
-        formData.append('user_id', currentUser._id);
-        formData.append("train_line", JSON.stringify(incidentInfo.train_line));
-
-        formData.append("category", incidentInfo.category[0] || "");
-        if (image) formData.append("image", image);  
+        const dataToSend = {
+          title: incidentInfo.title,
+          description: incidentInfo.description,
+          start_date: incidentInfo.startDate, 
+          end_date: incidentInfo.endDate,   
+          cost: incidentInfo.cost,
+          location: incidentInfo.location,
+          category: incidentInfo.category[0],
+          host: incidentInfo.host,
+          user_id: incidentInfo.userId,    
+          image: imageData, 
+        };
 
         // send POST request to server
         const response = await fetch("http://localhost:4000/api/incidents", {
           method: "POST",
-          body: formData,
+          headers: {
+            // Must specify content type for JSON body
+            "Content-Type": "application/json", 
+          },
+          body: JSON.stringify(dataToSend), // Send JSON body
         });
-        if (!response.ok) throw new Error("Failed to submit incident");
-
+        if (!response.ok) {
+          const resText = await response.text(); // get response text to debug
+          throw new Error(`Failed to submit event: ${resText}`);
+        }
+        const data = await response.json();
+        console.log("Event created:", data);
         onSubmitSuccess();
         
         // Reset form to default state
@@ -135,7 +155,7 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
             train_line: [],
             userId: currentUser?._id || ''
         });
-        setImage(null);
+        setImageData(null);
 
         if(locationInputRef.current){
           locationInputRef.current.value = '';
