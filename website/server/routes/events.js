@@ -10,15 +10,49 @@ import {
 
 const router = express.Router();
 
-// Search events by keyword
-router.get("/search", async (req, res) => {
-    const { keyword } = req.query;
+router.get("/", async (req, res) => {
     try {
-        const regex = new RegExp(keyword, "i");
-        const events = await Event.find({
-            $or: [{ title: regex }, { description: regex }, { "location.address": regex }],
-        });
+        const { search, category, dateRange } = req.query;
+
+        let queryFilter = {};
+
+        // Search by Keyword
+        if (search) {
+            const regex = new RegExp(search, "i"); 
+            queryFilter.$or = [
+                { title: regex }, 
+                { description: regex }, 
+                { "location.address": regex }
+            ];
+        }
+
+        // Search incident by Category
+        if (category && category !== 'All') {
+            queryFilter.category = { $in: [category] };
+        }
+        
+        // Search by Date Range
+        if (dateRange && dateRange !== 'Any') {
+            if (dateRange === 'Today') {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                queryFilter.start_date = { $gte: today, $lt: tomorrow };
+            } else if (dateRange === 'Last 7 Days') {
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+                queryFilter.start_date = { $gte: sevenDaysAgo };
+            } else if (dateRange === 'Last Month') {
+                const oneMonthAgo = new Date();
+                oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+                queryFilter.start_date = { $gte: oneMonthAgo };
+            }
+        }
+
+        const events = await Event.find(queryFilter);
         res.status(200).json(events);
+
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

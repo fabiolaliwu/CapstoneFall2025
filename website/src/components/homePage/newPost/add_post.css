@@ -93,7 +93,7 @@
 /* Form Container */
 .form-wrapper {
   position: fixed;
-  width: 40%;
+  width: 20%;
   max-height: 60vh;
   overflow-y: auto;
   background: rgb(228, 237, 239, 0.3);

@@ -4,9 +4,8 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Logo from '/logo.png';
 import Buttons from './buttons'; 
-import { FaInfoCircle, FaQuestionCircle, FaUserCircle, FaFilter } from "react-icons/fa"; // Import icons
+import { FaInfoCircle, FaQuestionCircle, FaUserCircle} from "react-icons/fa"; // Import icons
 import { IoLogInOutline } from "react-icons/io5";
-import { IoClose } from "react-icons/io5";
 
 function Bar({ 
     currentUser, 
@@ -15,27 +14,25 @@ function Bar({
     openEvents,
     openSummary,
     openIncidents,
-    filter,
-    setFilter
+    isFilterOpen,
+    setIsFilterOpen,
+    filterValues,
+    setFilterValues,
+    activeMenu,
+    setActiveMenu
 }) {
     const navigate = useNavigate();
     const location = useLocation();    
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const isHomePage = location.pathname === '/home' || location.pathname === '/';
-    const [isFilterMode, setIsFilterMode] = useState(false);
-    const [filterValues, setFilterValues] = useState({
-        eventCategory: 'All',
-        incidentCategory: 'All',
-        dateRange: 'Any'
-      });
-    const [activeMenu, setActiveMenu] = useState(null);
+
     const handleFilterClick = (menuName) => {
         setActiveMenu(activeMenu === menuName ? null : menuName);
     };
-
+    // Handles the selection of an item from inside a dropdown menu
     const selectOption = (filterName, value) => {
         setFilterValues(prev => ({ ...prev, [filterName]: value }));
-        setActiveMenu(null); // Close menu on selection
+        setActiveMenu(null); // Close menu after you made your selection
     };
     
     useEffect(() => {
@@ -131,8 +128,8 @@ function Bar({
                         <div className="search-divider"></div>
                         {/* Filter Button */}
                         <button 
-                                className={`filter-btn ${isFilterMode ? 'active' : ''}`}
-                                onClick={() => setIsFilterMode(!isFilterMode)}
+                                className={`filter-btn ${isFilterOpen ? 'active' : ''}`}
+                                onClick={() => setIsFilterOpen(!isFilterOpen)}
                             >
                                 <img 
                                     src="/filter.png" 
@@ -141,8 +138,8 @@ function Bar({
                                 />
                             </button>
                         </div>
-                        {/* Full Filter Bar */}
-                        {isFilterMode && (
+                        {/* Full filter bar appear after button is toggled */}
+                        {isFilterOpen && (
                             <div className="filter-bar">
                                 {/* Filter 1: Event Category */}
                                 <div className="filter-item-wrapper">
