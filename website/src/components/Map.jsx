@@ -178,12 +178,14 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
         const imageHtml = event.image ? `<img src="${event.image}" class="info-window-image" alt="Event Image" />` : '';
 
         marker.addListener('click', () => {
+          const eventCoords = event.location.coordinates;
           const content = `
             <div class="info-window-content">
               <h3>${event.title}</h3>
               <p>${event.description}</p>
               ${imageHtml}
               <a class="map-link"
+                id="show-route-event-${event._id}"
                 href="https://www.google.com/maps/search/?api=1&query=${event.location.coordinates.lat},${event.location.coordinates.lng}"
                 target="_blank">
                 Show in Map
@@ -199,6 +201,7 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
 
           google.maps.event.addListener(infoWindowRef.current, 'domready', () => { 
             const chatLink = document.getElementById(`chat-link-event-${event._id}`);
+            const routeLink = document.getElementById(`show-route-event-${event._id}`);
             if (chatLink) {
               chatLink.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -206,14 +209,15 @@ const Map = ({ searchQuery, userLocation, openChatFromMap }) => {
                 infoWindowRef.current.close();
               });
             }
+            if (routeLink && userLocation) {
+              routeLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showRoute(userLocation, eventCoords);
+                infoWindowRef.current.close();
+              });
+            } 
           });
-
-          // Button to show route
-          if (userLocation) {
-            showRoute(userLocation, event.location.coordinates);
-          }
         });
-        eventMarkersRef.current.push(marker);
       }
     });
 
