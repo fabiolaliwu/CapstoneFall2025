@@ -1,3 +1,8 @@
+.add {
+    position: relative;
+    flex-shrink: 0;
+    align-self: flex-start;
+}
 .add-btn {
     height: 40px;
     font-family: 'Lucida Sans', 'Lucida Grande', Geneva, Verdana, sans-serif;
