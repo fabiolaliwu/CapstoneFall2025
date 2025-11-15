@@ -83,3 +83,24 @@ export const getEventsByUser = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+// Update Event
+export const updateEvent = async (req, res) => {
+    const { id } = req.params;
+    const { title, description, start_date, end_date, cost, location, host} = req.body;
+    try {
+        const event = await Event.findById(id);
+        if (!event) return res.status(404).json({ error: "Event not found" });
+
+        event.title = title || event.title;
+        event.description = description || event.description;
+        event.start_date = start_date || event.start_date;
+        event.end_date = end_date || event.end_date;
+        event.location = location || event.location;
+
+        const updatedEvent = await event.save();
+        res.status(200).json(updatedEvent);
+    } catch (err) {
+        res.status(400).json({ error: "Invalid event ID" });
+    }
+};

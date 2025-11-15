@@ -7,7 +7,8 @@ import {
     getIncidents,
     createNewIncident,
     deleteIncident,
-    getIncidentsByUser
+    getIncidentsByUser,
+    updateIncident
   } from "../controllers/incidentControllers.js";
 
 const router = express.Router();
@@ -92,5 +93,8 @@ router.delete("/:id", deleteIncident);
 
 // GET incidents by user
 router.get("/user/:userId", getIncidentsByUser);
+
+// PUT update incident
+router.put("/:id", updateIncident);
 
 export default router;

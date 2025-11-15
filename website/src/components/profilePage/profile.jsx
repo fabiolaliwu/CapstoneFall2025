@@ -1,11 +1,8 @@
 import './profile.css';
 import Bar from '../homePage/bar';
 import { useState, useEffect } from 'react';
-
-const AVATARS =[
-  'avatar1.png', 'avatar2.png', 'avatar3.png', 'avatar4.png',
-  'avatar5.png', 'avatar6.png', 'avatar7.png', 'avatar8.png',
-]
+import Modal from './modal';
+import Avatar from './Avatar.jsx';
 
 function Profile({ currentUser }) {
   const [eventsPosted, setEventsPosted] = useState([]);
@@ -14,50 +11,17 @@ function Profile({ currentUser }) {
   const [selectIncident, setSelectIncident] = useState(null);
   const [loading, setLoading] = useState(true);
   const [savedEvents, setSavedEvents] = useState([]);
+  const [showModal, setShowModal] = useState(false); // Pop up model for editing event
+  const [eventToEdit, setEventToEdit] = useState(null); 
 
-  // Avatr selection handling and update to DB
-  const [showAvatarList, setShowAvatarList] = useState(false);
-  const [selectedAvatar, setSelectedAvatar] = useState(currentUser?.avatar || 'avatar8.png');
-
-  const handleAvatar = async (avatar) => {
-    try {
-      const response = await fetch(
-        `http://localhost:4000/api/users/${currentUser._id}/avatar`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ avatar }),
-        }
-      );
-      if (response.ok) {
-        setSelectedAvatar(avatar);
-        setShowAvatarList(false);
-        currentUser.avatar = avatar;
-        alert('Avatar updated successfully!');
-        console.log('Avatar updated:', avatar);
-      } else {
-        console.error('Failed to update avatar');
-      }
-    } catch (error) {
-      console.error('Error updating avatar:', error);
-    }
+  // Format date to date and time format
+  const formatForInput = (date) => {
+    if (!date) return '';
+    const d = new Date(date);
+    const offset = d.getTimezoneOffset();
+    const local = new Date(d.getTime() - offset * 60000);
+    return local.toISOString().slice(0, 16);
   };
-  // get current user avatar
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      if (!currentUser?._id) return;
-      try {
-        const res = await fetch(`http://localhost:4000/api/users/${currentUser._id}`);
-        if (!res.ok) 
-          throw new Error('Failed to fetch user');
-        const data = await res.json();
-        setSelectedAvatar(data.avatar || 'avatar8.png');
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchCurrentUser();
-  }, [currentUser?._id]);
 
   // fetch data once currentUser is available
   useEffect(() => {
@@ -95,40 +59,42 @@ function Profile({ currentUser }) {
     fetchUserData();
   }, [currentUser]);
 
-  // Delete event/incident handlers
-  const handleDeleteEvent = async (event) => {
-    const confirmDelete = window.confirm(`Delete event ${event.title}? This action cannot be undo.`);
-    if (!confirmDelete) return;
-    try {
-      const response = await fetch(`http://localhost:4000/api/events/${event._id}`, {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        setEventsPosted(prev => prev.filter(e => e._id !== event._id));
-        alert(`Event "${event.title}" deleted successfully!`);
-      }else{
-        console.error('Failed to delete event');
+  // event and incident handlers
+  const handleEvent = async (event, action) => {
+    if (action === "delete") {
+      const confirmDelete = window.confirm(`Delete event ${event.title}? This action cannot be undone.`);
+      if (!confirmDelete) return;
+  
+      try {
+        const response = await fetch(`http://localhost:4000/api/events/${event._id}`, {
+          method: "DELETE",
+        });
+        if (response.ok) {
+          setEventsPosted(prev => prev.filter(e => e._id !== event._id));
+          alert(`Event "${event.title}" deleted successfully!`);
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error('Error deleting event:', error);
     }
-  }
-  const handleDeleteIncident = async (incident) => {
-    const confirmDelete = window.confirm(`Delete incident ${incident.title}? This action cannot be undo.`);
-    if (!confirmDelete) return;
-    try {
-      const response = await fetch(`http://localhost:4000/api/incidents/${incident._id}`, {
-        method: 'DELETE',
-      });
-      if (response.ok) {
-        setIncidentsPosted(prev => prev.filter(i => i._id !== incident._id));
-        alert(`Incident "${incident.title}" deleted successfully!`);
-      }else {
-        console.error('Failed to delete incident');
+  };
+
+  const handleIncident = async (incident, action) => {
+    if(action === "delete") {
+      const confirmDelete = window.confirm(`Delete incident ${incident.title}? This action cannot be undone.`);
+      if (!confirmDelete) return;
+
+      try {
+        const response = await fetch(`http://localhost:4000/api/incidents/${incident._id}`, {
+          method: "DELETE",
+        });
+        if (response.ok) {
+          setIncidentsPosted(prev => prev.filter(i => i._id !== incident._id));
+          alert(`Incident "${incident.title}" deleted successfully!`);
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error('Error deleting incident:', error);
     }
   }
 
@@ -140,44 +106,14 @@ function Profile({ currentUser }) {
 
           {/* Header section with avatar and username */}
           <div className='header-section'>
-            {currentUser && (
-              <img
-                src={`http://localhost:4000/avatars/${selectedAvatar}?t=${Date.now()}`}
-                onClick={() => setShowAvatarList(!showAvatarList)}
-                alt="User Avatar"
-                className="avatar"
-              />
-            )}
+            <Avatar currentUser={currentUser} />
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <div className='profile-username' style={{ fontSize: '20px', fontWeight: 'bold' }}>
-                {currentUser?.username || 'idk why its not working'}
+                {currentUser?.username || 'Unknown User'}
               </div>
             </div>
           </div>
 
-          {/* Avatar list when triggered */}
-          {showAvatarList && (
-            <div className='avatar-selection'>
-              <div className='avatars-map'>
-                {AVATARS.map(avatar => (
-                  <img
-                    key={avatar}
-                    src={`http://localhost:4000/avatars/${avatar}`}
-                    alt={avatar}
-                    className="avatar-option"
-                    onClick={() => setSelectedAvatar(avatar)}
-                  />
-                ))}
-              </div>
-              {selectedAvatar === 'avatar8.png' && <p>You're still a potato 🥔. Choose any avatar you like!</p>}
-              {/* Button to update avatar */}
-              <button 
-                className="avatar-button"
-                onClick={() => handleAvatar(selectedAvatar)}
-              >Save selection
-              </button>
-            </div>
-          )}
           <br></br>
           <div className='profile-boxes'>
             <div className='event-box'>
@@ -190,13 +126,23 @@ function Profile({ currentUser }) {
                         className="title"
                         onClick={() => setSelectEvent(selectEvent === event._id ? null : event._id)}
                       >{event.title}</span>
+                      
                       {/* Click title to delete or update event */}
                       {selectEvent === event._id && (
-                          <div>
-                            <button 
-                              className="delete-button" 
-                              onClick={() => handleDeleteEvent(event)}
-                            > Delete</button>
+                        <div className="triggered-button">
+                          <button className="delete-button" onClick={() => handleEvent(event, "delete")}>Delete</button>
+                          <button
+                            className="update-button"
+                            onClick={() => {
+                              setEventToEdit({
+                                ...event,
+                                start_date: formatForInput(event.start_date),
+                                end_date: formatForInput(event.end_date)
+                              });
+                              setShowModal(true);
+                            }}
+                            >Edit</button>
+
                           </div>
                       )}
                     </li>
@@ -220,8 +166,7 @@ function Profile({ currentUser }) {
                       {/* Click title to delete or update incident */}
                       {selectIncident === incident._id && (
                           <div>
-                            <button className="delete-button" onClick={() => handleDeleteIncident(incident)}>Delete</button>
-                          </div>
+                            <button className="delete-button" onClick={() => handleIncident(incident, "delete")}>Delete</button>                          </div>
                       )}
                     </li>
                   ))}
@@ -247,10 +192,23 @@ function Profile({ currentUser }) {
               )}
             </div>
           </div>
+          {/* Pop up window for editing events */}
+          {showModal && (
+            <Modal
+              eventData={eventToEdit}
+              onClose={() => setShowModal(false)}
+              onSave={(updatedEvent) => {
+                setEventsPosted(prev =>
+                  prev.map(e => (e._id === updatedEvent._id ? updatedEvent : e))
+                );
+                setShowModal(false);
+              }}
+            />
+          )}
         </div>
       </div>
     </div>
-  );
+  ); 
 }
 
 export default Profile;
