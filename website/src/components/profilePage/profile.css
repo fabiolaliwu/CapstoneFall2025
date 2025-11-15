@@ -33,6 +33,7 @@
     justify-content: center;
     margin-top: 40px;
     margin-bottom: 32px;
+    position: relative;
     width: 100%;
 }
 .profile-username {
@@ -70,7 +71,7 @@
 }
 
 /* Event and Incident delete and updating */
-.delete-button{
+.delete-button, .update-button {
     background-color: #4b7b86;
     color: white;
     border: none;
@@ -80,6 +81,7 @@
     font-size: 14px;
     width: 80px;
     margin-top: 5px;
+    margin-right:10px;
 }
 li {
     display: list-item;
@@ -135,4 +137,10 @@ li {
     color: #555;
     text-align: center;
     font-family: 'Silkscreen';
+}
+
+.avatar-container {
+    position: relative;
+    display: inline-block;
+    text-align: center;
 }

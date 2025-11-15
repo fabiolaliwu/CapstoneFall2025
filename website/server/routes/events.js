@@ -4,7 +4,8 @@ import {
     getEventById,
     createNewEvent,
     deleteEvent,
-    getEventsByUser
+    getEventsByUser,
+    updateEvent
 }from "../controllers/eventControllers.js";
 
 const router = express.Router();
@@ -67,6 +68,9 @@ router.delete("/:id", deleteEvent);
 
 // GET events by user
 router.get("/user/:userId", getEventsByUser);
+
+// PUT update event
+router.put("/:id", updateEvent);
 
 export default router;
 

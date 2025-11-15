@@ -92,6 +92,30 @@ export const getIncidentsByUser = async (req, res) => {
     }
 }
 
+// Update Incident
+export const updateIncident = async (req, res) => {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    if (updateData.train_line) {
+        try {
+            updateData.train_line = typeof updateData.train_line === "string"
+                ? JSON.parse(updateData.train_line)
+                : updateData.train_line;
+        } catch (err) {
+            console.warn("TRAIN LINE PARSE ERROR:", err);
+        }
+    }
+
+    try {
+        const updatedIncident = await Incident.findByIdAndUpdate(id, updateData, { new: true });
+        if (!updatedIncident) return res.status(404).json({ error: "Incident not found" });
+        res.status(200).json(updatedIncident);
+    } catch (err) {
+        res.status(400).json({ error: "Invalid incident ID" });
+    }
+};
+
 
   
 /**
