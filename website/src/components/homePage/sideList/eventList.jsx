@@ -113,7 +113,7 @@ function EventList({ events, onClose, userLocation, onSelect, currentUser }) {
                 <div 
                     key={event._id} 
                     className="event-item" 
-                    onClick={() => onSelect(event._id)}
+                    onClick={() => onSelect(event)}
                 >
                     <div className="distance-heart-container">
                         <div className="event-distance-bar"> {distance.toFixed(2)} mi </div>  
