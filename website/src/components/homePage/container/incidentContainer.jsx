@@ -3,41 +3,49 @@ import axios from 'axios';
 import './incidentContainer.css';
 import IncidentList from '../sideList/incidentList.jsx';
 import ChatRoom from '../live-chat/chatRoom.jsx';
+import IncidentDetail from '../sideList/incidentDetail.jsx';
 
-function IncidentContainer({ currentUser, userLocation, onClose, initialSelectedId }) {
-    const [incidents, setIncidents] = useState([]);
+function IncidentContainer({ currentUser, userLocation, onClose, initialSelectedId, incidents }) {
     const [selectedIncidentId, setSelectedIncidentId] = useState(null);
+    const [incidentOpen, setIncidentOpen] = useState(false);
 
     useEffect(() => {
         if (initialSelectedId) {
-            setSelectedIncidentId(initialSelectedId);
-        }
-    }, [initialSelectedId]);
-
-    useEffect(() => {
-        // Fetch all incidents
-        const fetchIncidents = async () => {
-            try {
-                const response = await axios.get('http://localhost:4000/api/incidents');
-                setIncidents(response.data);
-            } catch (error) {
-                console.error('Error fetching incidents:', error);
+            const foundIncident = incidents.find(incident => incident._id === initialSelectedId);
+            if (foundIncident) {
+                setIncidentOpen(foundIncident);
+                setSelectedIncidentId(initialSelectedId);
             }
-        };
-        fetchIncidents();
-    }, []);
+        }
+    }, [initialSelectedId, incidents]);
 
     return (
         <div className="incident-container">
             {/* Left side: Incident List */}
-            <div className="incident-list">
-                <IncidentList
-                    incidents={incidents}
-                    userLocation={userLocation}
-                    onClose={onClose}
-                    onSelect={setSelectedIncidentId}
-                />
-            </div>
+            {incidentOpen ? (
+                <div className="incident-detail">
+                    <IncidentDetail
+                        incident={incidentOpen}
+                        onClose={() => {
+                            setIncidentOpen(null);
+                            setSelectedIncidentId(null);
+                        }}
+                    />
+                </div>
+            ):(
+                <div className="incident-list">
+                    <IncidentList
+                        incidents={incidents}
+                        userLocation={userLocation}
+                        onClose={onClose}
+                        onSelect={(incident) => {
+                            setSelectedIncidentId(incident._id);
+                            setIncidentOpen(incident);
+                        }}                        
+                        currentUser={currentUser}
+                    />
+                </div>
+            )}
             <hr className="container-divider" />
             {/* Right side: Chat Room for selected incident */}
             <div className="chat-room-container">
