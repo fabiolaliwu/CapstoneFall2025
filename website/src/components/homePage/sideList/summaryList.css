@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/earlyaccess/jejugothic.css');
+
+.summary-list-container {
+    position: relative; 
+    display: flex;
+    height: 100%;
+    align-items: flex-start;
+    z-index: 1;
+    margin: 0;
+    width: auto;
+    background-color: #F7F9FC; /* light neutral background */
+}
+
+/* Sidebar Panel */
+.summary-list {
+    width: 300px;
+    height: 97%;
+    background-color: #FFFFFF; /* #d9e1e3 */
+    padding: 12px;
+    overflow-y: auto;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+}
+
+/* Heading */
+.summary-list header {
+    font-family: 'Jeju Gothic', sans-serif;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 22px;
+    text-align: left;
+    letter-spacing: 0.8px;
+    color: #334155;
+    border-bottom: 2px solid #6e98a3;
+    padding-bottom: 8px;
+}
+
+/* Each item */
+.summary-item {
+    background-color: #F9FAFB;
+    border: 1px solid #E2E8F0;
+    border-radius: 15px;
+    padding: 15px 18px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+/* Hover & Active States */
+.summary-item:hover {
+    background-color: #EEF4FF;
+    border-color: #6e98a3;  /* #4A6CF7 */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(74, 108, 247, 0.15);
+}
+
+.summary-item.active {
+    background-color: #DDE7FF;
+    border-color: #6e98a3;  /* #4A6CF7 */
+    box-shadow: 0 4px 12px rgba(74, 108, 247, 0.25);
+}
+
+.summary-item:hover {
+    transform: translateY(-3px) scale(1.01); 
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); 
+    cursor: pointer;
+}
+
+/* item name */
+.summary-item h3 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+    color: #1E293B;
+}
+
+/* item description */
+.summary-item p {
+    margin: 6px 0;
+    font-size: 14px;
+    color: #475569;
+}
+
+/* summary item start/end date */
+.summary-item span {
+    font-size: 12px;
+    color: #64748B;
+}
+
+/* Distance badge */
+.summary-distance-bar {
+    background-color: #6e98a3; /* #4A6CF7 */
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    width: fit-content;
+    box-shadow: 0 2px 5px rgba(74, 108, 247, 0.2);
+}
+
+.distance-heart-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+
+/* Train icon*/
+.icon {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+.train-lines {
+    display: flex;
+    gap: 4px;
+}
+.train-lines span{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+}
