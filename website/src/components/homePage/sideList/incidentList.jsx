@@ -54,7 +54,7 @@ function IncidentList({ incidents, onClose, userLocation, onSelect }) {
                             <div
                                 key={incident._id}
                                 className="incident-item"
-                                onClick={() => onSelect(incident._id)}
+                                onClick={() => onSelect(incident)}
                             >
                                 <div className="icon">
                                 <div className="incident-distance-bar">
@@ -76,7 +76,7 @@ function IncidentList({ incidents, onClose, userLocation, onSelect }) {
                                     </div>
                                 )}
                                 </div>
-                                                                <h3>{incident.title}</h3>
+                                <h3>{incident.title}</h3>
                                 <p>{incident.description}</p>
                                 <span>
                                     Time Occurred: {new Date(incident.createdAt).toLocaleString('en-US', {
