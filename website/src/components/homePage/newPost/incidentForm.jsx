@@ -124,6 +124,7 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
           host: incidentInfo.host,
           user_id: incidentInfo.userId,    
           image: imageData, 
+          train_line: incidentInfo.train_line
         };
 
         // send POST request to server
