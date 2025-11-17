@@ -1,146 +1,190 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap');
+/* GLOBAL */
 .profile-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: Arial, sans-serif;
-    background-color: #bce8f6;
-    min-height: 100vh;
-    width: 94vw;
-    margin-left: 6.2vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background-color: #f4f8fb;
+  min-height: 100vh;
+  width: 94vw;
+  margin-left: 6.2vw;
 }
 
-.profile description {
-    text-align: center;
-    margin-bottom: 20px;
+/* Profile Header Card */
+.profile-header-card {
+  background: #ffffff;
+  margin-top: 100px;
+  padding: 20px;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px 10px rgba(16, 103, 217, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 30px;
 }
 
-.profile-content{
-    margin-top: 50px;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 800px;
+.profile-info h2 {
+  font-size: 30px;
+  color: #22313f;
+  margin-top: 5px; 
 }
 
-.header-section {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin-top: 40px;
-    margin-bottom: 32px;
-    position: relative;
-    width: 100%;
-}
-.profile-username {
-    font-size: 32px;
-    font-weight: bold;
-    margin-top: 40px;
-    text-align: center;
-    width: 100%;
-    font-family: 'Silkscreen';
+.profile-sub {
+  font-size: 16px;
+  color: #6b7a89;
 }
 
-
-.profile-boxes {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 32px; /* controls spacing between boxes */
-    width: 90%;
-    max-width: 1200px; /* makes boxes wider */
-    margin: 0 auto;
-    margin-top: 5vh;
-}
-.event-box, .incident-box, .saved-event-box {
-    flex: 1 1 0; /* makes both boxes equal width */
-    background-color: #ffffff;
-    border-radius: 14px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.10);
-    padding: 32px 24px 24px 24px;
-    min-width: 380px; /* wider than before */
-    max-width: 540px;
-}
-.event-box h3, .incident-box h3 {
-    margin-bottom: 16px;
+/* Profile Stats */
+.profile-stats {
+  display: flex;
+  gap: 30px;
+  font-size: 16px;
 }
 
-/* Event and Incident delete and updating */
-.delete-button, .update-button {
-    background-color: #4b7b86;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    width: 80px;
-    margin-top: 5px;
-    margin-right:10px;
+.profile-stats div strong {
+  font-size: 18px;
+  color: #0066a1;
 }
-li {
-    display: list-item;
-    margin-bottom: 8px;
+
+/* Tabs */
+.profile-tabs {
+  margin-top: 40px;
+  display: flex;
+  gap: 20px;
+  width: 90%;
+  max-width: 750px;
 }
-.title {
-    cursor: pointer;
+
+.profile-tabs button {
+  flex: 1;
+  padding: 12px 20px;
+  background: #9bc1dd;
+  border: none;
+  border-radius: 15px;
+  font-size: 15px;
+  color: #ffffff;
+  cursor: pointer;
 }
-  /* Avatar */
+
+.profile-tabs .active {
+  background: #3da7ee;
+  color: white;
+  box-shadow: 0 3px 12px rgba(0,107,179,0.3);
+}
+
+/* Content Area */
+.profile-content-area {
+  margin-top: 20px;
+  width: 90%;
+  max-width: 750px;
+}
+
+/* Card List */
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Each item card */
+.item-card {
+  background: #ffffff;
+  padding: 20px 20px;
+  border-radius: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+  transition: 0.25s;
+}
+
+.item-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 16px rgba(0,0,0,0.08);
+}
+
+/* item title */
+.item-card h4 {
+  font-size: 18px;
+  margin: 0;
+  color: #253645;
+}
+
+/* item description */
+.item-date {
+  font-size: 14px;
+  color: #738292;
+  margin-top: 4px;
+}
+
+/* Action buttons */
+.item-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.item-actions button {
+  padding: 8px 12px;
+  border: none;
+  background: #0077c8;
+  color: white;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.item-actions button:first-child {
+  background: #d9534f;
+}
+
+/* Avatar (override your previous styles if needed) */
 .avatar {
-    margin-right:20px;
-    background-color: #e0f2f1;
-    width: 100px;
-    height: 100px;
-    border-radius: 30%;
-    padding:10px;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  background: #e6f4fa;
+  padding: 15px;
+  object-fit: cover;
 }
 
-.avatar-button {
-    padding: 8px 14px;
-    background-color:#4b7b86;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 10px;
-    font-family: 'Silkscreen';
-    position: absolute;
-    display: flex;
-    margin-top: 10px;
-    left: 53%;
-    transform: translateX(-50%);
-}
+.avatar-button { 
+    padding: 8px 14px; 
+    background-color:#4b7b86; 
+    color: white; 
+    border: none; 
+    border-radius: 6px; 
+    font-size: 10px; 
+    font-family: 'Silkscreen'; 
+    position: absolute; 
+    display: flex; 
+    margin-top: 10px; 
+    left: 53%; 
+    transform: translateX(-50%); } 
 
-.avatars-map {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-}
+.avatars-map { 
+    display: flex; 
+    gap: 12px; 
+    justify-content: center; 
+} 
 
-.avatar-option {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-}
+.avatar-option { 
+    width: 50px; 
+    height: 50px; 
+    border-radius: 50%; 
+} 
 
-.avatar-option:hover {
-    transform: scale(1.1);
-}
+.avatar-option:hover { 
+    transform: scale(1.1); 
+} 
+    
+.avatar-selection p { 
+    font-style: italic; 
+    font-size: 10px; 
+    color: #555; 
+    text-align: 
+    center; font-family: 'Silkscreen'; 
+} 
 
-.avatar-selection p {
-    font-style: italic;
-    font-size: 10px;
-    color: #555;
-    text-align: center;
-    font-family: 'Silkscreen';
-}
-
-.avatar-container {
-    position: relative;
-    display: inline-block;
-    text-align: center;
-}
+.avatar-container { position: relative; display: inline-block; text-align: center; }

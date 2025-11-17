@@ -5,6 +5,7 @@ import Map from '../Map';
 import { useState, useEffect } from 'react';
 import EventContainer from './container/eventContainer.jsx';
 import IncidentContainer from './container/incidentContainer.jsx';
+import SummaryContainer from './container/summaryContainer.jsx';
 
 function Homepage({currentUser}) {
     const [openList, setOpenList] = useState('');
@@ -93,6 +94,7 @@ function Homepage({currentUser}) {
 
             {openList === 'events' && < EventContainer currentUser={currentUser} events={events} userLocation={userLocation} onClose={handleCloseContainer} initialSelectedId={mapSelectedId} /> }
             {openList === 'incidents' && < IncidentContainer currentUser={currentUser} incidents={incidents} userLocation={userLocation} onClose={handleCloseContainer} initialSelectedId={mapSelectedId} /> }
+            {openList === 'summary' && < SummaryContainer currentUser={currentUser} userLocation={userLocation} onClose={handleCloseContainer} initialSelected={mapSelectedId} /> }
         </div>
     );
 }
