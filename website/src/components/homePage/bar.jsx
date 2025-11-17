@@ -29,6 +29,16 @@ function Bar({
     const handleFilterClick = (menuName) => {
         setActiveMenu(activeMenu === menuName ? null : menuName);
     };
+
+    const handleNavigationAndOpen = (callback) => {
+        if (!isHomePage) {
+            navigate('/home'); // gp to the homepage
+        }
+        setTimeout(() => {
+            callback(); // open the list after navigation
+        }, 0);
+    };
+
     // Handles the selection of an item from inside a dropdown menu
     const selectOption = (filterName, value) => {
         setFilterValues(prev => ({ ...prev, [filterName]: value }));
@@ -70,9 +80,9 @@ function Bar({
                 <div className="middle-section">
                     {isLoggedIn && (
                         <Buttons
-                            openEvents={openEvents}
-                            openSummary={openSummary}
-                            openIncidents={openIncidents}
+                            openEvents={() => handleNavigationAndOpen(openEvents)}
+                            openSummary={() => handleNavigationAndOpen(openSummary)}
+                            openIncidents={() => handleNavigationAndOpen(openIncidents)}
                         />
                     )}
                     {isLoggedIn && (
