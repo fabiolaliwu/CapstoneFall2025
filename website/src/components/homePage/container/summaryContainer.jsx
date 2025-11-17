@@ -4,16 +4,9 @@ import './summaryContainer.css';
 import SummaryList from '../sideList/summaryList';
 import ChatRoom from '../live-chat/chatRoom.jsx';
 
-function SummaryContainer({currentUser, userLocation, onClose, initialSelected}) {
+function SummaryContainer({currentUser, userLocation, onClose}) {
         const [incidents, setIncidents] = useState([]);
         const [events, setEvents] = useState([]);
-        const [selectedItem, setSelectedItem] = useState(null);
-
-        useEffect(() => {
-            if (initialSelected) {
-                setSelectedItem(initialSelected);
-            }
-        }, [initialSelected]);
 
         useEffect(() => {
             const fetchData = async () => {
@@ -41,7 +34,6 @@ function SummaryContainer({currentUser, userLocation, onClose, initialSelected})
                     incidents={incidents}
                     events={events}
                     userLocation={userLocation}
-                    onSelect={setSelectedItem}
                     onClose={onClose}
                     currentUser={currentUser}
                 />
@@ -51,18 +43,11 @@ function SummaryContainer({currentUser, userLocation, onClose, initialSelected})
 
             {/* Right side chat */}
             <div className="chat-room-container">
-                {selectedItem ? (
-                    <ChatRoom
-                        currentUser={currentUser}
-                        chatType={selectedItem.type}
-                        chatId={selectedItem.id}
-                        onClose={() => setSelectedItem(null)}
-                    />
-                ) : (
-                    <div className="chat-placeholder">
-                        <p>← Click an item to view its chat room</p>
-                    </div>
-                )}
+                <ChatRoom
+                    currentUser={currentUser}
+                    chatType="global"
+                    chatId="main"
+                />
             </div>
         </div>
     );
