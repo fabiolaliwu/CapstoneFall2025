@@ -1,5 +1,7 @@
 import './eventDetail.css';
 import { IoArrowBack } from "react-icons/io5";
+// Import new icons for the list
+import { LuCalendarClock, LuMapPin, LuTicket, LuUser } from "react-icons/lu";
 
 const CategoryColors = [
     "#6e98a3", "#4A6CF7", "#8E7AB5", "#E1AFAF", "#7FB77E",
@@ -12,6 +14,29 @@ function getRandomColor() {
 }
 
 function EventDetail({ event, onClose }) {
+    let fullDateString = '';
+    if (event.start_date) {
+        const startDate = new Date(event.start_date);
+        const startDateFormat = {
+            year: 'numeric', month: 'short', day: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        };
+        fullDateString = startDate.toLocaleString('en-US', startDateFormat);
+
+        if (event.end_date) {
+            const endDate = new Date(event.end_date);
+            let endDateFormat;
+            if (endDate.toDateString() !== startDate.toDateString()){
+                endDateFormat = { year: 'numeric', month: 'short', day: 'numeric',
+                hour: '2-digit', minute: '2-digit' };
+            } else {
+                endDateFormat = { hour: '2-digit', minute: '2-digit' };
+            }        
+            const endDateString = endDate.toLocaleString('en-US', endDateFormat);
+            fullDateString += ` - ${endDateString}`;
+        }
+    }
+
     return(
         <div className="event-detail-container">
 
@@ -33,67 +58,78 @@ function EventDetail({ event, onClose }) {
 
             {/* BODY */}
             <div className="event-detail-body">
-                {/*  category tags */}
-                {Array.isArray(event.category) && event.category.length > 0 && (
-                    <div className="category-container">
-                        {event.category.map((cat, index) => (
-                            <span 
-                                key={index} 
-                                className="category" 
-                                style={{ backgroundColor: getRandomColor() }}
-                            >
-                                {cat}
-                            </span>
-                        ))}
+                <div className="scroll-wrapper">
+                    {/* category */}
+                    {Array.isArray(event.category) && event.category.length > 0 && (
+                        <div className="category-container">
+                            {event.category.map((cat, index) => (
+                                <span 
+                                    key={index} 
+                                    className="category" 
+                                    style={{ backgroundColor: getRandomColor() }}
+                                >
+                                    {cat}
+                                </span>
+                            ))}
+                        </div>
+                    )}
+                    
+                    {/* title */}
+                    <h2 className="event-title">{event.title}</h2>
+
+                    {/* description */}
+                    {event.description && (
+                        <p className="event-description">{event.description}</p>
+                    )}
+
+                    <div className="event-info">
+                        
+                        {/* Date & Time */}
+                        {fullDateString && (
+                            <div className="info-item">
+                                <LuCalendarClock size={24} className="info-icon" />
+                                <div className="info-text">
+                                    <span className="info-label">Date & Time</span>
+                                    <span className="info-data">{fullDateString}</span>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Location */}
+                        {event.location?.address && (
+                            <div className="info-item">
+                                <LuMapPin size={24} className="info-icon" />
+                                <div className="info-text">
+                                    <span className="info-label">Location</span>
+                                    <span className="info-data">{event.location.address}</span>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Cost */}
+                        {event.cost && (
+                            <div className="info-item">
+                                <LuTicket size={24} className="info-icon" />
+                                <div className="info-text">
+                                    <span className="info-label">Cost</span>
+                                    <span className="info-data">{event.cost}</span>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Host */}
+                        {event.host && (
+                            <div className="info-item">
+                                <LuUser size={24} className="info-icon" />
+                                <div className="info-text">
+                                    <span className="info-label">Host</span>
+                                    <span className="info-data">{event.host}</span>
+                                </div>
+                            </div>
+                        )}
                     </div>
-                )}
-                {/* title */}
-                <h2 className="event-title">{event.title}</h2>
-
-                {/* description */}
-                <p><strong>Description:</strong></p>
-                <p>{event.description}</p>
-
-                {/* Organiser */}
-                {event.host && (
-                    <p>
-                        <strong>Host: </strong>{event.host}
-                    </p>
-                )}
-
-                {/* Cost */}
-                {event.cost && (
-                    <p><strong>Cost:</strong> {event.cost}</p>
-                )}
-
-                {/* Date */}
-                <p>
-                    <strong>Start Date: </strong>
-                    {new Date(event.start_date).toLocaleString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                    })}
-                </p>
-
-                <p>
-                    <strong>End Date: </strong>
-                    {event.end_date
-                        ? new Date(event.end_date).toLocaleString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            })
-                    : 'None'}
-                </p>
-                {/* Location */}
-                <p><strong>Location:</strong> {event.location.address}</p>
+                </div>    
             </div>
-
         </div>
     );
 }
