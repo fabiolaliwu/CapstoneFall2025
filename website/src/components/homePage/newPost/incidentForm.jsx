@@ -123,7 +123,7 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
           category: incidentInfo.category[0],
           host: incidentInfo.host,
           user_id: incidentInfo.userId,    
-          image: imageData, 
+          image: imageData || '',
           train_line: incidentInfo.train_line
         };
 

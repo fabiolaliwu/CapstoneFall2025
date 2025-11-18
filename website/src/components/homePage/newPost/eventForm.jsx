@@ -147,7 +147,7 @@ function EventForm({categoriesFetchStartAsync,currentUser , onSubmitSuccess}) {
         category: eventInfo.category,
         host: eventInfo.host,
         user_id: eventInfo.userId,    
-        image: imageData, 
+        image: imageData || ''
       };
 
       const response = await fetch("http://localhost:4000/api/events", {

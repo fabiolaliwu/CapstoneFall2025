@@ -1,4 +1,5 @@
 import Event from "../models/Event.js";
+import uploadImage from "../imageUpload.js";
 
 
 // GET all event
@@ -41,6 +42,16 @@ export const createNewEvent = async (req, res) => {
             coordinates: { lat: 40.7128, lng: -74.0060 }
             };
         }
+        let imageURL = "";
+        if(image) {
+            try{
+                const uploadResult = await uploadImage(image, `event-${title.replace(/\s+/g, '-')}`);
+                imageURL = uploadResult.url;
+                console.log("Image uploaded to S3:", imageURL);    
+            } catch{
+                console.error("Image upload failed, saving event without image.");
+            }
+        }
         const eventData = {
             title,
             description,
@@ -51,7 +62,7 @@ export const createNewEvent = async (req, res) => {
             category: Array.isArray(category) ? category : [category],
             host,
             user_id,
-            image: image || "",
+            image: imageURL
           };
 
         const event = await Event.create(eventData);
