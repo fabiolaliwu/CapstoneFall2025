@@ -28,7 +28,7 @@ const trainColors = {
     'S': '#808080','W': '#F6BC26','Z': '#8E5C33'
 };
 
-function SummaryList({ incidents, events, userLocation, onSelect, currentUser }) {
+function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelectIncident, currentUser }) {
     const [savedEvents, setSavedEvents] = useState([]);
     const [savingEventId, setSavingEventId] = useState(null);
 
@@ -115,7 +115,13 @@ function SummaryList({ incidents, events, userLocation, onSelect, currentUser })
                         <div
                             key={`${item.type}-${item._id}`}
                             className="summary-item"
-                            onClick={() => onSelect({ type: item.type, id: item._id })}
+                            onClick={() => {
+                                if (item.type === 'event') {
+                                    onSelectEvents(item);
+                                } else {
+                                    onSelectIncident(item);
+                                }
+                            }}
                         >
                             <div className="distance-heart-container">
                                 <div className="summary-distance-bar">

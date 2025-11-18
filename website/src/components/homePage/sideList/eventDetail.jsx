@@ -1,6 +1,5 @@
 import './eventDetail.css';
 import { IoArrowBack } from "react-icons/io5";
-// Import new icons for the list
 import { LuCalendarClock, LuMapPin, LuTicket, LuUser } from "react-icons/lu";
 
 const CategoryColors = [
