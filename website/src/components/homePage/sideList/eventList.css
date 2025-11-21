@@ -5,7 +5,6 @@
     display: flex;
     height: 100%;
     align-items: flex-start;
-    z-index: 1;
     margin: 0;
     width: auto;
     background-color: #F7F9FC; /* light neutral background */
@@ -24,7 +23,7 @@
 
 /* Heading */
 .event-list header {
-    font-family: 'Jeju Gothic', sans-serif;
+    font-family: 'Times New Roman', Times, serif;
     margin-top: 0;
     margin-bottom: 10px;
     font-size: 22px;

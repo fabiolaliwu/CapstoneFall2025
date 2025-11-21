@@ -19,7 +19,16 @@ const calculateDistance = (loc1, loc2) => {
     return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 };
 
-function SummaryList({ incidents, events, userLocation, onSelect, currentUser }) {
+// Train color for each line
+const trainColors = {
+    '1': '#D82233','2': '#D82233','3': '#D82233','4': '#009952','5': '#009952',
+    '6': '#009952','7': '#9A38A1','A': '#0062CF','B': '#EB6800','C': '#0062CF',
+    'D': '#EB6800','E': '#EB6800','F': '#EB6800','G': '#6CBE45','J': '#8E5C33',
+    'L': '#AAAAAA','M': '#EB6800','N': '#F6BC26','Q': '#F6BC26','R': '#F6BC26',
+    'S': '#808080','W': '#F6BC26','Z': '#8E5C33'
+};
+
+function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelectIncident, currentUser }) {
     const [savedEvents, setSavedEvents] = useState([]);
     const [savingEventId, setSavingEventId] = useState(null);
 
@@ -41,10 +50,10 @@ function SummaryList({ incidents, events, userLocation, onSelect, currentUser })
         })),
     ];
 
-    // Sort by distance DESCENDING
+    // Sort by descending distance
     const sorted = merged.sort((a, b) => a.distance - b.distance);
 
-    // Event save system (unchanged)
+    // Event save system
     const handleSaveEvent = async (event) => {
         if (!currentUser?._id || savingEventId) return;
         const eventId = String(event._id);
@@ -106,12 +115,34 @@ function SummaryList({ incidents, events, userLocation, onSelect, currentUser })
                         <div
                             key={`${item.type}-${item._id}`}
                             className="summary-item"
-                            onClick={() => onSelect({ type: item.type, id: item._id })}
+                            onClick={() => {
+                                if (item.type === 'event') {
+                                    onSelectEvents(item);
+                                } else {
+                                    onSelectIncident(item);
+                                }
+                            }}
                         >
                             <div className="distance-heart-container">
                                 <div className="summary-distance-bar">
                                     {item.distance.toFixed(2)} mi
                                 </div>
+                                {item.type === "incident" && item.train_line && 
+                                !(item.train_line.length === 1 && item.train_line[0] === "N/A") && (
+                                    <div className="train-lines">
+                                    {item.train_line.map((line) => (
+                                        <span
+                                        key={line}
+                                        style={{
+                                            backgroundColor: trainColors[line] || '#000000',
+                                            color: (line === 'N' || line === 'R' ||  line === 'Q' ||  line === 'W') ? '#000000' : '#FFFFFF' 
+                                        }}
+                                        >
+                                        {line}
+                                        </span>
+                                    ))}
+                                    </div>
+                                )}
                                 {item.type === "event" && (
                                     <div
                                         className="save-event-icon"

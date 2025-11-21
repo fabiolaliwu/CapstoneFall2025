@@ -174,7 +174,7 @@ function Bar({
                                             <button onClick={() => selectOption('eventCategory', 'Pet/Animal')}>Pet/Animal</button>
                                             <button onClick={() => selectOption('eventCategory', 'Promotions')}>Promotions</button>
                                             <button onClick={() => selectOption('eventCategory', 'Education')}>Education</button>
-
+                                            <button onClick={() => selectOption('eventCategory', 'Other')}>Other</button>
                                         </div>
                                     )}
                                 </div>
@@ -200,6 +200,7 @@ function Bar({
                                             <button onClick={() => selectOption('incidentCategory', 'Protest')}>Protest</button>
                                             <button onClick={() => selectOption('incidentCategory', 'Gun')}>Gun</button>
                                             <button onClick={() => selectOption('incidentCategory', 'Crime')}>Crime</button>
+                                            <button onClick={() => selectOption('incidentCategory', 'Other')}>Other</button>
                                         </div>
                                     )}
                                 </div>
