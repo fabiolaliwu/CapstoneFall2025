@@ -114,7 +114,6 @@ function getCategory(title){
 }
 
 async function insertEvents(){
-    console.log("MONGO_URI:", MONGO_URI?.substring(0, 20) + "..."); // Don't log full URI with password
     try{
         await mongoose.connect(MONGO_URI,{
             serverSelectionTimeoutMS: 30000,
