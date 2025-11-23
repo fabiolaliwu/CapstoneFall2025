@@ -75,7 +75,7 @@ useEffect(() => {
     const loader = new Loader({
       apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
       version: 'weekly',
-      libraries: ['places', 'marker'],
+      libraries: ['places', 'marker', 'routes'],
     });
 
     loader.load().then(async () => {
