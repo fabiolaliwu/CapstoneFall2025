@@ -2,12 +2,15 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import fs from 'fs';
 
+//This script follows EventBrite layout to extract. So it doesnt work for other websites
+
 // URL of the website to scrape
 const targetURL = 'https://www.eventbrite.com/ttd/ny--new-york/';
 
 async function scrapeEvents() {
   try {
     const response = await axios.get(targetURL);
+    console.log("Fetching data from:", targetURL);
     const html = response.data;
 
     const $ = cheerio.load(html);
@@ -25,15 +28,15 @@ async function scrapeEvents() {
 
         // Date
         const date = container
-            .find('.eds-event-card-content__sub-title')
+            .find('.eds-event-card-content__sub-title') //date subtitle
             .text()
             .trim();
 
         // sub text  to extract location, cost, host, followers
         const subText = container
-            .find('.eds-event-card-content__sub')
+            .find('.eds-event-card-content__sub') //next line of subtitle
             .text()
-            .replace(/\s+/g, ' ') // whitespace
+            .replace(/\s+/g, ' ')// normalize spaces
             .trim();
         let location = '';
         let cost = 'Free';
@@ -41,7 +44,7 @@ async function scrapeEvents() {
         let followers = '';
 
         // Cost
-        const costMatch = subText.match(/Starts at \$[\d.,]+/i);
+        const costMatch = subText.match(/Starts at \$[\d.,]+/i); // String Match: "Starts at $XX.XX"
         if (costMatch){
             cost = costMatch[0];
         }
@@ -50,7 +53,7 @@ async function scrapeEvents() {
         }      
 
         // Followers
-        const followersMatch = subText.match(/[\d,.]+ followers/i);
+        const followersMatch = subText.match(/[\d,.]+ followers/i); // String Match: xx followers
         if (followersMatch) {
             followers = followersMatch[0];
         }
@@ -63,7 +66,7 @@ async function scrapeEvents() {
         }
 
         // Location
-        const locationMatch = subText.match(/[A-Za-z\s]+ • [A-Za-z\s]+, [A-Z]{2}/);
+        const locationMatch = subText.match(/[A-Za-z\s]+ • [A-Za-z\s]+, [A-Z]{2}/); // String Match: "Venue • City, ST"
         if (locationMatch) location = locationMatch[0];
 
         // Link
@@ -94,7 +97,7 @@ scrapeEvents();
 //  *    npm install axios cheerio
 //  * 
 //  * Run the script:
-//  *   node index.js
+//  *   node event.js
 //  *     
 //  */
 // // Scrapping tutorial reference: https://medium.com/@datajournal/web-scraping-with-cheerio-0f16371a16a4
