@@ -236,6 +236,7 @@ useEffect(() => {
     // Add Incident markers using the incidents property
     incidents.forEach(incident => {
       if (incident.location?.coordinates) {
+        const incidentCoords = incident.location.coordinates;
         const marker = new markerLibRef.current.AdvancedMarkerElement({
           map,
           position: incident.location.coordinates,
@@ -252,9 +253,7 @@ useEffect(() => {
               <p>${incident.description}</p>
               ${imageHtml}
               <a class="map-link"
-                  href="https://www.google.com/maps/search/?api=1&query=${incident.location.coordinates.lat},${incident.location.coordinates.lng}"
-                  target="_blank">
-                  Show in Map
+                  id="show-route-incident-${incident._id}" href="#"> Show in Map
               </a>
               <a class="map-link" id="chat-link-incident-${incident._id}" >
                     <span class="chat-icon"></span> Chat
@@ -267,6 +266,7 @@ useEffect(() => {
 
             google.maps.event.addListener(infoWindowRef.current, 'domready', () => { 
               const chatLink = document.getElementById(`chat-link-incident-${incident._id}`);
+              const routeLink = document.getElementById(`show-route-incident-${incident._id}`);
               if (chatLink) {
                 chatLink.addEventListener('click', (e) => {
                   e.preventDefault();
@@ -274,6 +274,13 @@ useEffect(() => {
                   infoWindowRef.current.close();
                 });
               }
+              if (routeLink && userLocation) {
+                routeLink.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  showRoute(userLocation, incidentCoords);
+                  infoWindowRef.current.close();
+                });
+              } 
             });
           });
           incidentMarkersRef.current.push(marker);
