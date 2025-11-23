@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import Modal from './modal';
 import Avatar from './Avatar.jsx';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
+
 function Profile({ currentUser }) {
   const [eventsPosted, setEventsPosted] = useState([]);
   const [incidentsPosted, setIncidentsPosted] = useState([]);
@@ -32,9 +35,9 @@ function Profile({ currentUser }) {
       try {
         // fetch events created by this user
         const [eventsResponse, incidentsResponse, savedEventsResponse] = await Promise.all([
-          fetch(`http://localhost:4000/api/events/user/${currentUser._id}`),
-          fetch(`http://localhost:4000/api/incidents/user/${currentUser._id}`),
-          fetch(`http://localhost:4000/api/users/${currentUser._id}/savedEvents`)
+          fetch(`${safeBaseUrl}/api/events/user/${currentUser._id}`),
+          fetch(`${safeBaseUrl}/api/incidents/user/${currentUser._id}`),
+          fetch(`${safeBaseUrl}/api/users/${currentUser._id}/savedEvents`)
         ]);
 
         if (!eventsResponse.ok || !incidentsResponse.ok || !savedEventsResponse.ok) { throw new Error('Failed to fetch user posts'); }
@@ -58,7 +61,7 @@ function Profile({ currentUser }) {
       const confirmDelete = window.confirm(`Delete event "${event.title}"? This action cannot be undone.`);
       if (!confirmDelete) return;
       try {
-        const response = await fetch(`http://localhost:4000/api/events/${event._id}`, { method: "DELETE" });
+        const response = await fetch(`${safeBaseUrl}/api/events/${event._id}`, { method: "DELETE" });
         if (response.ok) {
           setEventsPosted(prev => prev.filter(e => e._id !== event._id));
           alert(`Event "${event.title}" deleted successfully!`);
@@ -74,7 +77,7 @@ function Profile({ currentUser }) {
       const confirmDelete = window.confirm(`Delete incident "${incident.title}"? This action cannot be undone.`);
       if (!confirmDelete) return; 
       try { 
-        const response = await fetch(`http://localhost:4000/api/incidents/${incident._id}`, { method: "DELETE" }); 
+        const response = await fetch(`${safeBaseUrl}/api/incidents/${incident._id}`, { method: "DELETE" }); 
         if (response.ok) { 
           setIncidentsPosted(prev => prev.filter(i => i._id !== incident._id)); 
           alert(`Incident "${incident.title}" deleted successfully!`);

@@ -4,6 +4,9 @@ import linkedin_logo from './linkedin_logo.png';
 import instagram_logo from './instagram_logo.jpg';
 import Bar from '../homePage/bar'
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
+
 function Help(){
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
@@ -16,7 +19,7 @@ function Help(){
         e.preventDefault();
         
         try {
-            const response = await fetch("http://localhost:4000/api/Contacts", {
+            const response = await fetch(`${safeBaseUrl}/api/Contacts`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ fullName, email, subject, type, message }),

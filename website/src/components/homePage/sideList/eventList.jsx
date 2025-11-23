@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import './eventList.css';
 import {FaHeart} from 'react-icons/fa';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
+
 const calculateDistance = (loc1, loc2) => {
     if (!loc1 || !loc2) return Infinity; 
 
@@ -50,7 +53,7 @@ function EventList({ events, onClose, userLocation, onSelect, currentUser }) {
     );
     try {
       const response = await fetch(
-        `http://localhost:4000/api/users/${currentUser._id}/savedEvents`,
+        `${safeBaseUrl}/api/users/${currentUser._id}/savedEvents`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -74,7 +77,7 @@ function EventList({ events, onClose, userLocation, onSelect, currentUser }) {
       if (!currentUser?._id) return;
       try {
         const response = await fetch(
-          `http://localhost:4000/api/users/${currentUser._id}/savedEvents`
+          `${safeBaseUrl}/api/users/${currentUser._id}/savedEvents`
         );
         if (response.ok) {
           const userData = await response.json();

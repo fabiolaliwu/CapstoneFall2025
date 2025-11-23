@@ -3,6 +3,9 @@ import { Loader } from '@googlemaps/js-api-loader';
 import './Map.css';
 import { useNavigate } from 'react-router-dom';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
+
 // Accept 'events' and 'incidents' as properties
 const Map = ({ 
     searchQuery, 
@@ -39,7 +42,7 @@ useEffect(() => {
     }
     
     try {
-      const response = await fetch(`http://localhost:4000/api/events?${eventParams.toString()}`);
+      const response = await fetch(`${safeBaseUrl}/api/events?${eventParams.toString()}`);
       const data = await response.json();
       setEvents(data);
     } catch (error) {
@@ -54,7 +57,7 @@ useEffect(() => {
     }
 
     try {
-      const response = await fetch(`http://localhost:4000/api/incidents?${incidentParams.toString()}`);
+      const response = await fetch(`${safeBaseUrl}/api/incidents?${incidentParams.toString()}`);
       const data = await response.json();
       setIncidents(data);
     } catch (error) {
