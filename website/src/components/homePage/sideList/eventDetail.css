@@ -222,6 +222,7 @@
     line-height: 1.5;
     margin-bottom: 24px;
     animation: fadeInUp 0.5s ease-out 0.5s both;
+    white-space: pre-line;
 }
 
 .event-info {

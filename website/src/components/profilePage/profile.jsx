@@ -159,7 +159,7 @@ function Profile({ currentUser }) {
               <div className="item-card" key={incident._id}>
                 <div>
                   <h4>{incident.title}</h4>
-                  <p className="item-date">{new Date(incident.timestamp).toLocaleString()}</p>
+                  <p className="item-date">{new Date(incident.createdAt).toLocaleString()}</p>
                 </div>
 
                 <div className="item-actions">
