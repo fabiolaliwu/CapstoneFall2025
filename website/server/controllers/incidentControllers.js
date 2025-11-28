@@ -126,7 +126,7 @@ export const updateIncident = async (req, res) => {
     }
 };
 
-// POST Upvote/Remove Upvote Incident
+// Upvote/Remove Upvote Incident
 export const upvoteIncident = async (req, res) => {
     const { id } = req.params;
     const { user_id } = req.body;
@@ -135,7 +135,7 @@ export const upvoteIncident = async (req, res) => {
         const incident = await Incident.findById(id);
         if (!incident) return res.status(404).json({ error: "Incident not found" });
 
-        // Check if user has already upvoted
+        // check current user id in the list exists
         const hasUpvoted = incident.upvoters.includes(user_id);
         
         if (hasUpvoted) {
@@ -151,7 +151,7 @@ export const upvoteIncident = async (req, res) => {
                 upvoters: incident.upvoters,
                 hasUpvoted: false
             });
-        } else {
+        }else {
             // Add upvote
             incident.upvoters.push(user_id);
             await incident.save();
