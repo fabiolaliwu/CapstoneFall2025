@@ -6,7 +6,7 @@ export const useIncidentUpvotes = (incidents, currentUser, safeBaseUrl) => {
     const [upvotedIncidents, setUpvotedIncidents] = useState(new Set());
     const [incidentUpvoteCounts, setIncidentUpvoteCounts] = useState({});
 
-    // Initialize upvote states
+    // Initialize upvote states when incidents or currentUser change
     useEffect(() => {
         const counts = {};
         const newUpvoted = new Set();
@@ -14,14 +14,13 @@ export const useIncidentUpvotes = (incidents, currentUser, safeBaseUrl) => {
         incidents.forEach(incident => {
             counts[incident._id] = incident.upvoters?.length || 0;
 
-            if (
+            if(
                 currentUser?._id && 
                 incident.upvoters?.some(id => id.toString() === currentUser._id.toString())
             ) {
                 newUpvoted.add(incident._id.toString());
             }
         });
-
         setIncidentUpvoteCounts(counts);
         setUpvotedIncidents(newUpvoted);
 
@@ -41,12 +40,13 @@ export const useIncidentUpvotes = (incidents, currentUser, safeBaseUrl) => {
                 {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ user_id: currentUser._id }),
+                    body: JSON.stringify({ 
+                        user_id: currentUser._id 
+                    }),
                 }
             );
 
             if (!res.ok) throw new Error("Failed to toggle upvote");
-
             const data = await res.json();
 
             setUpvotedIncidents(prev => {
@@ -66,7 +66,7 @@ export const useIncidentUpvotes = (incidents, currentUser, safeBaseUrl) => {
                 [incidentId]: data.upvotes
             }));
 
-        } finally {
+        }finally {
             setUpvotingIncidentId(null);
         }
     };
