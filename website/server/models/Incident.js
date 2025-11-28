@@ -39,7 +39,11 @@ const IncidentSchema = new mongoose.Schema({
   image: { 
     type: String,
     default: ""
-  }
+  },
+  upvoters: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: "User" 
+  }]
 }, { 
   timestamps: true 
 });

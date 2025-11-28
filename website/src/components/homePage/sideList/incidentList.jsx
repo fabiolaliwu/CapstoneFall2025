@@ -1,5 +1,9 @@
-import { useState, useEffect } from 'react';
 import './incidentList.css';
+import { BiSolidUpvote } from "react-icons/bi";
+import { useIncidentUpvotes } from './useUpvote';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
 
 const calculateDistance = (loc1, loc2) => {
     if (!loc1 || !loc2) return Infinity;
@@ -31,7 +35,7 @@ const trainColors = {
   };
   
 
-function IncidentList({ incidents, onClose, userLocation, onSelect }) {
+function IncidentList({ incidents, onClose, userLocation, onSelect, currentUser }) {
     const sortedIncidents = [...incidents].sort((a, b) => {
         const locA = a.location ? a.location.coordinates : null;
         const locB = b.location ? b.location.coordinates : null;
@@ -40,6 +44,12 @@ function IncidentList({ incidents, onClose, userLocation, onSelect }) {
         const distB = calculateDistance(userLocation, locB);
         return distA - distB;
     });
+    const {
+        upvotedIncidents,
+        incidentUpvoteCounts,
+        upvotingIncidentId,
+        toggleUpvote
+    } = useIncidentUpvotes(incidents, currentUser, safeBaseUrl);
 
     return (
         <div className="incident-list-container">
@@ -49,6 +59,9 @@ function IncidentList({ incidents, onClose, userLocation, onSelect }) {
                     {sortedIncidents.map((incident) => {
                         const incidentLocation = incident.location ? incident.location.coordinates : null;
                         const distance = calculateDistance(userLocation, incidentLocation);
+                        const incidentId = String(incident._id);
+                        const isUpvoted = upvotedIncidents.has(incidentId);
+                        const upvoteCount = incidentUpvoteCounts[incidentId] || 0;
 
                         return (
                             <div
@@ -56,25 +69,43 @@ function IncidentList({ incidents, onClose, userLocation, onSelect }) {
                                 className="incident-item"
                                 onClick={() => onSelect(incident)}
                             >
-                                <div className="icon">
-                                <div className="incident-distance-bar">
-                                    {distance.toFixed(2)} mi
-                                </div>
-                                {incident.train_line && !(incident.train_line.length === 1 && incident.train_line[0] === "N/A") && (
-                                    <div className="train-lines">
-                                    {incident.train_line.map((line) => (
-                                        <span
-                                        key={line}
-                                        style={{
-                                            backgroundColor: trainColors[line] || '#000000',
-                                            color: (line === 'N' || line === 'R' ||  line === 'Q' ||  line === 'W') ? '#000000' : '#FFFFFF' 
-                                        }}
-                                        >
-                                        {line}
-                                        </span>
-                                    ))}
+                                <div className="icon">  
+                                    <div className="left-icon">
+                                        <div className="incident-distance-bar">
+                                            {distance.toFixed(2)} mi
+                                        </div>
+                                        {incident.train_line && !(incident.train_line.length === 1 && incident.train_line[0] === "N/A") && (
+                                            <div className="train-lines">
+                                            {incident.train_line.map((line) => (
+                                                <span
+                                                key={line}
+                                                style={{
+                                                    backgroundColor: trainColors[line] || '#000000',
+                                                    color: (line === 'N' || line === 'R' ||  line === 'Q' ||  line === 'W') ? '#000000' : '#FFFFFF' 
+                                                }}
+                                                >
+                                                {line}
+                                                </span>
+                                            ))}
+                                            </div>
+                                        )}
                                     </div>
-                                )}
+                                        
+                                    <div className="upvote-icon"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            toggleUpvote(incident); 
+                                        }}
+                                    >   
+                                        {upvoteCount > 0 &&(
+                                            <span className="upvote-count">{upvoteCount}</span>
+                                        )}
+                                        <BiSolidUpvote 
+                                            size={20} 
+                                            color={isUpvoted ? '#ed623b' : "grey"} 
+                                        />
+                                        
+                                    </div>
                                 </div>
                                 <h3>{incident.title}</h3>
                                 <p>{incident.description}</p>
