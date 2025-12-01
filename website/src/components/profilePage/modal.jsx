@@ -2,6 +2,9 @@ import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import "./modal.css";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
+
 function Modal({ eventData, onClose, onSave }) {
     const [title, setTitle] = useState(eventData?.title || "");
     const [description, setDescription] = useState(eventData?.description || "");
@@ -12,7 +15,7 @@ function Modal({ eventData, onClose, onSave }) {
         e.preventDefault();
 
         const res = await fetch(
-        `http://localhost:4000/api/events/${eventData._id}`,
+        `${safeBaseUrl}/api/events/${eventData._id}`,
         {
             method: "PUT",
             headers: { 

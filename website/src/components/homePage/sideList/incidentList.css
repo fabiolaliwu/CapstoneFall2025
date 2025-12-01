@@ -23,7 +23,7 @@
 
 /* Heading */
 .incident-list header {
-    font-family: 'Jeju Gothic', sans-serif;
+    font-family: 'Times New Roman', Times, serif;
     margin-top: 0;
     margin-bottom: 10px;
     font-size: 22px;
@@ -104,12 +104,19 @@
 .icon {
     display: flex;
     gap: 6px;
-    margin-bottom: 8px;
-
+    justify-content: space-between;  
+    align-items: center;
 }
+.left-icon {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
 .train-lines {
     display: flex;
     gap: 4px;
+    justify-content: flex-start;
 }
 .train-lines span{
     display: flex;
@@ -121,4 +128,34 @@
     width: 22px;
     height: 22px;
     border-radius: 50%;
+}
+
+/* Upvote Section */
+.upvote-icon,
+.incident-upvote {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.upvote-icon:hover,
+.incident-upvote:hover {
+    background-color: #E5E7EB;
+    transform: scale(1.05);
+}
+
+.upvote-icon:active,
+.incident-upvote:active {
+    transform: scale(0.95);
+}
+
+.upvote-count {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    min-width: 16px;
+    text-align: center;
 }

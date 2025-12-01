@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import './add_post.css';
 import { useLocationInput } from './LocationInput';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const safeBaseUrl = API_BASE_URL.replace(/\/$/, ''); // Ensures no double slash
 
 function IncidentForm({ currentUser, onSubmitSuccess }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -123,15 +125,17 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
           category: incidentInfo.category[0],
           host: incidentInfo.host,
           user_id: incidentInfo.userId,    
-          image: imageData, 
+          image: imageData || '',
+          train_line: incidentInfo.train_line
         };
 
         // send POST request to server
-        const response = await fetch("http://localhost:4000/api/incidents", {
+        const response = await fetch(`${safeBaseUrl}/api/incidents`, {
           method: "POST",
           headers: {
             // Must specify content type for JSON body
             "Content-Type": "application/json", 
+            "Authorization": `Bearer ${localStorage.getItem('token')}`,
           },
           body: JSON.stringify(dataToSend), // Send JSON body
         });

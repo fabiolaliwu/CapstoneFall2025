@@ -1,5 +1,5 @@
 import Incident from "../models/Incident.js";
-
+import uploadImage from "../imageUpload.js";
 
 // GET all incidents
 export const getAllIncidents = async (req, res) => {
@@ -54,6 +54,16 @@ export const createNewIncident = async (req, res) => {
             coordinates: { lat: 40.7128, lng: -74.0060 }
             };
         }
+        let imageURL = "";
+        if(image) {
+            try{
+                const uploadResult = await uploadImage(image, `event-${title.replace(/\s+/g, '-')}`);
+                imageURL = uploadResult.url;
+                console.log("Image uploaded to S3:", imageURL);    
+            } catch{
+                console.error("Image upload failed, saving incident without image.");
+            }
+        }
         const incident = await Incident.create({
             title,
             description,
@@ -61,7 +71,7 @@ export const createNewIncident = async (req, res) => {
             category,
             train_line,
             user_id,
-            image: image || "",
+            image: imageURL
         });
         res.status(200).json(incident);
     }catch (error) {
@@ -116,7 +126,47 @@ export const updateIncident = async (req, res) => {
     }
 };
 
+// Upvote/Remove Upvote Incident
+export const upvoteIncident = async (req, res) => {
+    const { id } = req.params;
+    const { user_id } = req.body;
 
+    try {
+        const incident = await Incident.findById(id);
+        if (!incident) return res.status(404).json({ error: "Incident not found" });
+
+        // check current user id in the list exists
+        const hasUpvoted = incident.upvoters.includes(user_id);
+        
+        if (hasUpvoted) {
+            // Remove upvote
+            incident.upvoters = incident.upvoters.filter(
+                voterId => voterId.toString() !== user_id.toString()
+            );
+            await incident.save();
+            
+            return res.status(200).json({ 
+                message: "Upvote removed successfully", 
+                upvotes: incident.upvoters.length,
+                upvoters: incident.upvoters,
+                hasUpvoted: false
+            });
+        }else {
+            // Add upvote
+            incident.upvoters.push(user_id);
+            await incident.save();
+
+            return res.status(200).json({ 
+                message: "Incident upvoted successfully", 
+                upvotes: incident.upvoters.length,
+                upvoters: incident.upvoters,
+                hasUpvoted: true
+            });
+        }
+    } catch (err) {
+        res.status(400).json({ error: "Invalid incident ID" });
+    }
+};
   
 /**
  * The backend worklow of event and incident is reference by 

@@ -3,6 +3,10 @@ import io from "socket.io-client";
 import './chatRoom.css';
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:4000';
+const safeBaseUrl = API_BASE_URL.replace(/\/$/, ''); // Removes trailing slash for API calls
+
 function ChatRoom({ currentUser, chatType = "global", chatId = null }) {
     const [socket, setSocket] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -21,10 +25,10 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null }) {
     useEffect(() => {
         const fetchMessages = async () => {
             try {
-                const response = await axios.get(`http://localhost:4000/api/messages?chat_type=${chatType}&ref_id=${chatId}`);
+                const response = await axios.get(`${safeBaseUrl}/api/messages?chat_type=${chatType}&ref_id=${chatId}`);
 
                 if (chatType !== "global" && chatId) {
-                    const resTitle = await axios.get(`http://localhost:4000/api/${chatType}s/${chatId}`);
+                    const resTitle = await axios.get(`${safeBaseUrl}/api/${chatType}s/${chatId}`);
                     setChatTitle(resTitle.data.title || `${chatType} Chat`);
                 }
                 // if the chat has no message yet
@@ -36,7 +40,7 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null }) {
                         ref_id: chatId,
                         createdAt: new Date().toISOString(),
                     };
-                    await axios.post('http://localhost:4000/api/messages', initMessage);
+                    await axios.post(`${safeBaseUrl}/api/messages`, initMessage);
                     setMessages([initMessage]);
                 } else{
                     setMessages(response.data);
@@ -54,7 +58,7 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null }) {
 
     // Setup socket listeners
     useEffect(() => {
-        const socket = io("http://localhost:4000");
+        const socket = io(SOCKET_URL);
         setSocket(socket);
         socket.emit('joinRoom', room);
 
@@ -89,7 +93,7 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null }) {
 
         try {
             // Save to database first
-            await axios.post('http://localhost:4000/api/messages', messageData);
+            await axios.post(`${safeBaseUrl}/api/messages`, messageData);
             setNewMessage("");
         }catch (error) {
             console.error('Error saving message:', error);

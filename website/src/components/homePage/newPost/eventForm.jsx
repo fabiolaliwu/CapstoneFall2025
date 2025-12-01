@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import './add_post.css';
 import { useLocationInput } from './LocationInput.jsx';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const safeBaseUrl = API_BASE_URL.replace(/\/$/, ''); // Ensures no double slash
 
 function EventForm({categoriesFetchStartAsync,currentUser , onSubmitSuccess}) {
   const [categories, setCategories] = useState([]);
@@ -147,14 +149,15 @@ function EventForm({categoriesFetchStartAsync,currentUser , onSubmitSuccess}) {
         category: eventInfo.category,
         host: eventInfo.host,
         user_id: eventInfo.userId,    
-        image: imageData, 
+        image: imageData || ''
       };
 
-      const response = await fetch("http://localhost:4000/api/events", {
+      const response = await fetch(`${safeBaseUrl}/api/events`, {
         method: "POST",
         headers: {
             // Must specify content type for JSON body
             "Content-Type": "application/json", 
+            "Authorization": `Bearer ${localStorage.getItem('token')}` // JWS autorization
         },
         body: JSON.stringify(dataToSend), // Send JSON body
       });

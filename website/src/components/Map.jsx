@@ -3,6 +3,9 @@ import { Loader } from '@googlemaps/js-api-loader';
 import './Map.css';
 import { useNavigate } from 'react-router-dom';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
+
 // Accept 'events' and 'incidents' as properties
 const Map = ({ 
     searchQuery, 
@@ -39,7 +42,7 @@ useEffect(() => {
     }
     
     try {
-      const response = await fetch(`http://localhost:4000/api/events?${eventParams.toString()}`);
+      const response = await fetch(`${safeBaseUrl}/api/events?${eventParams.toString()}`);
       const data = await response.json();
       setEvents(data);
     } catch (error) {
@@ -54,7 +57,7 @@ useEffect(() => {
     }
 
     try {
-      const response = await fetch(`http://localhost:4000/api/incidents?${incidentParams.toString()}`);
+      const response = await fetch(`${safeBaseUrl}/api/incidents?${incidentParams.toString()}`);
       const data = await response.json();
       setIncidents(data);
     } catch (error) {
@@ -72,7 +75,7 @@ useEffect(() => {
     const loader = new Loader({
       apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
       version: 'weekly',
-      libraries: ['places', 'marker'],
+      libraries: ['places', 'marker', 'routes'],
     });
 
     loader.load().then(async () => {
@@ -233,6 +236,7 @@ useEffect(() => {
     // Add Incident markers using the incidents property
     incidents.forEach(incident => {
       if (incident.location?.coordinates) {
+        const incidentCoords = incident.location.coordinates;
         const marker = new markerLibRef.current.AdvancedMarkerElement({
           map,
           position: incident.location.coordinates,
@@ -249,9 +253,7 @@ useEffect(() => {
               <p>${incident.description}</p>
               ${imageHtml}
               <a class="map-link"
-                  href="https://www.google.com/maps/search/?api=1&query=${incident.location.coordinates.lat},${incident.location.coordinates.lng}"
-                  target="_blank">
-                  Show in Map
+                  id="show-route-incident-${incident._id}" href="#"> Show in Map
               </a>
               <a class="map-link" id="chat-link-incident-${incident._id}" >
                     <span class="chat-icon"></span> Chat
@@ -264,6 +266,7 @@ useEffect(() => {
 
             google.maps.event.addListener(infoWindowRef.current, 'domready', () => { 
               const chatLink = document.getElementById(`chat-link-incident-${incident._id}`);
+              const routeLink = document.getElementById(`show-route-incident-${incident._id}`);
               if (chatLink) {
                 chatLink.addEventListener('click', (e) => {
                   e.preventDefault();
@@ -271,6 +274,13 @@ useEffect(() => {
                   infoWindowRef.current.close();
                 });
               }
+              if (routeLink && userLocation) {
+                routeLink.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  showRoute(userLocation, incidentCoords);
+                  infoWindowRef.current.close();
+                });
+              } 
             });
           });
           incidentMarkersRef.current.push(marker);

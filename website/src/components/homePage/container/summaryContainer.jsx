@@ -3,66 +3,83 @@ import axios from 'axios';
 import './summaryContainer.css';
 import SummaryList from '../sideList/summaryList';
 import ChatRoom from '../live-chat/chatRoom.jsx';
+import EventDetail from '../sideList/eventDetail';
+import IncidentDetail from '../sideList/incidentDetail.jsx';
 
-function SummaryContainer({currentUser, userLocation, onClose, initialSelected}) {
-        const [incidents, setIncidents] = useState([]);
-        const [events, setEvents] = useState([]);
-        const [selectedItem, setSelectedItem] = useState(null);
+function SummaryContainer({currentUser, userLocation, onClose, initialSelectedId, events, incidents }) {
+    const [eventOpen, setEventOpen] = useState(null);
+    const [incidentOpen, setIncidentOpen] = useState(false);
+    const [selectedEventId, setSelectedEventId] = useState(null);
+    const [selectedIncidentId, setSelectedIncidentId] = useState(null);
 
-        useEffect(() => {
-            if (initialSelected) {
-                setSelectedItem(initialSelected);
-            }
-        }, [initialSelected]);
-
-        useEffect(() => {
-            const fetchData = async () => {
-                try {
-                    const [incidentsResponse, eventResponse] = await Promise.all([
-                        axios.get('http://localhost:4000/api/incidents'),
-                        axios.get('http://localhost:4000/api/events'),
-                    ]);
-
-                    setIncidents(incidentsResponse.data);
-                    setEvents(eventResponse.data);
-                } catch (error) {
-                    console.error('Error fetching the summary data:', error);
+    useEffect(() => {
+        if (initialSelectedId) {
+            const foundEvent = events.find(event => event._id === initialSelectedId);
+            if (foundEvent) {
+                setEventOpen(foundEvent);
+                setSelectedEventId(initialSelectedId);
+            } else {
+                const foundIncident = incidents.find(incident => incident._id === initialSelectedId);
+                if (foundIncident) {
+                    setIncidentOpen(foundIncident);
+                    setSelectedIncidentId(initialSelectedId);
                 }
-            };
-            
-            fetchData();
-        }, []);
+            }
+        }
+    }, [initialSelectedId, events, incidents]);
 
-        return (
-            <div className="summary-container">
+    return (
+        <div className="summary-container">
             {/* Left side list */}
-            <div className="summary-list">
-                <SummaryList
-                    incidents={incidents}
-                    events={events}
-                    userLocation={userLocation}
-                    onSelect={setSelectedItem}
-                    onClose={onClose}
-                    currentUser={currentUser}
-                />
-            </div>
+            {eventOpen ? (
+                <div className="event-detail">
+                    <EventDetail
+                        event={eventOpen}
+                        onClose={() => {
+                            setEventOpen(null);
+                            setSelectedEventId(null);
+                        }}
+                    />
+                </div>
+                ) : incidentOpen ? (
+                    <div className="incident-detail">
+                        <IncidentDetail
+                            incident={incidentOpen}
+                            onClose={() => {
+                                setIncidentOpen(null);
+                                setSelectedIncidentId(null);
+                            }}
+                        />
+                    </div>
+                ) : (
+                    <div className="summary-list">
+                    <SummaryList
+                        events={events}
+                        incidents={incidents}
+                        userLocation={userLocation}
+                        onClose={onClose}
+                        onSelectEvents={(event) => {
+                            setSelectedEventId(event._id);
+                            setEventOpen(event);
+                        }}     
+                        onSelectIncident={(incident) => {
+                            setSelectedIncidentId(incident._id);
+                            setIncidentOpen(incident);
+                        }}                   
+                        currentUser={currentUser}
+                    />
+                </div>
+            )}
 
             <hr className="container-divider" />
 
             {/* Right side chat */}
             <div className="chat-room-container">
-                {selectedItem ? (
-                    <ChatRoom
-                        currentUser={currentUser}
-                        chatType={selectedItem.type}
-                        chatId={selectedItem.id}
-                        onClose={() => setSelectedItem(null)}
-                    />
-                ) : (
-                    <div className="chat-placeholder">
-                        <p>← Click an item to view its chat room</p>
-                    </div>
-                )}
+                <ChatRoom
+                    currentUser={currentUser}
+                    chatType="global"
+                    chatId="main"
+                />
             </div>
         </div>
     );

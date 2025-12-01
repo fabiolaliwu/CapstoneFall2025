@@ -3,6 +3,9 @@ import Bar from '../homePage/bar';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const safeBaseUrl = API_BASE_URL.replace(/\/$/, ''); // Removes trailing slash if it exists
+
 function Login( {setCurrentUser} ) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -16,7 +19,7 @@ function Login( {setCurrentUser} ) {
         setMessage('');
 
         try {
-            const response = await fetch('http://localhost:4000/api/users/login', {
+            const response = await fetch(`${safeBaseUrl}/api/users/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

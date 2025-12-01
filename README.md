@@ -25,6 +25,7 @@
 6. In another terminal, run the backend
     ```sh 
     cd website/server
+    npm install @aws-sdk/client-s3 @aws-sdk/lib-storage
     npm install   
     node backend.js
     ```
