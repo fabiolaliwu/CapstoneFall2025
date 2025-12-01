@@ -85,6 +85,23 @@ function Profile({ currentUser }) {
     } 
   };
 
+  const handleUnsaveEvent = async (eventId) => {
+    try {
+      const res = await fetch(
+        `http://localhost:4000/api/users/${currentUser._id}/savedEvents/${eventId}`,
+        { method: "DELETE" }
+      );
+
+      if (res.ok) {
+        setSavedEvents(prev => prev.filter(e => e._id !== eventId));
+      }
+    } catch (err) {
+      console.error("Unsave error:", err);
+    }
+  };
+
+
+
   if (loading) return <div>Loading profile...</div>;
 
   return (
@@ -173,14 +190,29 @@ function Profile({ currentUser }) {
           <div className="card-list">
             {savedEvents.length === 0 ? (
               <p>No saved events yet.</p>
-            ) : savedEvents.map(event => (
-              <div className="item-card" key={event._id}>
-                <h4>{event.title}</h4>
-              </div>
-            ))}
+            ) : (
+              savedEvents.map(event => (
+                <div className="item-card" key={event._id}>
+                  <div>
+                    <h4>{event.title}</h4>
+                    <p className="item-date">
+                      {new Date(event.start_date).toLocaleString()}
+                    </p>
+                  </div>
+
+                  <div className="item-actions">
+                    <button
+                      className="unsave-btn"
+                      onClick={() => handleUnsaveEvent(event._id)}
+                    >
+                      Unsave
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         )}
-
       </div>
 
       {/* EVENT EDIT MODAL */}

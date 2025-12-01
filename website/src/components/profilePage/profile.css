@@ -139,7 +139,16 @@
   background: #d9534f;
 }
 
-/* Avatar (override your previous styles if needed) */
+.unsave-btn {
+  background: #e74c3c;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+
 .avatar {
   width: 100px;
   height: 100px;
