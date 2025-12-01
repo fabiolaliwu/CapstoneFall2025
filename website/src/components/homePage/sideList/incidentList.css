@@ -95,6 +95,7 @@
     font-weight: 500;
     padding: 5px 10px;
     border-radius: 12px;
+    margin-bottom: 8px;
     width: fit-content;
     box-shadow: 0 2px 5px rgba(74, 108, 247, 0.2);
 }

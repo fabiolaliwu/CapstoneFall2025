@@ -5,9 +5,6 @@ import { useIncidentUpvotes } from './useUpvote';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
-const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
-
 const calculateDistance = (loc1, loc2) => {
     if (!loc1 || !loc2) return Infinity;
 
