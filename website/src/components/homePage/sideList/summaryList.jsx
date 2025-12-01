@@ -37,9 +37,15 @@ function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelect
     const [savedEvents, setSavedEvents] = useState([]);
     const [savingEventId, setSavingEventId] = useState(null);
 
+    const {
+        upvotedIncidents,
+        incidentUpvoteCounts,
+        upvotingIncidentId,
+        toggleUpvote
+    } = useIncidentUpvotes(incidents, currentUser, safeBaseUrl);
+
     const incidentsArr = incidents || [];
     const eventsArr = events || [];
-
 
     // Combine both
     const merged = [
@@ -54,10 +60,25 @@ function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelect
             distance: calculateDistance(userLocation, evt.location?.coordinates)
         })),
     ];
+    // Sort by Upvotes, then Distance
+    const sorted = merged.sort((a, b) => {
+        const A = String(a._id);
+        const upvotesA = incidentUpvoteCounts[A] !== undefined 
+            ? incidentUpvoteCounts[A] 
+            : (a.upvoters?.length || 0);
 
-    // Sort by descending distance
-    const sorted = merged.sort((a, b) => a.distance - b.distance);
+        const B = String(b._id);
+        const upvotesB = incidentUpvoteCounts[B] !== undefined 
+            ? incidentUpvoteCounts[B] 
+            : (b.upvoters?.length || 0);
+        // More votes goes first (B - A)
+        if (upvotesB !== upvotesA) {
+            return upvotesB - upvotesA;
+        }
 
+        // If votes are equal then compare Distance
+        return a.distance - b.distance;
+    });
     // Event save system
     const handleSaveEvent = async (event) => {
         if (!currentUser?._id || savingEventId) return;
@@ -111,13 +132,6 @@ function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelect
         fetchSavedEvents();
     }, [currentUser?._id]);
 
-    const {
-        upvotedIncidents,
-        incidentUpvoteCounts,
-        upvotingIncidentId,
-        toggleUpvote
-    } = useIncidentUpvotes(incidents, currentUser, safeBaseUrl);
-    
     return (
         <div className="summary-list-container">
             <div className="summary-list">
