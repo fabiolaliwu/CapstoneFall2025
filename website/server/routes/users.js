@@ -9,7 +9,8 @@ import {
     getUserById,
     updateAvatar,
     eventSaveList,
-    getSavedEvents
+    getSavedEvents,
+    deleteSavedEvent
 } from "../controllers/userControllers.js";
 
 const router = express.Router();
@@ -40,5 +41,9 @@ router.put('/:id/savedEvents', eventSaveList);
 
 // GET /api/users/:id/savedEvents
 router.get('/:id/savedEvents', getSavedEvents);
+
+// DELETE /api/users/:id/savedEvents/:eventId
+router.delete("/:id/savedEvents/:eventId", deleteSavedEvent);
+
 
 export default router;

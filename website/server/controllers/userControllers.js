@@ -198,3 +198,26 @@ export const getSavedEvents = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+export const deleteSavedEvent = async (req, res) => {
+  try {
+    const { id, eventId } = req.params;
+
+    const user = await User.findById(id);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    user.savedEvents = user.savedEvents.filter(
+      e => e.toString() !== eventId.toString()
+    );
+
+    await user.save();
+    await user.populate("savedEvents");
+
+    return res.status(200).json({
+      message: "Event unsaved successfully",
+      savedEvents: user.savedEvents
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

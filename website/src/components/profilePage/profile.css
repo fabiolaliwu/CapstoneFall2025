@@ -139,6 +139,16 @@
   background: #d9534f;
 }
 
+.unsave-btn {
+  background: #e74c3c;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+
 /* Avatar */
 .avatar {
   width: 100px;
