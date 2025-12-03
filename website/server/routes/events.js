@@ -5,7 +5,8 @@ import {
     createNewEvent,
     deleteEvent,
     getEventsByUser,
-    updateEvent
+    updateEvent,
+    upvoteEvent
 }from "../controllers/eventControllers.js";
 
 const router = express.Router();
@@ -71,6 +72,9 @@ router.get("/user/:userId", getEventsByUser);
 
 // PUT update event
 router.put("/:id", updateEvent);
+
+// PUT upvote event
+router.put("/:id/upvote", upvoteEvent);
 
 export default router;
 

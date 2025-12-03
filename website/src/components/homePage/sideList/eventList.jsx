@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import './eventList.css';
 import {FaHeart} from 'react-icons/fa';
+import { BiSolidUpvote } from "react-icons/bi";
+import { useEventUpvotes } from './useUpvote';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
@@ -37,6 +39,12 @@ function EventList({ events, onClose, userLocation, onSelect, currentUser }) {
 
         return distA - distB;
     });
+    const {
+        upvotedEvents,
+        eventUpvoteCounts,
+        upvotingEventId,
+        toggleUpvote
+    } = useEventUpvotes(events, currentUser, safeBaseUrl);
 
   const [savedEvents, setSavedEvents] = useState([]);
   const [savingEventId, setSavingEventId] = useState(null);
@@ -111,6 +119,9 @@ function EventList({ events, onClose, userLocation, onSelect, currentUser }) {
                 const eventLocation = event.location ? event.location.coordinates : null;
                 const distance = calculateDistance(userLocation, eventLocation);
                 const isEventSaved = savedEvents.includes(String(event._id));
+                const eventId = String(event._id);
+                const isUpvoted = upvotedEvents.has(eventId);
+                const upvoteCount = eventUpvoteCounts[eventId] || 0;
 
                 return(
                 <div 
@@ -120,14 +131,28 @@ function EventList({ events, onClose, userLocation, onSelect, currentUser }) {
                 >
                     <div className="distance-heart-container">
                         <div className="event-distance-bar"> {distance.toFixed(2)} mi </div>  
-                        <div
-                          className="save-event-icon" 
-                          onClick={(e) => {
-                              e.stopPropagation(); 
-                              handleSaveEvent(event);
-                        }}>
-                          <FaHeart color={savedEvents.includes(String(event._id)) ? '#f03e82' : 'grey'} />
-                            {savingEventId === String(event._id) && '...'} 
+                        <div className="icon-group">
+                          <div className="upvote-icon"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                toggleUpvote(event); 
+                            }}
+                          >   
+                            {upvoteCount > 0 &&( <span className="upvote-count">{upvoteCount}</span>)}
+                            <BiSolidUpvote 
+                                size={20} 
+                                color={isUpvoted ? '#ed623b' : "grey"} 
+                            />
+                          </div>
+                          <div
+                            className="save-event-icon" 
+                            onClick={(e) => {
+                                e.stopPropagation(); 
+                                handleSaveEvent(event);
+                          }}>
+                            <FaHeart color={savedEvents.includes(String(event._id)) ? '#f03e82' : 'grey'} />
+                              {savingEventId === String(event._id) && '...'} 
+                          </div>
                         </div>
                     </div>
                     <h3>{event.title}</h3>
