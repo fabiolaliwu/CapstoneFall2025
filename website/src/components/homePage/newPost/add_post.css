@@ -289,3 +289,61 @@ div button.selected {
     transform: scale(1.1);
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
 }
+
+/* ========================= */
+/* MOBILE */
+@media screen and (max-width: 768px) and (orientation: portrait) {
+    /* Button below search bar */
+    .add {
+        margin-top: 10px;
+        margin-left: 190px;
+    }
+
+    .dropdown-menu {
+        left: 50%;
+        transform: translateX(-50%);
+        width: 160px;
+    }
+
+    .form-wrapper {
+        width: 80%;
+        max-width: 280px;
+        max-height: 65vh;
+        padding: 16px;
+        margin: 0 auto;
+        left: 18%;
+        top: 13%;
+    }
+
+    .form-wrapper input,
+    .form-wrapper textarea,
+    .form-wrapper select {
+        font-size: 15px;
+        padding: 8px;
+        width: 270px;
+    }
+
+    .category-toggle button,
+    .cost-toggle button {
+        font-size: 12px;
+        padding: 7px 10px;
+        min-height: 36px;
+    }
+
+    .my-location-btn,
+    .form-wrapper button[type="submit"] {
+        width: 100%;
+        padding: 12px;
+        margin-left: 0;
+    }
+
+    .train-line-grid {
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .train-line-option {
+        height: 36px;
+        width: 36px;
+    }
+}
