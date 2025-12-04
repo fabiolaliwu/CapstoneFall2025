@@ -151,3 +151,20 @@
     background-color: #5b828b;;
     box-shadow: 0 2px 8px rgba(54, 82, 201, 0.4);
 }
+
+/* Mobile */
+@media (max-width: 768px) {
+    .chat-room-container {
+        flex-direction: column;
+        height: 30vh;
+        max-height: 45vh;
+        width: 95%;
+        padding: 0 10px;
+        margin: 0 auto;
+    }
+    .chat-room {
+        border-radius: 0 0 10px 10px;
+        margin: 0 10px;
+        height: auto;
+    }
+}

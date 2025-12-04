@@ -47,6 +47,7 @@ function IncidentContainer({ currentUser, userLocation, onClose, initialSelected
                 </div>
             )}
             <hr className="container-divider" />
+            <hr className ="mobile-divider" />
             {/* Right side: Chat Room for selected incident */}
             <div className="chat-room-container">
                 {selectedIncidentId ? (

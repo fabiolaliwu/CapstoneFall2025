@@ -72,6 +72,7 @@ function SummaryContainer({currentUser, userLocation, onClose, initialSelectedId
             )}
 
             <hr className="container-divider" />
+            <hr className="mobile-divider" />
 
             {/* Right side chat */}
             <div className="chat-room-container">

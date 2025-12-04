@@ -113,7 +113,9 @@ function EventList({ events, onClose, userLocation, onSelect, currentUser }) {
     return (
         <div className="event-list-container">
         <div className="event-list">
-            <header>EVENTS</header>
+            <div className="list-header">
+              <header>EVENTS</header>
+            </div>
             <div className="event-items">
             {sortedEvents.map((event, index) => {
                 const eventLocation = event.location ? event.location.coordinates : null;
