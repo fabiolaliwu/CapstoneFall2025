@@ -6,6 +6,7 @@ import Logo from '/logo.png';
 import Buttons from './buttons'; 
 import { FaInfoCircle, FaQuestionCircle, FaUserCircle} from "react-icons/fa"; // Import icons
 import { IoLogInOutline } from "react-icons/io5";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 function Bar({ 
     currentUser, 
@@ -25,6 +26,19 @@ function Bar({
     const location = useLocation();    
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const isHomePage = location.pathname === '/home' || location.pathname === '/';
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    useEffect(() => {
+        const sideBarOpenPage = location.pathname === '/about' || 
+                            location.pathname === '/help' || 
+                            location.pathname === '/login' ||
+                            location.pathname === '/home' ||
+                            location.pathname === '/profile';
+        
+        if (sideBarOpenPage) {
+            setIsSidebarOpen(true);
+        }
+    }, [location.pathname]);
 
     const handleFilterClick = (menuName) => {
         setActiveMenu(activeMenu === menuName ? null : menuName);
@@ -66,13 +80,16 @@ function Bar({
     
     return (
         <>
+        {/* Handle Side bar open and closing for mobile */}
             {/* Sidebar */}
-            <div className="bar">       
+            <div className={`bar ${isSidebarOpen ? "open" : ""}`}>
                 
                 {/* Top Section */}
                 <div className="top-section">
                     <div className="logo">
-                        <Link to="/home"><img src={Logo} alt="Stay in the Loop" /></Link>
+                        <Link to="/home"  onClick={() => setIsSidebarOpen(false)}>
+                            <img src={Logo} alt="Stay in the Loop" />
+                        </Link>
                     </div>
                 </div>
                 
@@ -107,7 +124,7 @@ function Bar({
                             <NavLink to="/profile" className="profile-btn" title="Profile">
                                 <FaUserCircle size={22} />
                             </NavLink>
-                            <button onClick={handleLogout} className="logout-button" title="Logout">
+                            <button className="logout-button" title="Logout" onClick={() => {handleLogout();}}>
                                 <img src="https://cdn-icons-png.flaticon.com/512/1828/1828479.png" alt="Logout" className="logout-icon"/>
                             </button>
                         </div>
@@ -120,9 +137,18 @@ function Bar({
                 </div>
             </div>
             
+            {isSidebarOpen && (
+                <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)}></div>
+            )}
+            
             {/* Handle elements on map */}
             {isLoggedIn && isHomePage && (
                 <div className="floating-controls">
+                    <button className="mobile-hamburger"
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    >
+                        <GiHamburgerMenu size={24} />
+                    </button>
                     <div className="search-bar-wrapper">
                         <div className="search-bar">
                             <form className="search-form" onSubmit={handleSearch}>
