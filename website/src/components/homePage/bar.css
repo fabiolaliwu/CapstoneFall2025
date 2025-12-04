@@ -399,3 +399,21 @@
     max-width: 100%;
   }
 }
+/* MOBILE: move sidebar left for better space */
+@media (max-width: 768px) {
+  .bar {
+    left: -80px; 
+    width: 80px;
+    transition: left 0.3s ease;
+  }
+  .bar:hover {
+    left: 0;
+  }
+  .floating-controls {
+    top: 12px;
+    right: 40px;
+  }
+  .search-bar-wrapper {
+    max-width: 90%;
+  }
+}
