@@ -15,6 +15,16 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    width:180px;
+}
+/* Mobile + sign icon not display when using desktop */
+.btn-icon{
+    display:none;
+    font-size: 22px;
+    font-weight: bold;
+}
+.btn-addPost{
+    display: inline-block;
 }
 .add-btn:hover {
     background: linear-gradient(135deg, #6e98a3, #4b7b86);
@@ -288,4 +298,72 @@ div button.selected {
 .train-line-option:hover {
     transform: scale(1.1);
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+/* MOBILE */
+@media screen and (max-width: 768px) and (orientation: portrait) {
+    .add {
+        top: -40px;
+        position: fixed;
+        top: 12px;
+        right: 5px; 
+        margin-left: 0;
+        z-index: 1001;
+    }
+    .add-btn {
+        width: 50px;
+    }
+    .btn-icon{
+        display:inline-block;
+    }
+    .btn-addPost{
+        display: none;
+    }
+    .dropdown-menu {
+        right:-175%;
+        transform: translateX(-50%);
+        width: 160px;
+    }
+
+    .form-wrapper {
+        width: 80%;
+        max-width: 280px;
+        max-height: 65vh;
+        padding: 16px;
+        margin: 0 auto;
+        left: 18%;
+        top: 8%;
+    }
+
+    .form-wrapper input,
+    .form-wrapper textarea,
+    .form-wrapper select {
+        font-size: 15px;
+        padding: 8px;
+        width: 270px;
+    }
+
+    .category-toggle button,
+    .cost-toggle button {
+        font-size: 12px;
+        padding: 7px 10px;
+        min-height: 36px;
+    }
+
+    .my-location-btn,
+    .form-wrapper button[type="submit"] {
+        width: 100%;
+        padding: 12px;
+        margin-left: 0;
+    }
+
+    .train-line-grid {
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .train-line-option {
+        height: 36px;
+        width: 36px;
+    }
 }

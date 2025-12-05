@@ -5,7 +5,6 @@
     display: flex;
     height: 100%;
     align-items: flex-start;
-    z-index: 1;
     margin: 0;
     width: auto;
     background-color: #F7F9FC; /* light neutral background */
@@ -158,4 +157,24 @@
     color: #374151;
     min-width: 16px;
     text-align: center;
+}
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+    .incident-list-container {
+        width: 95%;
+        padding: 0 10px;
+        margin: 0 auto;
+        height: 65vh;
+    }
+    .incident-list {
+        width: 100%;
+        height: auto;
+        padding: 10px;
+    }
+    .incident-list header {
+        font-size: 18px;
+        padding-bottom: 6px;
+        margin-bottom: 8px;
+        background-color: white;
+    }
 }

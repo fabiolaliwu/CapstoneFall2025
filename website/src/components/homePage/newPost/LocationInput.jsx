@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useJsApiLoader } from '@react-google-maps/api';
 
 const LIBRARIES = ['places'];
@@ -6,6 +6,7 @@ const LIBRARIES = ['places'];
 export function useLocationInput(onChange) {
   const autocompleteRef = useRef(null);
   const locationInputRef = useRef(null);
+  const [inputValue, setInputValue] = useState('');
 
   // Load google place API
   const { isLoaded } = useJsApiLoader({
@@ -19,26 +20,36 @@ export function useLocationInput(onChange) {
     if(!isLoaded || !window.google) return;
 
     if (!autocompleteRef.current && locationInputRef.current) {
-      const autocomplete = new window.google.maps.places.Autocomplete(
-        locationInputRef.current,
-        {
-          types: ['geocode', 'establishment'],
-          componentRestrictions: { country: 'us' },
-        }
+      const autocomplete = new window.google.maps.places.PlaceAutocompleteElement({
+        componentRestrictions: { country: 'us' },
+      });
+      locationInputRef.current.parentNode.insertBefore(
+        autocomplete,
+        locationInputRef.current
       );
+      locationInputRef.current.style.display = 'none';
     
-      autocomplete.addListener('place_changed', () => {
+      autocomplete.addEventListener('gmp-placeselect', async () => {
         const place = autocomplete.getPlace();
-        if (place && place.formatted_address) {
+        if (place) {
+          await place.fetchFields({
+            fields:['displayName', 'formatted_address', 'location']
+          })
+          const address = place.formatted_address;
+          const location = place.location;
           const geometry = place.geometry?.location;
-          const coordinates = geometry
+          const coordinates = location
             ? { lat: geometry.lat(), lng: geometry.lng() }
             : null;
     
           console.log('Coordinates:', coordinates);
-          onChange(place.formatted_address, coordinates);
+          if(locationInputRef.current) {
+            locationInputRef.current.value = address;
+          }
+          setInputValue(address);
+          onChange(address, coordinates);
         } else {
-          console.error('No formatted address found for the selected place.');
+          console.error('No place details available found for the selected place.');
         }
       });
       autocompleteRef.current = autocomplete;
@@ -57,11 +68,19 @@ export function useLocationInput(onChange) {
           geocoder.geocode({ location: latlng }, (results, status) => {
             if (status === 'OK' && results[0]) {
               const address = results[0].formatted_address;
-              // Return both address and coordinates
-              onChange(address, { lat: latitude, lng: longitude });
               if(locationInputRef.current) {
                 locationInputRef.current.value = address;
               }
+              if(autocompleteRef.current){
+                const input = autocompleteRef.current.querySelector("input");
+                if(input){
+                  input.value = address;
+                }
+              }
+              setInputValue(address);
+              // Return both address and coordinates
+              onChange(address, { lat: latitude, lng: longitude });
+             
             } else {
               console.error("Geocoder failed: " + status);
               alert("Unable to retrieve address. Please try again.");

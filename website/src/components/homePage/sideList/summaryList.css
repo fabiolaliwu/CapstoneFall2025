@@ -157,3 +157,55 @@
     height: 22px;
     border-radius: 50%;
 }
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .summary-list-container {
+    width: 95%;
+    height: 35vh;
+  }
+
+  .summary-list {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    padding: 10px;
+  }
+
+  .summary-list header {
+    font-size: 18px;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+  }
+  .summary-item {
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+
+  .summary-item h3 {
+    font-size: 15px;
+  }
+
+  .summary-item p {
+    font-size: 13px;
+  }
+  .summary-item span {
+    font-size: 11px;
+  }
+  .summary-distance-bar {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .train-lines span {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+  }
+
+  .upvote-icon,
+  .incident-upvote {
+    padding: 4px 6px;
+    font-size: 12px;
+  }
+}

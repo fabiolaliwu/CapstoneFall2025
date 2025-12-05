@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './eventContainer.css';
 import EventList from '../sideList/eventList.jsx';
@@ -48,6 +48,7 @@ function EventContainer({ currentUser, userLocation, onClose, initialSelectedId,
             )}
             
             <hr className="container-divider" />
+            <hr className="mobile-divider" />
             {/* Right side: Chat Room for selected event */}
             <div className="chat-room-container">
                 {selectedEventId ? (

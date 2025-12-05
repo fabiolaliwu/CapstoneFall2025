@@ -45,9 +45,10 @@ function AddPost( {currentUser} ) {
             toggleDropdown();
           }
         }}
-        style={{ width: 170}}
+        
       >
-        <span style={{ display: 'inline-block' }}>
+        <span className="btn-icon">+</span>
+        <span className="btn-addPost">
           {showForm ? 'Close Form' : 'Add Post ▾'}
         </span>
       </button>

@@ -383,3 +383,55 @@
     color: #fff;
     font-weight: 600;
 }
+.mobile-hamburger {
+  display: none;
+}
+
+.mobile-hamburger:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* MOBILE SECTION  */
+@media (max-width: 768px) {
+  .bar {
+    left: -100px;
+    width: 90px;
+    transition: left 0.3s ease;
+  }
+  .bar.open {
+    left: 0;
+  }
+  .bar:hover {
+    left: -100px;
+  }
+  .bar.open:hover {
+    left: 0; 
+  }
+  /* Hamburger shows */
+  .mobile-hamburger {
+    display: flex;
+    background: #3f3f3f;
+    border: 1px solid #3f3f3f;
+    border-radius: 12px;
+    padding: 8px 10px;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    color: #fff;
+  }
+  
+  .floating-controls {
+    top: 12px;
+    right: 12px;
+    left: 12px;
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    justify-content: space-between; 
+    gap: 8px; 
+  }
+  .search-bar-wrapper {
+    max-width:none;
+    flex-grow: 1;
+  }
+
+}
