@@ -58,8 +58,8 @@
       display: flex;
       flex-direction: column;
       width: 95%;
-      height: 80vh;
-      top: 110px;
+      height: auto;
+      top: 70px;
       left: 0;
     }
     .summary-list {

@@ -162,7 +162,7 @@
 @media (max-width: 768px) {
   .summary-list-container {
     width: 95%;
-    height: auto;
+    height: 35vh;
     padding: 0 10px;
   }
 
