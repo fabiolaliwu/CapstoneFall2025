@@ -12,15 +12,15 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null }) {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const [loading, setLoading] = useState(true);
-    const messagesEndRef = useRef(null);
+    // const messagesEndRef = useRef(null);
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
-    // Scroll to bottom automatically
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
+    // const scrollToBottom = () => {
+    //     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // };
+    // // Scroll to bottom automatically
+    // useEffect(() => {
+    //     scrollToBottom();
+    // }, [messages]);
 
     // Determine room
     const room = chatType === "global" ? "global" : `${chatType}-${chatId}`;
@@ -144,7 +144,7 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null }) {
                             </span>
                         </div>
                     ))}
-                    <div ref={messagesEndRef} />
+                    {/* <div ref={messagesEndRef} /> */}
                 </div>
 
                 <div className="chat-input">
