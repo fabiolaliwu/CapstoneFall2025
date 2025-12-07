@@ -1,3 +1,8 @@
+.map-container {
+    width: 94%;
+    margin-left: 6%;
+    height: 100%; 
+}
 .info-window-content {
     max-width: 250px;
 }
@@ -45,3 +50,11 @@
     object-fit: cover; 
     border-radius: 4px;
 } 
+
+/* Mobile */
+@media (max-width: 768px) {
+    .map-container {
+        width: 100%; 
+        margin-left: 0; 
+    }
+}

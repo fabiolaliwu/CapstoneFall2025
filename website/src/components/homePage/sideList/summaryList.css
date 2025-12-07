@@ -112,7 +112,7 @@
 }
 .right-icon {
     display: flex;
-    gap: 2px;
+    gap: 8px;
     align-items: center;
 }
 
@@ -146,8 +146,8 @@
 .heart-icon {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
-    padding: 4px 8px;
+    margin-bottom: 4px;
+    padding: 4px 0;
     border-radius: 8px;
     transition: all 0.2s ease;
 }
@@ -187,36 +187,5 @@
     font-size: 18px;
     padding-bottom: 6px;
     margin-bottom: 8px;
-  }
-  .summary-item {
-    padding: 12px 14px;
-    margin-bottom: 10px;
-  }
-
-  .summary-item h3 {
-    font-size: 15px;
-  }
-
-  .summary-item p {
-    font-size: 13px;
-  }
-  .summary-item span {
-    font-size: 11px;
-  }
-  .summary-distance-bar {
-    font-size: 11px;
-    padding: 4px 8px;
-  }
-
-  .train-lines span {
-    width: 20px;
-    height: 20px;
-    font-size: 11px;
-  }
-
-  .upvote-icon,
-  .incident-upvote {
-    padding: 4px 6px;
-    font-size: 12px;
   }
 }

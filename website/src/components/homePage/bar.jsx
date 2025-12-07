@@ -144,11 +144,11 @@ function Bar({
             {/* Handle elements on map */}
             {isLoggedIn && isHomePage && (
                 <div className="floating-controls">
-                    <button className="mobile-hamburger"
+                    {/* <button className="mobile-hamburger"
                         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                     >
                         <GiHamburgerMenu size={24} />
-                    </button>
+                    </button> */}
                     <div className="search-bar-wrapper">
                         <div className="search-bar">
                             <form className="search-form" onSubmit={handleSearch}>

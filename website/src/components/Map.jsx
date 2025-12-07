@@ -288,7 +288,7 @@ useEffect(() => {
     });
   }, [events, incidents, userLocation, openChatFromMap]);
 
-  return <div ref={mapRef} style={{ height: '100%', width: '94%', marginLeft: '6%'}} />;
+  return <div ref={mapRef} className="map-container"/>;
 };
 
 export default Map;

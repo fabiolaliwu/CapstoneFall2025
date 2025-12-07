@@ -368,7 +368,7 @@
         box-sizing: border-box;
     }
     .event-detail-body {
-        padding: 0 12px;
+        padding: 0 25px;
         flex: none;
         min-height: 0;
         max-height: auto;
@@ -396,5 +396,9 @@
     .category {
         font-size: 10px;
         padding: 4px 8px;
+    }
+    .info-item:hover .info-data {
+        color: #2d454b;
+        transform: translateX(2px);
     }
 }
