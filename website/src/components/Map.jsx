@@ -15,7 +15,8 @@ const Map = ({
     setEvents, 
     setIncidents,
     events, 
-    incidents 
+    incidents, 
+    onMapBackgroundClick
 }) => {
   const mapRef = useRef(null); 
   const mapInstanceRef = useRef(null);
@@ -91,6 +92,12 @@ useEffect(() => {
           mapId: 'ba9f438e91bcc80eeddbc99c'
         });
         mapInstanceRef.current = map;
+        map.addListener('click', () => {
+          if (onMapBackgroundClick) {
+            onMapBackgroundClick(); // Triggers handleCloseContainer in homepage.jsx
+          }
+          infoWindowRef.current?.close(); // Also close any open info windows
+        });
 
         directionsServiceRef.current = new google.maps.DirectionsService();
         directionsRendererRef.current = new google.maps.DirectionsRenderer({
@@ -104,7 +111,7 @@ useEffect(() => {
         });
       }
     });
-  }, []);
+  }, [onMapBackgroundClick]);
 
   // Show route
   const showRoute = (origin, destination) => {

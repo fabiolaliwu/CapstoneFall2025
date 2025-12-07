@@ -73,7 +73,8 @@ function Homepage({currentUser}) {
                     incidents={incidents}
                     setIncidents={setIncidents}
                     filterValues={filterValues}
-                    openChatFromMap={openChatFromMap} />
+                    openChatFromMap={openChatFromMap} 
+                    onMapBackgroundClick={handleCloseContainer}/>
             </div>
             <div className='content'>
                 <Bar 
