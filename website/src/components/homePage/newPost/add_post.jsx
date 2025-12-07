@@ -3,9 +3,7 @@ import './add_post.css';
 import EventForm from './eventForm.jsx';
 import IncidentForm from './incidentForm';
 
-function AddPost( {currentUser} ) {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [showForm, setShowForm] = useState(null);
+function AddPost({ currentUser, showDropdown, setShowDropdown, showForm, setShowForm }){
   const [showPopup, setShowPopup] = useState(false);
 
   // toggle dropdown

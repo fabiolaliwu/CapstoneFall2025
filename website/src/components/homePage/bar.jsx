@@ -20,7 +20,11 @@ function Bar({
     filterValues,
     setFilterValues,
     activeMenu,
-    setActiveMenu
+    setActiveMenu,
+    isAddPostOpen,
+    setIsAddPostOpen,
+    activePostForm,
+    setActivePostForm
 }) {
     const navigate = useNavigate();
     const location = useLocation();    
@@ -254,7 +258,13 @@ function Bar({
                         )}
                     </div>
                     <div className="addpost">
-                        <AddPost currentUser={currentUser} />
+                        <AddPost 
+                            currentUser={currentUser} 
+                            showDropdown={isAddPostOpen}
+                            setShowDropdown={setIsAddPostOpen}
+                            showForm={activePostForm}
+                            setShowForm={setActivePostForm}
+                        />
                     </div>
                 </div>
             )}
