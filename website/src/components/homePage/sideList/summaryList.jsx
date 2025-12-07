@@ -1,6 +1,6 @@
 import './summaryList.css';
 import { BiSolidUpvote } from "react-icons/bi";
-import { useIncidentUpvotes } from './useUpvote';
+import { useIncidentUpvotes, useEventUpvotes } from './useUpvote';
 import { FaHeart } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 
@@ -41,8 +41,16 @@ function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelect
         upvotedIncidents,
         incidentUpvoteCounts,
         upvotingIncidentId,
-        toggleUpvote
+        toggleUpvote: toggleIncidentUpvote
     } = useIncidentUpvotes(incidents, currentUser, safeBaseUrl);
+
+    const {
+        upvotedEvents,
+        eventUpvoteCounts,
+        upvotingEventId,
+        toggleUpvote: toggleEventUpvote
+    } = useEventUpvotes(events, currentUser, safeBaseUrl);
+
 
     const incidentsArr = incidents || [];
     const eventsArr = events || [];
@@ -62,15 +70,21 @@ function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelect
     ];
     // Sort by Upvotes, then Distance
     const sorted = merged.sort((a, b) => {
-        const A = String(a._id);
-        const upvotesA = incidentUpvoteCounts[A] !== undefined 
-            ? incidentUpvoteCounts[A] 
-            : (a.upvoters?.length || 0);
+        const getUpvoteCount = (item) => {
+            const id = String(item._id);
+            if (item.type === 'incident') {
+                return incidentUpvoteCounts[id] !== undefined 
+                ? incidentUpvoteCounts[id] 
+                : (typeof item.upvotes === 'number' ? item.upvotes : (item.upvotes?.length || 0));
+            } else {
+                return eventUpvoteCounts[id] !== undefined
+                ? eventUpvoteCounts[id]
+                : (typeof item.upvotes === 'number' ? item.upvotes : (item.upvotes?.length || 0));
+            }
+        };
 
-        const B = String(b._id);
-        const upvotesB = incidentUpvoteCounts[B] !== undefined 
-            ? incidentUpvoteCounts[B] 
-            : (b.upvoters?.length || 0);
+        const upvotesA = getUpvoteCount(a);
+        const upvotesB = getUpvoteCount(b);
         // More votes goes first (B - A)
         if (upvotesB !== upvotesA) {
             return upvotesB - upvotesA;
@@ -79,6 +93,7 @@ function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelect
         // If votes are equal then compare Distance
         return a.distance - b.distance;
     });
+
     // Event save system
     const handleSaveEvent = async (event) => {
         if (!currentUser?._id || savingEventId) return;
@@ -138,9 +153,17 @@ function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelect
             <header>ALL ACTIVITY</header>
             <div className="summary-items">
                 {sorted.map(item => {
-                    const incidentId = String(item._id);
-                    const isUpvoted = upvotedIncidents.has(incidentId);
-                    const upvoteCount = incidentUpvoteCounts[incidentId] || 0;
+                    const itemId = String(item._id);
+                    let isUpvoted = false;
+                    let upvoteCount = 0;
+
+                    if (item.type === 'incident') {
+                        isUpvoted = upvotedIncidents.has(itemId);
+                        upvoteCount = incidentUpvoteCounts[itemId] || 0;
+                    } else {
+                        isUpvoted = upvotedEvents.has(itemId);
+                        upvoteCount = eventUpvoteCounts[itemId] || 0;
+                    }   
 
                     return (
                     <div
@@ -178,30 +201,30 @@ function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelect
                             )}
                             </div>
 
-                            {item.type === "incident" && (
-                                <div 
-                                    className="upvote-icon" 
-                                    onClick={(e) => {
-                                        e.stopPropagation(); 
-                                        toggleUpvote(item);
-                                    }}
-                                    style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}
-                                >
-                                    {upvoteCount > 0 &&(
-                                        <span className="upvote-count">{upvoteCount}</span>
-                                    )}
-                                    <BiSolidUpvote 
-                                        size={20} 
-                                        color={isUpvoted ? '#ed623b' : "grey"} 
-                                    />
-                                </div>
-                            )}
+                            <div className="right-icon">
+                            <div 
+                                className="upvote-icon" 
+                                onClick={(e) => {
+                                    e.stopPropagation(); 
+                                    if (item.type === 'incident') toggleIncidentUpvote(item);
+                                    else toggleEventUpvote(item);
+                                }}
+                                style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}
+                            >
+                                {upvoteCount > 0 &&(
+                                    <span className="upvote-count">{upvoteCount}</span>
+                                )}
+                                <BiSolidUpvote 
+                                    size={20} 
+                                    color={isUpvoted ? '#ed623b' : "grey"} 
+                                />
+                            </div>
 
 
 
                             {item.type === "event" && (
                                 <div
-                                    className="icon"
+                                    className="heart-icon"
                                     onClick={e => {
                                         e.stopPropagation();
                                         handleSaveEvent(item);
@@ -216,6 +239,7 @@ function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelect
                                     />
                                 </div>
                             )}
+                            </div>
                         </div>
 
                         <h3>{item.title}</h3>

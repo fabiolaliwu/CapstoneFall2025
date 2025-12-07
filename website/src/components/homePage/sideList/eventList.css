@@ -146,19 +146,17 @@
 @media (max-width: 768px) {
     .event-list-container {
         width: 95%;
-        padding: 0 10px;
-        margin: 0 auto;
-        height: 65vh;
+        height: 35vh;
     }
     .event-list {
         width: 100%;
         height: auto;
         padding: 10px;
+        background-color: white;
     }
     .event-list header {
         font-size: 18px;
         padding-bottom: 6px;
         margin-bottom: 8px;
-        background-color: white;
     }
 }

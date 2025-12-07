@@ -159,12 +159,11 @@
         height: 30vh;
         max-height: 45vh;
         width: 95%;
-        padding: 0 10px;
         margin: 0 auto;
     }
     .chat-room {
-        border-radius: 0 0 10px 10px;
-        margin: 0 10px;
+        border-radius: 10px;
+        padding-right: 10vw;
         height: auto;
     }
 }
