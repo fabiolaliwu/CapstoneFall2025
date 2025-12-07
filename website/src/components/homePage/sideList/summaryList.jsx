@@ -75,11 +75,11 @@ function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelect
             if (item.type === 'incident') {
                 return incidentUpvoteCounts[id] !== undefined 
                 ? incidentUpvoteCounts[id] 
-                : (item.upvotes || item.upvotes?.length || 0);
+                : (typeof item.upvotes === 'number' ? item.upvotes : (item.upvotes?.length || 0));
             } else {
                 return eventUpvoteCounts[id] !== undefined
                 ? eventUpvoteCounts[id]
-                : (item.upvotes || item.upvotes?.length || 0);
+                : (typeof item.upvotes === 'number' ? item.upvotes : (item.upvotes?.length || 0));
             }
         };
 
