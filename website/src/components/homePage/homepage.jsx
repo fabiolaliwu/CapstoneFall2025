@@ -15,6 +15,8 @@ function Homepage({currentUser}) {
     const [searchQuery, setSearchQuery] = useState('');
     const [mapSelectedId, setMapSelectedId] = useState(null);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [isAddPostOpen, setIsAddPostOpen] = useState(false);
+    const [activePostForm, setActivePostForm] = useState(null);
     const [filterValues, setFilterValues] = useState({
         eventCategory: 'All',
         incidentCategory: 'All',
@@ -60,6 +62,10 @@ function Homepage({currentUser}) {
     const handleCloseContainer = () => {
         setOpenList('');
         setMapSelectedId(null);
+        setIsFilterOpen(false); 
+        setActiveMenu(null);        
+        setIsAddPostOpen(false);    
+        setActivePostForm(null);
     }
 
     return (
@@ -90,6 +96,10 @@ function Homepage({currentUser}) {
                     setFilterValues={setFilterValues}
                     activeMenu={activeMenu}
                     setActiveMenu={setActiveMenu}
+                    isAddPostOpen={isAddPostOpen}
+                    setIsAddPostOpen={setIsAddPostOpen}
+                    activePostForm={activePostForm}
+                    setActivePostForm={setActivePostForm}
                 />
             </div>
 
