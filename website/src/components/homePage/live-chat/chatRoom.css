@@ -33,7 +33,7 @@
     padding-bottom: 8px;
     letter-spacing: 0.5px;
 }
-
+/* Active status of chat room */
 .active-status {
     display: inline-flex;
     align-items: center;
