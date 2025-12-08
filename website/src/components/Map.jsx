@@ -139,19 +139,29 @@ useEffect(() => {
     if (!mapInstanceRef.current || !markerLibRef.current) return;
     const map = mapInstanceRef.current;
 
+    const warningIcon = document.createElement("img");
+    warningIcon.src = "/incidentIcon.png";
+    warningIcon.style.width = "32px";
+    warningIcon.style.height = "32px";
+
+    const eventIcon = document.createElement("img");
+    eventIcon.src = "/eventIcon.png";
+    eventIcon.style.width = "32px";
+    eventIcon.style.height = "32px";
+
     // Clear previous markers
     eventMarkersRef.current.forEach(marker => marker.setMap(null));
     incidentMarkersRef.current.forEach(marker => marker.setMap(null));
     eventMarkersRef.current = [];
     incidentMarkersRef.current = [];
 
-    const eventIcon = document.createElement('div');
-    eventIcon.style.fontSize = '2rem';
-    eventIcon.innerHTML = '📍';
+    // const eventIcon = document.createElement('div');
+    // eventIcon.style.fontSize = '2rem';
+    // eventIcon.innerHTML = '📍';
 
-    const incidentIcon = document.createElement('div');
-    incidentIcon.style.fontSize = '2rem';
-    incidentIcon.innerHTML = '⚠️';
+    // const incidentIcon = document.createElement('div');
+    // incidentIcon.style.fontSize = '2rem';
+    // incidentIcon.innerHTML = '⚠️';
 
     // User location marker
     if (userLocation) {
@@ -247,8 +257,8 @@ useEffect(() => {
         const marker = new markerLibRef.current.AdvancedMarkerElement({
           map,
           position: incident.location.coordinates,
+          content: warningIcon.cloneNode(true),
           title: incident.title,
-          content: incidentIcon.cloneNode(true)
         });
 
         const imageHtml = incident.image ? `<img src="${incident.image}" class="info-window-image" alt="Incident Image" />` : '';

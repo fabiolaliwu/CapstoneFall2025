@@ -51,6 +51,7 @@ function EventForm({categoriesFetchStartAsync,currentUser , onSubmitSuccess}) {
 
   // Location input autofill
   const { locationInputRef, handleUseMyLocation, isLoaded } = useLocationInput((address, coordinates) => {
+    console.log('onChange called with:', address, coordinates);
     setEventInfo(prev => ({
       ...prev, 
       location: {
