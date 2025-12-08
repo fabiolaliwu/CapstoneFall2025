@@ -34,14 +34,30 @@
     letter-spacing: 0.5px;
 }
 
+.active-status {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 8px;
+    color: #04b94f;
+    gap: 4px;
+}
+.active-icon {
+    width: 15px;
+    height: 15px;
+}
+.active-text {
+    font-size: 15px;
+}
+
 /* Messages area */
 .chat-messages {
-    flex: 1;
+    flex: 1 1 auto;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    padding-right: 5px;
+    padding-right: 5px 10px;
+    min-height: 0;
 }
 
 /* Generic message bubble */

@@ -12,15 +12,8 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null }) {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const [loading, setLoading] = useState(true);
-    // const messagesEndRef = useRef(null);
-
-    // const scrollToBottom = () => {
-    //     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    // };
-    // // Scroll to bottom automatically
-    // useEffect(() => {
-    //     scrollToBottom();
-    // }, [messages]);
+    const [isActiveNow, setIsActiveNow] = useState(false);
+    const messagesEndRef = useRef(null);
 
     // Determine room
     const room = chatType === "global" ? "global" : `${chatType}-${chatId}`;
@@ -113,10 +106,40 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null }) {
             sendMessage();
         }
     }
+
+    // Determination of chatroom active status
+    useEffect(() => {
+        if (!messages || messages.length === 0) {
+            setIsActiveNow(false);
+            return;
+        }
+        const tenMinutes = 10 * 60 * 1000; // 10 mins
+        const now = new Date();
+        // check if the message is within last 10 mins
+        const recentMessage = messages.some(msg => {
+            const msgTime = new Date(msg.createdAt);
+            return now - msgTime <= tenMinutes; // 
+        });
+        setIsActiveNow(recentMessage);
+    }, [messages]);
+    
+    //auto scroll to bottom
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" ,block: "end" });
+    }, [messages]);    
+
     return (
         <div className="chat-room-container">
             <div className="chat-room">
-                <div className="chat-header">{chatTitle}</div>
+            <div className="chat-header">
+                {chatTitle}
+                {isActiveNow && (
+                    <span className="active-status">
+                        <img src="/activeIcon.png" alt="Active Now" className="active-icon"/>
+                        <span className="active-text">Active Now</span>
+                    </span>
+                )}
+            </div>
 
                 <div className="chat-messages">
                     {loading ? (
@@ -144,7 +167,7 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null }) {
                             </span>
                         </div>
                     ))}
-                    {/* <div ref={messagesEndRef} /> */}
+                    <div ref={messagesEndRef} />
                 </div>
 
                 <div className="chat-input">
