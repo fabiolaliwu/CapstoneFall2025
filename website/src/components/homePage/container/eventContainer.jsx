@@ -1,54 +1,63 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './eventContainer.css';
 import EventList from '../sideList/eventList.jsx';
+import EventDetail from '../sideList/eventDetail.jsx';
 import ChatRoom from '../live-chat/chatRoom.jsx';
-import EventDetail from '../sideList/eventDetail';
 
-function EventContainer({ currentUser, userLocation, onClose, initialSelectedId, events }) {
+function EventContainer({ currentUser, userLocation, onClose, initialSelectedId }) {
+    const [events, setEvents] = useState([]);
     const [selectedEventId, setSelectedEventId] = useState(null);
-    const [eventOpen, setEventOpen] = useState(null);
 
     useEffect(() => {
         if (initialSelectedId) {
-            const foundEvent = events.find(event => event._id === initialSelectedId);
-            if (foundEvent) {
-                setEventOpen(foundEvent);
-                setSelectedEventId(initialSelectedId);
-            }
+            setSelectedEventId(initialSelectedId);
         }
-    }, [initialSelectedId, events]);
+    }, [initialSelectedId]);
+
+    useEffect(() => {
+        // Fetch all events
+        const fetchEvents = async () => {
+            try {
+                const response = await axios.get('http://localhost:4000/api/events');
+                setEvents(response.data);
+            } catch (error) {
+                console.error('Error fetching events:', error);
+            }
+        };
+        fetchEvents();
+    }, []);
+
+    const selectedEvent = events.find(e => String(e._id) === String(selectedEventId));
 
     return (
         <div className="event-container">
-            {/* Left side: Event List or Event Detail*/}
-            {eventOpen ? (
-                <div className="event-detail">
-                    <EventDetail
-                        event={eventOpen}
-                        onClose={() => {
-                            setEventOpen(null);
-                            setSelectedEventId(null);
-                        }}
-                    />
-                </div>
-            ):(
-                <div className="event-list">
-                    <EventList
-                        events={events}
-                        userLocation={userLocation}
-                        onClose={onClose}
-                        onSelect={(event) => {
-                            setSelectedEventId(event._id);
-                            setEventOpen(event);
-                        }}                        
-                        currentUser={currentUser}
-                    />
-                </div>
-            )}
-            
+            {/* Left side: Event List */}
+            <div className="event-list">
+                <EventList
+                    events={events}
+                    userLocation={userLocation}
+                    onClose={onClose}
+                    onSelect={(evt) => setSelectedEventId(evt?._id || evt)}
+                    currentUser={currentUser}
+                />
+            </div>
+
             <hr className="container-divider" />
-            <hr className="mobile-divider" />
+
+            {/* Middle: Detail panel */}
+            <div className="event-detail-panel">
+                {selectedEvent ? (
+                    <EventDetail event={selectedEvent} onClose={() => setSelectedEventId(null)} />
+                ) : (
+                    <div className="chat-placeholder">
+                        <p>← Click an event to view details</p>
+                    </div>
+                )}
+            </div>
+
+            <hr className="container-divider" />
+
             {/* Right side: Chat Room for selected event */}
             <div className="chat-room-container">
                 {selectedEventId ? (
@@ -64,7 +73,6 @@ function EventContainer({ currentUser, userLocation, onClose, initialSelectedId,
                     </div>
                 )}
             </div>
-            
         </div>
     );
 }

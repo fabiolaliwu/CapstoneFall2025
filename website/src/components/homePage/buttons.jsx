@@ -1,6 +1,6 @@
 import './buttons.css';
 import { FaRegCalendarAlt } from "react-icons/fa";
-import { IoBarChartSharp } from "react-icons/io5";
+import { IoGlobeOutline } from "react-icons/io5";
 import { IoWarningOutline } from "react-icons/io5";
 
 function Buttons({ openEvents, openSummary, openIncidents }) {
@@ -13,8 +13,8 @@ function Buttons({ openEvents, openSummary, openIncidents }) {
       </button>
 
       <button onClick={openSummary}>
-        <IoBarChartSharp size={20} />
-        <span className="btn-text">Summary</span>
+        <IoGlobeOutline size={20} />
+        <span className="btn-text">All</span>
       </button>
 
       <button onClick={openIncidents}>

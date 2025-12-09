@@ -15,8 +15,6 @@ function Homepage({currentUser}) {
     const [searchQuery, setSearchQuery] = useState('');
     const [mapSelectedId, setMapSelectedId] = useState(null);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
-    const [isAddPostOpen, setIsAddPostOpen] = useState(false);
-    const [activePostForm, setActivePostForm] = useState(null);
     const [filterValues, setFilterValues] = useState({
         eventCategory: 'All',
         incidentCategory: 'All',
@@ -62,10 +60,6 @@ function Homepage({currentUser}) {
     const handleCloseContainer = () => {
         setOpenList('');
         setMapSelectedId(null);
-        setIsFilterOpen(false); 
-        setActiveMenu(null);        
-        setIsAddPostOpen(false);    
-        setActivePostForm(null);
     }
 
     return (
@@ -79,8 +73,7 @@ function Homepage({currentUser}) {
                     incidents={incidents}
                     setIncidents={setIncidents}
                     filterValues={filterValues}
-                    openChatFromMap={openChatFromMap} 
-                    onMapBackgroundClick={handleCloseContainer}/>
+                    openChatFromMap={openChatFromMap} />
             </div>
             <div className='content'>
                 <Bar 
@@ -96,16 +89,12 @@ function Homepage({currentUser}) {
                     setFilterValues={setFilterValues}
                     activeMenu={activeMenu}
                     setActiveMenu={setActiveMenu}
-                    isAddPostOpen={isAddPostOpen}
-                    setIsAddPostOpen={setIsAddPostOpen}
-                    activePostForm={activePostForm}
-                    setActivePostForm={setActivePostForm}
                 />
             </div>
 
             {openList === 'events' && < EventContainer currentUser={currentUser} events={events} userLocation={userLocation} onClose={handleCloseContainer} initialSelectedId={mapSelectedId} /> }
             {openList === 'incidents' && < IncidentContainer currentUser={currentUser} incidents={incidents} userLocation={userLocation} onClose={handleCloseContainer} initialSelectedId={mapSelectedId} /> }
-            {openList === 'summary' && < SummaryContainer currentUser={currentUser} events={events} incidents={incidents} userLocation={userLocation} onClose={handleCloseContainer} initialSelectedId={mapSelectedId} /> }
+            {openList === 'summary' && < SummaryContainer currentUser={currentUser} userLocation={userLocation} onClose={handleCloseContainer} initialSelected={mapSelectedId} /> }
         </div>
     );
 }
