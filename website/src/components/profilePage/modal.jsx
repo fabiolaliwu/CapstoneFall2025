@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import "./modal.css";
+import logger from "../../logger";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
@@ -33,6 +34,10 @@ function Modal({ eventData, onClose, onSave }) {
         if (res.ok) {
             const updated = await res.json();
             onSave(updated);
+            logger.info(`Event ${eventData._id} updated successfully.`);
+        }
+        else {
+            logger.error(`Failed to update event ${eventData._id}. Status: ${res.status}`);
         }
     };
 

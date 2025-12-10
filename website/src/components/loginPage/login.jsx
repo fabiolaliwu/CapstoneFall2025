@@ -2,6 +2,7 @@ import './login.css';
 import Bar from '../homePage/bar';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logger from "../../logger";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 const safeBaseUrl = API_BASE_URL.replace(/\/$/, ''); // Removes trailing slash if it exists
@@ -39,10 +40,12 @@ function Login( {setCurrentUser} ) {
                 setCurrentUser(data.user);
                 // alert('Login successful! thank you');
                 navigate('/home'); // redirect to home page
+                logger.info(`User ${data.user.username} logged in successfully.`);
             }
     
         } catch (error) {
             console.error('Error during login:', error);
+            logger.error(`Login error: ${error.message}`);
             setMessage('Network error. Please try again.');
         }
     };

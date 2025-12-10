@@ -2,6 +2,7 @@ import './signup.css';
 import Bar from '../homePage/bar';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logger from "../../logger";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
@@ -40,15 +41,18 @@ function Signup(){
             if (!response.ok) {
                 // Signup failed
                 setMessage(data.error || 'Signup failed');
+                logger.warn(`Signup failed for username: ${username}. Reason: ${data.error}`);
             } else {
                 // Signup succeeded
                 setMessage(`Account created! Welcome, ${data.user.username}`);
                 // alert('Account created successfully! You can now log in.');
                 navigate('/login');
+                logger.info(`New user signed up: ${data.user.username}`);
 
             }
         } catch (error) {
             console.error('Error during signup:', error);
+            logger.error(`Signup error: ${error.message}`);
             setMessage('An error occurred. Please try again.');
         }
     };

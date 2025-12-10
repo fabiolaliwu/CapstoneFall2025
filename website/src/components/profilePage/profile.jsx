@@ -3,6 +3,7 @@ import Bar from '../homePage/bar';
 import { useState, useEffect } from 'react';
 import Modal from './modal';
 import Avatar from './Avatar.jsx';
+import logger from "../../logger";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
@@ -45,8 +46,10 @@ function Profile({ currentUser }) {
         setEventsPosted(await eventsResponse.json());
         setIncidentsPosted(await incidentsResponse.json());
         setSavedEvents(await savedEventsResponse.json());
+        logger.info("Profile page data loaded")
       } catch (err) {
         console.error("Profile load error:", err);
+        logger.error(`Profile load error: ${err.message}`);
       } finally {
         setLoading(false);
       }
@@ -63,11 +66,13 @@ function Profile({ currentUser }) {
       try {
         const response = await fetch(`${safeBaseUrl}/api/events/${event._id}`, { method: "DELETE" });
         if (response.ok) {
+          logger.info(`Event deleted: ${event._id} by user ${currentUser._id}`);
           setEventsPosted(prev => prev.filter(e => e._id !== event._id));
           alert(`Event "${event.title}" deleted successfully!`);
         }
       } catch (error) {
         console.error(error);
+        logger.error(`Error deleting event: ${error.message}`);
       }
     }
   };
@@ -80,10 +85,12 @@ function Profile({ currentUser }) {
         const response = await fetch(`${safeBaseUrl}/api/incidents/${incident._id}`, { method: "DELETE" }); 
         if (response.ok) { 
           setIncidentsPosted(prev => prev.filter(i => i._id !== incident._id)); 
+          logger.info(`Incident deleted: ${incident._id} by user ${currentUser._id}`);
           alert(`Incident "${incident.title}" deleted successfully!`);
         } 
       } catch (error) { 
         console.error(error);
+        logger.error(`Error deleting incident: ${error.message}`);
       } 
     } 
   };
@@ -97,9 +104,11 @@ function Profile({ currentUser }) {
 
       if (res.ok) {
         setSavedEvents(prev => prev.filter(e => e._id !== eventId));
+        logger.debug(`Event unsaved: ${eventId} by user ${currentUser._id}`);
       }
     } catch (err) {
       console.error("Unsave error:", err);
+      logger.error(`Error unsaving event: ${err.message}`);
     }
   };
 

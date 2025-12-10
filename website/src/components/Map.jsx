@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import './Map.css';
 import { useNavigate } from 'react-router-dom';
+import logger from '../logger';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
@@ -46,8 +47,10 @@ useEffect(() => {
       const response = await fetch(`${safeBaseUrl}/api/events?${eventParams.toString()}`);
       const data = await response.json();
       setEvents(data);
+      logger.info(`Fetched ${data.length} events with params: ${eventParams.toString()}`);
     } catch (error) {
       console.error('Error fetching events:', error);
+      logger.error(`Error fetching events: ${error}`);
     }
   };
 
@@ -61,13 +64,16 @@ useEffect(() => {
       const response = await fetch(`${safeBaseUrl}/api/incidents?${incidentParams.toString()}`);
       const data = await response.json();
       setIncidents(data);
+      logger.info(`Fetched ${data.length} incidents with params: ${incidentParams.toString()}`);
     } catch (error) {
       console.error('Error fetching incidents:', error);
+      logger.error(`Error fetching incidents: ${error}`);
     }
   };
 
   fetchEvents();
   fetchIncidents();
+  logger.info(`Incident and event data fetch triggered.`);
   
 }, [searchQuery, filterValues, setEvents, setIncidents]);
 
@@ -126,9 +132,11 @@ useEffect(() => {
       (result,status)=>{
         if(status===google.maps.DirectionsStatus.OK){
           directionsRendererRef.current.setDirections(result);
+          logger.info("Route display triggered")
         }
         else{
           console.error(`error fetching directions ${result}`);
+          logger.error(`Error fetching directions: ${result}`);
         }
       }
     );
