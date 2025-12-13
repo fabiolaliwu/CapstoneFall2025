@@ -83,6 +83,36 @@
     margin-top: 25px;
 }
 
+/* Mobile */
+@media (max-width: 768px) {
+    .signup-section {
+        width: 100%; 
+        margin-left: 0; 
+        padding: 0 20px; 
+        box-sizing: border-box;
+    }
+
+    .signup-box-background {
+        width: 100%;   
+        max-width: 400px; 
+        padding: 30px 20px;
+        box-sizing: border-box;
+    }
+
+    .username-input, 
+    .password-input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .signup-title {
+        font-size: 32px; 
+    }
+    
+    .signup-description {
+        font-size: 16px;
+    }
+}
 /* 
 citation: 
 https://www.w3schools.com/css/css3_shadows_box.asp

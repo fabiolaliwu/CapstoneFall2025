@@ -92,3 +92,11 @@ margin-bottom: 20px;
 .team-grid a .team-card {
   cursor: pointer;       /* keeps the pointer cursor on hover */
 }
+
+@media (max-width: 768px) {
+    .about-page {
+        width: 100vw;
+        margin-left: 0;
+        margin-bottom: 10vh;
+    }
+}
