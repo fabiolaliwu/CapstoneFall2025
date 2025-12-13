@@ -82,6 +82,13 @@
     text-align: center;
     flex: 2;
     font-size: 30px;
+    color:#6e98a3;
+}
+
+.chat-placeholder p {
+    padding: 10px;
+    color: #6e98a3;
+    margin-bottom: -200px;
 }
 
 .container-divider {
