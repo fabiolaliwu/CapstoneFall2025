@@ -133,6 +133,12 @@ useEffect(() => {
       }
     );
   };
+  // Make showRoute available globally so IncidentDetail can call it
+  window.showRouteFromDetails = (destinationCoords) => {
+    if (!userLocation) return;
+    showRoute(userLocation, destinationCoords);
+  };
+
 
   // Update markers when properties change
   useEffect(() => {
@@ -216,10 +222,10 @@ useEffect(() => {
                 id="show-route-event-${event._id}"
                 href="https://www.google.com/maps/search/?api=1&query=${event.location.coordinates.lat},${event.location.coordinates.lng}"
                 target="_blank">
-                Show in Map
+                Show Path on Map
               </a>
               <a id="chat-link-event-${event._id}" class="map-link">
-                  <span class="chat-icon"></span> Chat
+                  <span class="chat-icon"></span> Details
               </a>
             </div>
           `;
@@ -270,10 +276,10 @@ useEffect(() => {
               <p>${incident.description}</p>
               ${imageHtml}
               <a class="map-link"
-                  id="show-route-incident-${incident._id}" href="#"> Show in Map
+                  id="show-route-incident-${incident._id}" href="#"> Show Path on Map
               </a>
               <a class="map-link" id="chat-link-incident-${incident._id}" >
-                    <span class="chat-icon"></span> Chat
+                    <span class="chat-icon"></span> Details
               </a>
             </div>
             `;

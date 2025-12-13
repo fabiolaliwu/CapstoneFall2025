@@ -12,14 +12,14 @@ function Buttons({ openEvents, openSummary, openIncidents }) {
         <span className="btn-text">Events</span>
       </button>
 
-      <button onClick={openSummary}>
-        <IoGlobeOutline size={20} />
-        <span className="btn-text">All</span>
-      </button>
-
       <button onClick={openIncidents}>
         <IoWarningOutline size={20} />
         <span className="btn-text">Incidents</span>
+      </button>
+
+      <button onClick={openSummary}>
+        <IoGlobeOutline size={20} />
+        <span className="btn-text">All</span>
       </button>
 
     </div>

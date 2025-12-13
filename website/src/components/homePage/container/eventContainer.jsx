@@ -8,6 +8,8 @@ import ChatRoom from '../live-chat/chatRoom.jsx';
 function EventContainer({ currentUser, userLocation, onClose, initialSelectedId }) {
     const [events, setEvents] = useState([]);
     const [selectedEventId, setSelectedEventId] = useState(null);
+    const [showChat, setShowChat] = useState(false);
+    const [previousSelectedEventId, setPreviousSelectedEventId] = useState(null);
 
     useEffect(() => {
         if (initialSelectedId) {
@@ -30,6 +32,25 @@ function EventContainer({ currentUser, userLocation, onClose, initialSelectedId 
 
     const selectedEvent = events.find(e => String(e._id) === String(selectedEventId));
 
+    // Handle event selection - reset chat state when selecting a new event
+    const handleEventSelect = (evt) => {
+        const eventId = evt?._id || evt;
+        
+        // Only update if selecting a different event
+        if (eventId !== selectedEventId) {
+            setPreviousSelectedEventId(selectedEventId);
+            setSelectedEventId(eventId);
+            setShowChat(false); // Always show detail, not chat
+        }
+    };
+
+    // also reset chat when selectedEventId changes to null fior when you closing detail)
+    useEffect(() => {
+        if (selectedEventId === null) {
+            setShowChat(false);
+        }
+    }, [selectedEventId]);
+
     return (
         <div className="event-container">
             {/* Left side: Event List */}
@@ -38,38 +59,45 @@ function EventContainer({ currentUser, userLocation, onClose, initialSelectedId 
                     events={events}
                     userLocation={userLocation}
                     onClose={onClose}
-                    onSelect={(evt) => setSelectedEventId(evt?._id || evt)}
+                    onSelect={handleEventSelect} // Use the new handler
                     currentUser={currentUser}
                 />
             </div>
 
             <hr className="container-divider" />
 
-            {/* Middle: Detail panel */}
-            <div className="event-detail-panel">
-                {selectedEvent ? (
-                    <EventDetail event={selectedEvent} onClose={() => setSelectedEventId(null)} />
-                ) : (
-                    <div className="chat-placeholder">
-                        <p>← Click an event to view details</p>
+            {/* Right side: Detail or Chat */}
+            <div className="event-right-section">
+                {/* Content: Detail or Chat */}
+                {showChat ? (
+                    <div className="chat-section">
+                        {selectedEventId ? (
+                            <ChatRoom
+                                currentUser={currentUser}
+                                chatType="event"
+                                chatId={selectedEventId}
+                                onClose={() => setShowChat(false)} // Close chat, stay on same event
+                                eventTitle={selectedEvent?.title}
+                            />
+                        ) : (
+                            <div className="chat-placeholder">
+                                <p>← Click an event to view its chat room</p>
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-
-            <hr className="container-divider" />
-
-            {/* Right side: Chat Room for selected event */}
-            <div className="chat-room-container">
-                {selectedEventId ? (
-                    <ChatRoom
-                        currentUser={currentUser}
-                        chatType="event"
-                        chatId={selectedEventId}
-                        onClose={() => setSelectedEventId(null)}
-                    />
                 ) : (
-                    <div className="chat-placeholder">
-                        <p>← Click an event to view its chat room</p>
+                    <div className="detail-section">
+                        {selectedEvent ? (
+                            <EventDetail 
+                                event={selectedEvent} 
+                                onClose={() => setSelectedEventId(null)}                       
+                                onOpenChat={() => setShowChat(true)} 
+                            />
+                        ) : (
+                            <div className="chat-placeholder">
+                                <p>← Click an event to view details</p>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

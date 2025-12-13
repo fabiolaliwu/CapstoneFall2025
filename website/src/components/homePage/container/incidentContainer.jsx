@@ -8,6 +8,8 @@ import ChatRoom from '../live-chat/chatRoom.jsx';
 function IncidentContainer({ currentUser, userLocation, onClose, initialSelectedId }) {
     const [incidents, setIncidents] = useState([]);
     const [selectedIncidentId, setSelectedIncidentId] = useState(null);
+    const [showChat, setShowChat] = useState(false);
+    const [previousSelectedIncidentId, setPreviousSelectedIncidentId] = useState(null);
 
     useEffect(() => {
         if (initialSelectedId) {
@@ -30,6 +32,25 @@ function IncidentContainer({ currentUser, userLocation, onClose, initialSelected
 
     const selectedIncident = incidents.find(i => String(i._id) === String(selectedIncidentId));
 
+    // Handle incident selection - reset chat state when selecting a new incident
+    const handleIncidentSelect = (evt) => {
+        const incidentId = evt?._id || evt;
+        
+        // Only update if selecting a different incident
+        if (incidentId !== selectedIncidentId) {
+            setPreviousSelectedIncidentId(selectedIncidentId);
+            setSelectedIncidentId(incidentId);
+            setShowChat(false); // Always show detail, not chat
+        }
+    };
+
+    // also reset chat when selectedIncidentId changes to null fior when you closing detail)
+    useEffect(() => {
+        if (selectedIncidentId === null) {
+            setShowChat(false);
+        }
+    }, [selectedIncidentId]);
+
     return (
         <div className="incident-container">
             {/* Left side: Incident List */}
@@ -38,38 +59,45 @@ function IncidentContainer({ currentUser, userLocation, onClose, initialSelected
                     incidents={incidents}
                     userLocation={userLocation}
                     onClose={onClose}
-                    onSelect={(inc) => setSelectedIncidentId(inc?._id || inc)}
+                    onSelect={handleIncidentSelect}
                     currentUser={currentUser}
                 />
             </div>
 
             <hr className="container-divider" />
 
-            {/* Middle: Detail panel */}
-            <div className="incident-detail-panel">
-                {selectedIncident ? (
-                    <IncidentDetail incident={selectedIncident} onClose={() => setSelectedIncidentId(null)} />
-                ) : (
-                    <div className="chat-placeholder">
-                        <p>← Click an incident to view details</p>
+            {/* Right side: Detail or Chat */}
+            <div className="incident-right-section">
+                {/* Content: Detail or Chat */}
+                {showChat ? (
+                    <div className="chat-section">
+                        {selectedIncidentId ? (
+                            <ChatRoom
+                                currentUser={currentUser}
+                                chatType="incident"
+                                chatId={selectedIncidentId}
+                                onClose={() => setShowChat(false)} // Close chat, stay on same incident
+                                incidentTitle={selectedIncident?.title}
+                            />
+                        ) : (
+                            <div className="chat-placeholder">
+                                <p>← Click an incident to view its chat room</p>
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-
-            <hr className="container-divider" />
-
-            {/* Right side: Chat Room for selected incident */}
-            <div className="chat-room-container">
-                {selectedIncidentId ? (
-                    <ChatRoom
-                        currentUser={currentUser}
-                        chatType="incident"
-                        chatId={selectedIncidentId}
-                        onClose={() => setSelectedIncidentId(null)}
-                    />
                 ) : (
-                    <div className="chat-placeholder">
-                        <p>← Click an incident to view its chat room</p>
+                    <div className="detail-section">
+                        {selectedIncident ? (
+                            <IncidentDetail 
+                                incident={selectedIncident} 
+                                onClose={() => setSelectedIncidentId(null)} 
+                                onOpenChat={() => setShowChat(true)}
+                            />
+                        ) : (
+                            <div className="chat-placeholder">
+                                <p>← Click an incident to view details</p>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
