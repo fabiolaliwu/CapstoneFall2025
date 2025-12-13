@@ -197,7 +197,11 @@
     center; font-family: 'Silkscreen'; 
 } 
 
-.avatar-container { position: relative; display: inline-block; text-align: center; }
+.avatar-container { 
+    position: relative; 
+    display: inline-block; 
+    text-align: center; 
+}
 
 /* Mobile */
 @media (max-width: 768px) {
