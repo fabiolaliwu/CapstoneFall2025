@@ -2,64 +2,102 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './incidentContainer.css';
 import IncidentList from '../sideList/incidentList.jsx';
-import ChatRoom from '../live-chat/chatRoom.jsx';
 import IncidentDetail from '../sideList/incidentDetail.jsx';
+import ChatRoom from '../live-chat/chatRoom.jsx';
 
-function IncidentContainer({ currentUser, userLocation, onClose, initialSelectedId, incidents }) {
+function IncidentContainer({ currentUser, userLocation, onClose, initialSelectedId }) {
+    const [incidents, setIncidents] = useState([]);
     const [selectedIncidentId, setSelectedIncidentId] = useState(null);
-    const [incidentOpen, setIncidentOpen] = useState(false);
+    const [showChat, setShowChat] = useState(false);
+    const [previousSelectedIncidentId, setPreviousSelectedIncidentId] = useState(null);
 
     useEffect(() => {
         if (initialSelectedId) {
-            const foundIncident = incidents.find(incident => incident._id === initialSelectedId);
-            if (foundIncident) {
-                setIncidentOpen(foundIncident);
-                setSelectedIncidentId(initialSelectedId);
-            }
+            setSelectedIncidentId(initialSelectedId);
         }
-    }, [initialSelectedId, incidents]);
+    }, [initialSelectedId]);
+
+    useEffect(() => {
+        // Fetch all incidents
+        const fetchIncidents = async () => {
+            try {
+                const response = await axios.get('http://localhost:4000/api/incidents');
+                setIncidents(response.data);
+            } catch (error) {
+                console.error('Error fetching incidents:', error);
+            }
+        };
+        fetchIncidents();
+    }, []);
+
+    const selectedIncident = incidents.find(i => String(i._id) === String(selectedIncidentId));
+
+    // Handle incident selection - reset chat state when selecting a new incident
+    const handleIncidentSelect = (evt) => {
+        const incidentId = evt?._id || evt;
+        
+        // Only update if selecting a different incident
+        if (incidentId !== selectedIncidentId) {
+            setPreviousSelectedIncidentId(selectedIncidentId);
+            setSelectedIncidentId(incidentId);
+            setShowChat(false); // Always show detail, not chat
+        }
+    };
+
+    // also reset chat when selectedIncidentId changes to null fior when you closing detail)
+    useEffect(() => {
+        if (selectedIncidentId === null) {
+            setShowChat(false);
+        }
+    }, [selectedIncidentId]);
 
     return (
         <div className="incident-container">
             {/* Left side: Incident List */}
-            {incidentOpen ? (
-                <div className="incident-detail">
-                    <IncidentDetail
-                        incident={incidentOpen}
-                        onClose={() => {
-                            setIncidentOpen(null);
-                            setSelectedIncidentId(null);
-                        }}
-                    />
-                </div>
-            ):(
-                <div className="incident-list">
-                    <IncidentList
-                        incidents={incidents}
-                        userLocation={userLocation}
-                        onClose={onClose}
-                        onSelect={(incident) => {
-                            setSelectedIncidentId(incident._id);
-                            setIncidentOpen(incident);
-                        }}                        
-                        currentUser={currentUser}
-                    />
-                </div>
-            )}
+            <div className="incident-list">
+                <IncidentList
+                    incidents={incidents}
+                    userLocation={userLocation}
+                    onClose={onClose}
+                    onSelect={handleIncidentSelect}
+                    currentUser={currentUser}
+                />
+            </div>
+
             <hr className="container-divider" />
-            <hr className ="mobile-divider" />
-            {/* Right side: Chat Room for selected incident */}
-            <div className="chat-room-container">
-                {selectedIncidentId ? (
-                    <ChatRoom
-                        currentUser={currentUser}
-                        chatType="incident"
-                        chatId={selectedIncidentId}
-                        onClose={() => setSelectedIncidentId(null)}
-                    />
+
+            {/* Right side: Detail or Chat */}
+            <div className="incident-right-section">
+                {/* Content: Detail or Chat */}
+                {showChat ? (
+                    <div className="chat-section">
+                        {selectedIncidentId ? (
+                            <ChatRoom
+                                currentUser={currentUser}
+                                chatType="incident"
+                                chatId={selectedIncidentId}
+                                onClose={() => setShowChat(false)} // Close chat, stay on same incident
+                                incidentTitle={selectedIncident?.title}
+                            />
+                        ) : (
+                            <div className="chat-placeholder">
+                                <p>← Click an incident to view its chat room</p>
+                            </div>
+                        )}
+                    </div>
                 ) : (
-                    <div className="chat-placeholder">
-                        <p>← Click an incident to view its chat room</p>
+                    <div className="detail-section">
+                        {selectedIncident ? (
+                            <IncidentDetail 
+                                incident={selectedIncident} 
+                                onClose={() => setSelectedIncidentId(null)} 
+                                onOpenChat={() => setShowChat(true)}
+                            />
+                        ) : (
+                            <div className="chat-placeholder">
+                                <p>← Click an incident to view details</p>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

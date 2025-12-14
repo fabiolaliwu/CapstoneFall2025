@@ -79,8 +79,8 @@ function Homepage({currentUser}) {
                     incidents={incidents}
                     setIncidents={setIncidents}
                     filterValues={filterValues}
-                    openChatFromMap={openChatFromMap} 
-                    onMapBackgroundClick={handleCloseContainer}/>
+                    onMapBackgroundClick={handleCloseContainer}
+                    openChatFromMap={openChatFromMap} />
             </div>
             <div className='content'>
                 <Bar 
@@ -105,7 +105,7 @@ function Homepage({currentUser}) {
 
             {openList === 'events' && < EventContainer currentUser={currentUser} events={events} userLocation={userLocation} onClose={handleCloseContainer} initialSelectedId={mapSelectedId} /> }
             {openList === 'incidents' && < IncidentContainer currentUser={currentUser} incidents={incidents} userLocation={userLocation} onClose={handleCloseContainer} initialSelectedId={mapSelectedId} /> }
-            {openList === 'summary' && < SummaryContainer currentUser={currentUser} events={events} incidents={incidents} userLocation={userLocation} onClose={handleCloseContainer} initialSelectedId={mapSelectedId} /> }
+            {openList === 'summary' && < SummaryContainer currentUser={currentUser} userLocation={userLocation} onClose={handleCloseContainer} initialSelected={mapSelectedId} /> }
         </div>
     );
 }

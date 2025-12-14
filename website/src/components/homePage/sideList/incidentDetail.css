@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 300px; 
+    width: 100%; 
     padding: 10px 0; 
     background: linear-gradient(to bottom, #fafafa 0%, #ffffff 100%);
     box-sizing: border-box;
@@ -88,16 +88,34 @@
     transform: translateX(-5px) scale(0.95);
 }
 
-/* Image */
+/* Image
 .incident-image {
     width: 100%;
-    height: 140px;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
     border-radius: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     animation: fadeInScale 0.6s ease-out 0.1s both;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+} */
+
+.incident-image-wrapper {
+    width: 100%;
+    max-height: 220px;
+    min-height: 160px;
+    overflow: hidden;
+    border-radius: 20px;
+    flex-shrink: 0; 
+    margin: 0 15px 15px;
 }
+
+.incident-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
 
 @keyframes fadeInScale {
     from {
@@ -111,10 +129,11 @@
 }
 
 .incident-title {
-    margin: 12px 0 8px 0; 
+    margin: 15px 0; 
     font-size: 26px;
     font-weight: 700; 
     line-height: 1.2; 
+    text-align: left;
     flex: 1;
     overflow-y: auto;
     animation: fadeInUp 0.5s ease-out 0.2s both;
@@ -155,7 +174,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     animation: fadeIn 0.5s ease-out 0.3s both;
 }
 
@@ -217,8 +236,8 @@
 .incident-description {
     font-size: 16px;
     color: #555;
-    line-height: 1.5;
-    margin-bottom: 24px;
+    line-height: 1.8;
+    margin-bottom: 28px;
     animation: fadeInUp 0.5s ease-out 0.5s both;
 }
 
@@ -232,7 +251,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 12px;
+    padding: 15px;
     border-radius: 12px;
     background: rgba(110, 152, 163, 0.03);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -321,6 +340,71 @@
     transform: translateX(2px);
 }
 
+.show-map-button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    margin-bottom: 30px;
+    border: none;
+    border-radius: 10px;
+    background: #5f9cec;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fadeInUp 0.5s ease-out 0.8s both;
+    position: relative;
+    overflow: hidden;
+}
+
+.show-map-button::before {
+    display: none;
+}
+
+.show-map-button:hover {
+    background: rgba(110, 152, 163, 0.12);
+    border-color: rgba(110, 152, 163, 0.25);
+    box-shadow: 0 4px 12px rgba(110, 152, 163, 0.15);
+    color: #2d454b;
+}
+
+.show-map-button:hover::before {
+    transform: scaleY(1);
+}
+
+.show-map-button:active {
+    transform: translateX(2px) scale(0.97);
+}
+
+
+/* Style for chat button in incident detail header */
+.open-chat-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: 1px solid rgba(110, 152, 163, 0.3);
+    color: #6e98a3;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-left: auto;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.open-chat-button:hover {
+    background: rgba(110, 152, 163, 0.1);
+    border-color: #6e98a3;
+    transform: translateY(-1px);
+}
+
+.chat-button-text {
+    white-space: nowrap;
+}
+
 /* Scrollbar styling */
 .incident-detail-body::-webkit-scrollbar {
     width: 6px;
@@ -380,9 +464,9 @@
     }
     .incident-title {
         font-size: 20px;
-        margin: 8px 0 6px 0;
+        margin: 8px;
     }
-    .event-description {
+    .incident-description {
         font-size: 14px;
         margin-bottom: 16px;
     }

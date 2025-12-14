@@ -2,12 +2,13 @@ import { useEffect, useState, useRef } from "react";
 import io from "socket.io-client";
 import './chatRoom.css';
 import axios from "axios";
+import { IoArrowBack } from "react-icons/io5";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:4000';
 const safeBaseUrl = API_BASE_URL.replace(/\/$/, ''); // Removes trailing slash for API calls
 
-function ChatRoom({ currentUser, chatType = "global", chatId = null }) {
+function ChatRoom({ currentUser, chatType = "global", chatId = null, onClose, eventTitle }) {
     const [socket, setSocket] = useState(null);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
@@ -130,16 +131,22 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null }) {
 
     return (
         <div className="chat-room-container">
+            
             <div className="chat-room">
-            <div className="chat-header">
-                {chatTitle}
-                {isActiveNow && (
-                    <span className="active-status">
-                        <img src="/activeIcon.png" alt="Active Now" className="active-icon"/>
-                        <span className="active-text">Active Now</span>
-                    </span>
-                )}
-            </div>
+                <div className="chat-header">
+                    {chatType !== "global" && onClose && (
+                        <button className="chat-back-button" onClick={onClose}>
+                            <IoArrowBack size={24} />
+                        </button>
+                    )}
+                    <span className="chat-title-text">{eventTitle || chatTitle}</span>
+                    {isActiveNow && (
+                        <span className="active-status">
+                            <img src="/activeIcon.png" alt="Active Now" className="active-icon"/>
+                            <span className="active-text">Active Now</span>
+                        </span>
+                    )}
+                </div>
 
                 <div className="chat-messages">
                     {loading ? (

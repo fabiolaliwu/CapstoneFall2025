@@ -1,8 +1,19 @@
 import './incidentDetail.css';
 import { IoArrowBack } from "react-icons/io5";
 import { LuCalendarClock, LuMapPin } from "react-icons/lu";
+import { MdOutlineChat } from "react-icons/md";
 
-function IncidentDetail({ incident, onClose }) {
+const CategoryColors = [
+    "#6e98a3", "#4A6CF7", "#8E7AB5", "#E1AFAF", "#7FB77E",
+    "#D97D54", "#A6D0DD", "#C5A3FF", "#FFC3A1", "#82A0D8"
+];
+
+function getRandomColor() {
+    const random_index = Math.floor(Math.random() * CategoryColors.length);
+    return CategoryColors[random_index];
+}
+
+function IncidentDetail({ incident, onClose, onOpenChat }) {
     let fullDateString = '';
     if (incident.createdAt) {
         const occuredTime = new Date(incident.createdAt);
@@ -21,15 +32,21 @@ function IncidentDetail({ incident, onClose }) {
                 <button className="back-button" onClick={onClose}>
                     <IoArrowBack size={24} />
                 </button>
+                <button className="open-chat-button" onClick={onOpenChat}>
+                    <span className="chat-button-text">OPEN INCIDENT CHAT</span>
+                    <MdOutlineChat size={20} />
+                </button>
             </div>
 
             {/* IMAGE */}
             {incident.image && (
-                <img 
-                    src={incident.image} 
-                    alt={incident.title} 
-                    className="incident-image"
-                />
+                <div className="incident-image-wrapper">
+                    <img 
+                        src={incident.image} 
+                        alt={incident.title} 
+                        className="incident-image"
+                    />
+                </div>
             )}
 
             {/* BODY */}
@@ -82,6 +99,15 @@ function IncidentDetail({ incident, onClose }) {
                             </div>
                         )}
                     </div>
+                    {incident.location?.coordinates && (
+                        <button
+                            className="show-map-button"
+                            onClick={() => window.showRouteFromDetails(incident.location.coordinates)}
+                        >
+                            Show Route
+                        </button>
+                    )}
+
                 </div>    
             </div>
         </div>
