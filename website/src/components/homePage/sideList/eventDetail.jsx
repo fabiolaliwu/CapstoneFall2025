@@ -1,6 +1,7 @@
 import './eventDetail.css';
 import { IoArrowBack } from "react-icons/io5";
 import { LuCalendarClock, LuMapPin, LuTicket, LuUser } from "react-icons/lu";
+import { MdOutlineChat } from "react-icons/md";
 
 const CategoryColors = [
     "#6e98a3", "#4A6CF7", "#8E7AB5", "#E1AFAF", "#7FB77E",
@@ -12,7 +13,7 @@ function getRandomColor() {
     return CategoryColors[random_index];
 }
 
-function EventDetail({ event, onClose }) {
+function EventDetail({ event, onClose, onOpenChat }) {
     let fullDateString = '';
     if (event.start_date) {
         const startDate = new Date(event.start_date);
@@ -44,16 +45,23 @@ function EventDetail({ event, onClose }) {
                 <button className="back-button" onClick={onClose}>
                     <IoArrowBack size={24} />
                 </button>
+                <button className="open-chat-button" onClick={onOpenChat}>
+                    <span className="chat-button-text">OPEN EVENT CHAT</span>
+                    <MdOutlineChat size={20} />
+                </button>
             </div>
 
             {/* IMAGE */}
             {event.image && (
-                <img 
-                    src={event.image} 
-                    alt={event.title} 
-                    className="event-image"
-                />
+                <div className="event-image-wrapper">
+                    <img 
+                        src={event.image} 
+                        alt={event.title} 
+                        className="event-image"
+                    />
+                </div>
             )}
+
 
             {/* BODY */}
             <div className="event-detail-body">
@@ -127,6 +135,15 @@ function EventDetail({ event, onClose }) {
                             </div>
                         )}
                     </div>
+                    {event.location?.coordinates && (
+                        <button
+                            className="show-map-button"
+                            onClick={() => window.showRouteFromDetails(event.location.coordinates)}
+                        >
+                            Show Route
+                        </button>
+                    )}
+
                 </div>    
             </div>
         </div>

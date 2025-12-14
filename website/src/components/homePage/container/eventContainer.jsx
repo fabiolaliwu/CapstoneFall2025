@@ -1,70 +1,106 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './eventContainer.css';
 import EventList from '../sideList/eventList.jsx';
+import EventDetail from '../sideList/eventDetail.jsx';
 import ChatRoom from '../live-chat/chatRoom.jsx';
-import EventDetail from '../sideList/eventDetail';
 
-function EventContainer({ currentUser, userLocation, onClose, initialSelectedId, events }) {
+function EventContainer({ currentUser, userLocation, onClose, initialSelectedId }) {
+    const [events, setEvents] = useState([]);
     const [selectedEventId, setSelectedEventId] = useState(null);
-    const [eventOpen, setEventOpen] = useState(null);
+    const [showChat, setShowChat] = useState(false);
+    const [previousSelectedEventId, setPreviousSelectedEventId] = useState(null);
 
     useEffect(() => {
         if (initialSelectedId) {
-            const foundEvent = events.find(event => event._id === initialSelectedId);
-            if (foundEvent) {
-                setEventOpen(foundEvent);
-                setSelectedEventId(initialSelectedId);
-            }
+            setSelectedEventId(initialSelectedId);
         }
-    }, [initialSelectedId, events]);
+    }, [initialSelectedId]);
+
+    useEffect(() => {
+        // Fetch all events
+        const fetchEvents = async () => {
+            try {
+                const response = await axios.get('http://localhost:4000/api/events');
+                setEvents(response.data);
+            } catch (error) {
+                console.error('Error fetching events:', error);
+            }
+        };
+        fetchEvents();
+    }, []);
+
+    const selectedEvent = events.find(e => String(e._id) === String(selectedEventId));
+
+    // Handle event selection - reset chat state when selecting a new event
+    const handleEventSelect = (evt) => {
+        const eventId = evt?._id || evt;
+        
+        // Only update if selecting a different event
+        if (eventId !== selectedEventId) {
+            setPreviousSelectedEventId(selectedEventId);
+            setSelectedEventId(eventId);
+            setShowChat(false); // Always show detail, not chat
+        }
+    };
+
+    // also reset chat when selectedEventId changes to null fior when you closing detail)
+    useEffect(() => {
+        if (selectedEventId === null) {
+            setShowChat(false);
+        }
+    }, [selectedEventId]);
 
     return (
         <div className="event-container">
-            {/* Left side: Event List or Event Detail*/}
-            {eventOpen ? (
-                <div className="event-detail">
-                    <EventDetail
-                        event={eventOpen}
-                        onClose={() => {
-                            setEventOpen(null);
-                            setSelectedEventId(null);
-                        }}
-                    />
-                </div>
-            ):(
-                <div className="event-list">
-                    <EventList
-                        events={events}
-                        userLocation={userLocation}
-                        onClose={onClose}
-                        onSelect={(event) => {
-                            setSelectedEventId(event._id);
-                            setEventOpen(event);
-                        }}                        
-                        currentUser={currentUser}
-                    />
-                </div>
-            )}
-            
+            {/* Left side: Event List */}
+            <div className="event-list">
+                <EventList
+                    events={events}
+                    userLocation={userLocation}
+                    onClose={onClose}
+                    onSelect={handleEventSelect} // Use the new handler
+                    currentUser={currentUser}
+                />
+            </div>
+
             <hr className="container-divider" />
-            <hr className="mobile-divider" />
-            {/* Right side: Chat Room for selected event */}
-            <div className="chat-room-container">
-                {selectedEventId ? (
-                    <ChatRoom
-                        currentUser={currentUser}
-                        chatType="event"
-                        chatId={selectedEventId}
-                        onClose={() => setSelectedEventId(null)}
-                    />
+
+            {/* Right side: Detail or Chat */}
+            <div className="event-right-section">
+                {/* Content: Detail or Chat */}
+                {showChat ? (
+                    <div className="chat-section">
+                        {selectedEventId ? (
+                            <ChatRoom
+                                currentUser={currentUser}
+                                chatType="event"
+                                chatId={selectedEventId}
+                                onClose={() => setShowChat(false)} // Close chat, stay on same event
+                                eventTitle={selectedEvent?.title}
+                            />
+                        ) : (
+                            <div className="chat-placeholder">
+                                <p>← Click an event to view its chat room</p>
+                            </div>
+                        )}
+                    </div>
                 ) : (
-                    <div className="chat-placeholder">
-                        <p>← Click an event to view its chat room</p>
+                    <div className="detail-section">
+                        {selectedEvent ? (
+                            <EventDetail 
+                                event={selectedEvent} 
+                                onClose={() => setSelectedEventId(null)}                       
+                                onOpenChat={() => setShowChat(true)} 
+                            />
+                        ) : (
+                            <div className="chat-placeholder">
+                                <p>← Click an event to view details</p>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
-            
         </div>
     );
 }
