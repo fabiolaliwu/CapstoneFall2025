@@ -108,6 +108,11 @@ function SummaryContainer({ currentUser, userLocation, onClose, initialSelected 
     };
 
     const handleOpenChat = () => {
+        // Check if user is logged in before opening chat
+        if (!currentUser) {
+            alert('Please log in to view the chat room');
+            return;
+        }
         setShowChat(true);
     };
     
@@ -132,14 +137,20 @@ function SummaryContainer({ currentUser, userLocation, onClose, initialSelected 
             <div id="global-chat" className="summary-right-section">
                 {showChat ? (
                     <div className="chat-section">
-                        {/* Global chat has no back button, event/incident chat has back button */}
-                        <ChatRoom
-                            currentUser={currentUser}
-                            chatType={selectedItem ? selectedItem.type : "global"}
-                            chatId={selectedItem ? selectedItem._id : null}
-                            onClose={selectedItem ? () => setShowChat(false) : undefined} // Only show back button for event/incident chats
-                            eventTitle={selectedDetail?.title}
-                        />
+                        {/* Check if user is logged in before showing chat */}
+                        {currentUser ? (
+                            <ChatRoom
+                                currentUser={currentUser}
+                                chatType={selectedItem ? selectedItem.type : "global"}
+                                chatId={selectedItem ? selectedItem._id : null}
+                                onClose={selectedItem ? () => setShowChat(false) : undefined}
+                                eventTitle={selectedDetail?.title}
+                            />
+                        ) : (
+                            <div className="chat-placeholder">
+                                <p>Please log in to view the chat room</p>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <div className="detail-section">
@@ -149,12 +160,14 @@ function SummaryContainer({ currentUser, userLocation, onClose, initialSelected 
                                     event={selectedDetail}
                                     onClose={handleCloseDetail}
                                     onOpenChat={handleOpenChat}
+                                    currentUser={currentUser}
                                 />
                             ) : (
                                 <IncidentDetail
                                     incident={selectedDetail}
                                     onClose={handleCloseDetail}
                                     onOpenChat={handleOpenChat}
+                                    currentUser={currentUser}
                                 />
                             )
                         ) : (

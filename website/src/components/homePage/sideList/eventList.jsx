@@ -106,7 +106,7 @@ function EventList({ events, onClose, userLocation, onSelect, currentUser }) {
       }
     };
     fetchSavedEvents();
-  }, [currentUser._id]);
+  }, [currentUser]);
   
   
 

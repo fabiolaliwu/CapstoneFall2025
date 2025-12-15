@@ -2,10 +2,10 @@ import './about.css';
 import Bar from '../homePage/bar';
 import logo from './logo.jpg';
 
-function About() {
+function About(currentUser, onLogout) {
   return (
     <div className="about-page">
-      <Bar />
+      <Bar currentUser={currentUser} onLogout={onLogout} />
 
       {/* HERO SECTION */}
       <section className="about-hero">

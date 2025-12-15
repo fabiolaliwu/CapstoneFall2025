@@ -57,7 +57,7 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null, onClose, ev
         if(chatType === "global" || chatId){
             fetchMessages();
         }
-    }, [chatType, chatId, currentUser._id]);
+    }, [chatType, chatId, currentUser]);
 
     // Setup socket listeners
     useEffect(() => {

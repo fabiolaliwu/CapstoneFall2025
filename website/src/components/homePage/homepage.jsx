@@ -9,7 +9,7 @@ import SummaryContainer from './container/summaryContainer.jsx';
 import { startIntroTour } from '../walkthrough/introTour.js';
 import { useNavigate } from 'react-router-dom';
 
-function Homepage({currentUser}) {
+function Homepage({currentUser, onLogout}) {
     const navigate = useNavigate();
     const [openList, setOpenList] = useState('');
     const [events, setEvents] = useState([]);
@@ -125,6 +125,7 @@ function Homepage({currentUser}) {
             <div className='content'>
                 <Bar 
                     currentUser={currentUser} 
+                    onLogout={onLogout}
                     searchQuery={searchQuery} 
                     setSearchQuery={setSearchQuery}
                     openEvents={() => toggleList('events')}

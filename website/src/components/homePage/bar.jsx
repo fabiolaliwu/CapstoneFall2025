@@ -9,7 +9,8 @@ import { IoLogInOutline } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 function Bar({ 
-    currentUser, 
+    currentUser,
+    onLogout,
     searchQuery, 
     setSearchQuery,
     openEvents,
@@ -65,15 +66,20 @@ function Bar({
     
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (token) {
+        if (token && currentUser) {
             setIsLoggedIn(true);
         } else {
             setIsLoggedIn(false);
         }
     }, [currentUser]); 
 
-    const handleLogout = () => {
+    const handleLogoutClick = () => {
+        // Clear localStorage
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        if (onLogout && typeof onLogout === 'function') {
+            onLogout();
+        }
         setIsLoggedIn(false);
         navigate('/home');
     };
@@ -100,17 +106,14 @@ function Bar({
                 {/* Middle Section */}
                 <div className="middle-section">
                     <div id="list-buttons">
-                        {isLoggedIn && (
-                            <Buttons
-                                openEvents={() => handleNavigationAndOpen(openEvents)}
-                                openSummary={() => handleNavigationAndOpen(openSummary)}
-                                openIncidents={() => handleNavigationAndOpen(openIncidents)}
-                            />
-                        )}
+                      {/* Show buttons to everyone*/}
+                      <Buttons
+                          openEvents={() => handleNavigationAndOpen(openEvents)}
+                          openSummary={() => handleNavigationAndOpen(openSummary)}
+                          openIncidents={() => handleNavigationAndOpen(openIncidents)}
+                      />
                     </div>
-                    {isLoggedIn && (
-                        <hr className="divider" />
-                    )}
+                    <hr className="divider" />
                     <div className="nav-links">
                         <NavLink to="/about"  id="about-button" className="nav-link-button">
                             <FaInfoCircle size={20} />
@@ -130,7 +133,7 @@ function Bar({
                             <NavLink to="/profile" className="profile-btn" title="Profile">
                                 <FaUserCircle size={22} />
                             </NavLink>
-                            <button className="logout-button" title="Logout" onClick={() => {handleLogout();}}>
+                            <button className="logout-button" title="Logout" onClick={handleLogoutClick}>
                                 <img src="https://cdn-icons-png.flaticon.com/512/1828/1828479.png" alt="Logout" className="logout-icon"/>
                             </button>
                         </div>
@@ -148,15 +151,9 @@ function Bar({
             )}
             
             {/* Handle elements on map */}
-            {isLoggedIn && isHomePage && (
+            {isHomePage && (
                 <div className="floating-controls">
-                    {/* <button className="mobile-hamburger"
-                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                    >
-                        <GiHamburgerMenu size={24} />
-                    </button> */}
-                    <div id="search-bar"
-                    className="search-bar-wrapper">
+                    <div id="search-bar" className="search-bar-wrapper">
                         <div className="search-bar">
                             <form className="search-form" onSubmit={handleSearch}>
                                 <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="Search" className="search-icon"/>
@@ -169,7 +166,7 @@ function Bar({
                                 />
                             </form>
                         <div className="search-divider"></div>
-                        {/* Filter Button */}
+                         {/* Filter Button */}
                         <button 
                                 className={`filter-btn ${isFilterOpen ? 'active' : ''}`}
                                 onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -260,15 +257,16 @@ function Bar({
                             </div>
                         )}
                     </div>
-                    <div className="addpost">
-                        <AddPost 
-                            currentUser={currentUser} 
-                            showDropdown={isAddPostOpen}
-                            setShowDropdown={setIsAddPostOpen}
-                            showForm={activePostForm}
-                            setShowForm={setActivePostForm}
-                        />
-                    </div>
+                    {/* Only show AddPost button if logged in */}
+                        <div className="addpost">
+                            <AddPost 
+                                currentUser={currentUser} 
+                                showDropdown={isAddPostOpen}
+                                setShowDropdown={setIsAddPostOpen}
+                                showForm={activePostForm}
+                                setShowForm={setActivePostForm}
+                            />
+                        </div>
                 </div>
             )}
         </>

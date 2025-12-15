@@ -7,7 +7,7 @@ import Avatar from './Avatar.jsx';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
 
-function Profile({ currentUser }) {
+function Profile({ currentUser, onLogout }) {
   const [eventsPosted, setEventsPosted] = useState([]);
   const [incidentsPosted, setIncidentsPosted] = useState([]);
   const [selectEvent, setSelectEvent] = useState(null); 

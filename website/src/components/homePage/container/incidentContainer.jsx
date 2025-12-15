@@ -71,7 +71,7 @@ function IncidentContainer({ currentUser, userLocation, onClose, initialSelected
                 {/* Content: Detail or Chat */}
                 {showChat ? (
                     <div className="chat-section">
-                        {selectedIncidentId ? (
+                        {selectedIncidentId && currentUser ? (
                             <ChatRoom
                                 currentUser={currentUser}
                                 chatType="incident"
@@ -79,6 +79,10 @@ function IncidentContainer({ currentUser, userLocation, onClose, initialSelected
                                 onClose={() => setShowChat(false)} // Close chat, stay on same incident
                                 incidentTitle={selectedIncident?.title}
                             />
+                        ) : !currentUser ? (
+                            <div className="chat-placeholder">
+                                <p>Please log in to view the chat room</p>
+                            </div>
                         ) : (
                             <div className="chat-placeholder">
                                 <p>← Click an incident to view its chat room</p>
@@ -92,6 +96,7 @@ function IncidentContainer({ currentUser, userLocation, onClose, initialSelected
                                 incident={selectedIncident} 
                                 onClose={() => setSelectedIncidentId(null)} 
                                 onOpenChat={() => setShowChat(true)}
+                                currentUser={currentUser}
                             />
                         ) : (
                             <div className="chat-placeholder">
