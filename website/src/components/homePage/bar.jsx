@@ -256,7 +256,6 @@ function Bar({
                         )}
                     </div>
                     {/* Only show AddPost button if logged in */}
-                    {isLoggedIn && (
                         <div className="addpost">
                             <AddPost 
                                 currentUser={currentUser} 
@@ -266,7 +265,6 @@ function Bar({
                                 setShowForm={setActivePostForm}
                             />
                         </div>
-                    )}
                 </div>
             )}
         </>
