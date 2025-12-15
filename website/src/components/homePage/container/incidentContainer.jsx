@@ -52,7 +52,7 @@ function IncidentContainer({ currentUser, userLocation, onClose, initialSelected
     }, [selectedIncidentId]);
 
     return (
-        <div className="incident-container">
+        <div id="incident-container" className="incident-container">
             {/* Left side: Incident List */}
             <div className="incident-list">
                 <IncidentList

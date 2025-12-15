@@ -6,8 +6,11 @@ import { useState, useEffect } from 'react';
 import EventContainer from './container/eventContainer.jsx';
 import IncidentContainer from './container/incidentContainer.jsx';
 import SummaryContainer from './container/summaryContainer.jsx';
+import { startIntroTour } from '../walkthrough/introTour.js';
+import { useNavigate } from 'react-router-dom';
 
 function Homepage({currentUser}) {
+    const navigate = useNavigate();
     const [openList, setOpenList] = useState('');
     const [events, setEvents] = useState([]);
     const [incidents, setIncidents] = useState([]);
@@ -58,6 +61,31 @@ function Homepage({currentUser}) {
             );
         }
     }, []);
+
+    useEffect(() => {
+        if (!window.__loopStartTourOnHome) return;
+        if (events.length === 0) return; // Don't start if events are empty
+
+        window.__loopStartTourOnHome = false;
+
+        console.log('Starting tour with events:', events);
+        console.log('First event ID:', events[0]?._id);
+
+        setTimeout(() => {
+            startIntroTour({
+            openEvents: () => setOpenList('events'),
+            openIncidents: () => setOpenList('incidents'),
+            openSummary: () => setOpenList('summary'),
+            selectFirstEvent: () => {
+                console.log('selectFirstEvent called, events available:', events.length);
+                console.log('First event:', events[0]);
+                setMapSelectedId(events[0]?._id);
+            }
+            });
+        }, 300);
+    }, [events]);
+
+
 
     const handleCloseContainer = () => {
         setOpenList('');

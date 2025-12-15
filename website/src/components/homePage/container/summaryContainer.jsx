@@ -112,7 +112,7 @@ function SummaryContainer({ currentUser, userLocation, onClose, initialSelected 
     };
     
     return (
-        <div className="summary-container">
+        <div id="summary-container" className="summary-container">
             {/* Left side list */}
             <div className="summary-list">
                 <SummaryList
@@ -129,7 +129,7 @@ function SummaryContainer({ currentUser, userLocation, onClose, initialSelected 
             <hr className="container-divider" />
 
             {/* Right side: Detail or Chat */}
-            <div className="summary-right-section">
+            <div id="global-chat" className="summary-right-section">
                 {showChat ? (
                     <div className="chat-section">
                         {/* Global chat has no back button, event/incident chat has back button */}

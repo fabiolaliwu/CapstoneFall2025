@@ -32,7 +32,8 @@ function AddPost({ currentUser, showDropdown, setShowDropdown, showForm, setShow
 
   return (
     <div className="add">
-      <button
+      <button 
+        id="add-post-btn"
         className="add-btn"
         //if the form is open, click the button to close the form
         onClick={() => {

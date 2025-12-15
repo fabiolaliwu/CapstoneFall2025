@@ -38,14 +38,14 @@ function EventDetail({ event, onClose, onOpenChat }) {
     }
 
     return(
-        <div className="event-detail-container">
+        <div id="event-detail" className="event-detail-container">
 
             {/* HEADER */}
-            <div className="event-detail-header">
-                <button className="back-button" onClick={onClose}>
+            <div id="event-detail-header" className="event-detail-header">
+                <button id="event-detail-back" className="back-button" onClick={onClose}>
                     <IoArrowBack size={24} />
                 </button>
-                <button className="open-chat-button" onClick={onOpenChat}>
+                <button id="event-chat-button" className="open-chat-button" onClick={onOpenChat}>
                     <span className="chat-button-text">OPEN EVENT CHAT</span>
                     <MdOutlineChat size={20} />
                 </button>

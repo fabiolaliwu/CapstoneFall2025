@@ -7,3 +7,35 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
+/* Fix for intro.js highlighting issues */
+.introjs-helperLayer {
+  box-shadow: rgba(33, 33, 33, 0.8) 0px 0px 1px 2px, rgba(33, 33, 33, 0.5) 0px 0px 0px 5000px !important;
+  z-index: 999999 !important;
+}
+
+.introjs-tooltip {
+  z-index: 1000000 !important;
+  min-width: 300px;
+}
+
+.introjs-tooltipbuttons {
+  text-align: right;
+}
+
+.introjs-bullets {
+  display: none;
+}
+
+/* Ensure tour elements are visible on top of other content */
+.introjs-overlay {
+  z-index: 999998 !important;
+}
+
+.introjs-helperNumberLayer {
+  z-index: 1000001 !important;
+}
+
+.introjs-arrow {
+  z-index: 1000002 !important;
+}
