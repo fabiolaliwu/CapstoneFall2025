@@ -19,16 +19,23 @@ function App() {
         }
     } ,[]);
     
+    // Handle logout - clear user state
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setCurrentUser(null);
+    };
+    
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Homepage currentUser={currentUser} />} />
-                <Route path="/home" element={<Homepage currentUser={currentUser} />} />
+                <Route path="/" element={<Homepage currentUser={currentUser} onLogout={handleLogout} />} />
+                <Route path="/home" element={<Homepage currentUser={currentUser} onLogout={handleLogout} />} />
                 <Route path="/login" element={<Login setCurrentUser={setCurrentUser} />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/help" element={<Help />} />
-                <Route path="/profile" element={<Profile currentUser={currentUser}/>} />
+                <Route path="/about" element={<About currentUser={currentUser} onLogout={handleLogout} />} />
+                <Route path="/help" element={<Help currentUser={currentUser} onLogout={handleLogout} />} />
+                <Route path="/profile" element={<Profile currentUser={currentUser} onLogout={handleLogout} />} />
             </Routes>
         </Router>
     );

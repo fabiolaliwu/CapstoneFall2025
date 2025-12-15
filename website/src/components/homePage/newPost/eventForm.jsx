@@ -134,6 +134,10 @@ function EventForm({categoriesFetchStartAsync,currentUser , onSubmitSuccess}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(!currentUser){
+      alert('Please sign in to submit an event');
+      return;
+    }
     
     if (!validateForm()) return;
     

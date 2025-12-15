@@ -13,7 +13,7 @@ function getRandomColor() {
     return CategoryColors[random_index];
 }
 
-function IncidentDetail({ incident, onClose, onOpenChat }) {
+function IncidentDetail({ incident, onClose, onOpenChat, currentUser }) {
     let fullDateString = '';
     if (incident.createdAt) {
         const occuredTime = new Date(incident.createdAt);
@@ -24,6 +24,20 @@ function IncidentDetail({ incident, onClose, onOpenChat }) {
         fullDateString = occuredTime.toLocaleString('en-US', occuredTimeFormat);
     }
 
+    const handleChatClick = () => {
+        if (!currentUser) {
+            alert('Please log in to view the chat room');
+            return;
+        }
+        // Double check token exists
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Please log in to view the chat room');
+            return;
+        }
+        onOpenChat();
+    };
+
     return(
         <div className="incident-detail-container">
 
@@ -32,7 +46,7 @@ function IncidentDetail({ incident, onClose, onOpenChat }) {
                 <button className="back-button" onClick={onClose}>
                     <IoArrowBack size={24} />
                 </button>
-                <button className="open-chat-button" onClick={onOpenChat}>
+                <button className="open-chat-button" onClick={handleChatClick}>
                     <span className="chat-button-text">OPEN INCIDENT CHAT</span>
                     <MdOutlineChat size={20} />
                 </button>

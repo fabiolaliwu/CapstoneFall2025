@@ -108,6 +108,10 @@ function IncidentForm({ currentUser, onSubmitSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(!currentUser){
+      alert('Please sign in to submit an incident');
+      return;
+    }
 
     if (!validateForm()) return;
 

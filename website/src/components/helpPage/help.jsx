@@ -5,7 +5,7 @@ import Bar from '../homePage/bar';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
 
-function Help() {
+function Help(currentUser, onLogout) {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
@@ -33,7 +33,7 @@ function Help() {
 
   return (
     <div className="help-page">
-      <Bar />
+      <Bar currentUser={currentUser} onLogout={onLogout} />
 
       <div className="help-content">
         
