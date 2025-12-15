@@ -124,7 +124,7 @@ function Bar({
                     </div>
                 </div>
 
-                 {/* Bottom Section */}
+                {/* Bottom Section */}
                 <div className="bottom-section">
                     {isLoggedIn ? (
                         <div className="user-actions">
