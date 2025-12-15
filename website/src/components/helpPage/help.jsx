@@ -52,7 +52,7 @@ function Help() {
             <h2 className="help-left-title">How does LOOP Work?</h2>
 
             <button onClick={handleStartTour} className="start-tour-btn">
-                Press to See Website Walkthrough Tour
+              View Website Walkthrough Tour
             </button>
 
             <div className="help-left-section">

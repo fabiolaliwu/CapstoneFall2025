@@ -63,29 +63,41 @@ function Homepage({currentUser}) {
     }, []);
 
     useEffect(() => {
+        const hasVisitedBefore = localStorage.getItem('loop_has_visited');
+        
+        if (!hasVisitedBefore) {
+            // First-time visitor - set the flag for tour
+            window.__loopStartTourOnHome = true;
+            localStorage.setItem('loop_has_visited', 'true');
+            console.log('First time visitor detected - tour will start');
+        }
+    }, []);
+
+    useEffect(() => {
         if (!window.__loopStartTourOnHome) return;
         if (events.length === 0) return; // Don't start if events are empty
-
-        window.__loopStartTourOnHome = false;
 
         console.log('Starting tour with events:', events);
         console.log('First event ID:', events[0]?._id);
 
+        const shouldStartTour = window.__loopStartTourOnHome;
+        window.__loopStartTourOnHome = false;
+
         setTimeout(() => {
             startIntroTour({
-            openEvents: () => setOpenList('events'),
-            openIncidents: () => setOpenList('incidents'),
-            openSummary: () => setOpenList('summary'),
-            selectFirstEvent: () => {
-                console.log('selectFirstEvent called, events available:', events.length);
-                console.log('First event:', events[0]);
-                setMapSelectedId(events[0]?._id);
-            }
+                openEvents: () => setOpenList('events'),
+                openIncidents: () => setOpenList('incidents'),
+                openSummary: () => setOpenList('summary'),
+                selectFirstEvent: () => {
+                    console.log('selectFirstEvent called, events available:', events.length);
+                    console.log('First event:', events[0]);
+                    if (events.length > 0) {
+                        setMapSelectedId(events[0]._id);
+                    }
+                }
             });
         }, 300);
     }, [events]);
-
-
 
     const handleCloseContainer = () => {
         setOpenList('');
