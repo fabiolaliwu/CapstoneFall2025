@@ -10,10 +10,15 @@ function EventContainer({ currentUser, userLocation, onClose, initialSelectedId 
     const [selectedEventId, setSelectedEventId] = useState(null);
     const [showChat, setShowChat] = useState(false);
     const [previousSelectedEventId, setPreviousSelectedEventId] = useState(null);
+    const [eventDetailReady, setEventDetailReady] = useState(false);
+
 
     useEffect(() => {
         if (initialSelectedId) {
             setSelectedEventId(initialSelectedId);
+            setTimeout(() => {
+                setEventDetailReady(true);
+            }, 100);
         }
     }, [initialSelectedId]);
 
@@ -52,9 +57,9 @@ function EventContainer({ currentUser, userLocation, onClose, initialSelectedId 
     }, [selectedEventId]);
 
     return (
-        <div className="event-container">
+        <div id="event-container" className="event-container">
             {/* Left side: Event List */}
-            <div className="event-list">
+            <div id="event-list" className="event-list">
                 <EventList
                     events={events}
                     userLocation={userLocation}
@@ -67,7 +72,7 @@ function EventContainer({ currentUser, userLocation, onClose, initialSelectedId 
             <hr className="container-divider" />
 
             {/* Right side: Detail or Chat */}
-            <div className="event-right-section">
+            <div id="event-right-section" className="event-right-section">
                 {/* Content: Detail or Chat */}
                 {showChat ? (
                     <div className="chat-section">

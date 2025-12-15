@@ -7,17 +7,17 @@ function Buttons({ openEvents, openSummary, openIncidents }) {
   return (
     <div className="all-buttons">
       
-      <button onClick={openEvents}>
+      <button id="events-button" onClick={openEvents}>
         <FaRegCalendarAlt size={20} />
         <span className="btn-text">Events</span>
       </button>
 
-      <button onClick={openIncidents}>
+      <button id="incidents-button" onClick={openIncidents}>
         <IoWarningOutline size={20} />
         <span className="btn-text">Incidents</span>
       </button>
 
-      <button onClick={openSummary}>
+      <button id="all-button" onClick={openSummary}>
         <IoGlobeOutline size={20} />
         <span className="btn-text">All</span>
       </button>

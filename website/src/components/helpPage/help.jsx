@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import './help.css';
 import Bar from '../homePage/bar';
+import { startIntroTour } from '../walkthrough/introTour';
+import { useNavigate } from 'react-router-dom';
+
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 const safeBaseUrl = API_BASE_URL.replace(/\/$/, '');
 
 function Help(currentUser, onLogout) {
+  const navigate = useNavigate();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
@@ -31,6 +35,12 @@ function Help(currentUser, onLogout) {
     }
   };
 
+  const handleStartTour = () => {
+    window.__loopStartTourOnHome = true;
+
+    navigate('/home'); 
+  };
+
   return (
     <div className="help-page">
       <Bar currentUser={currentUser} onLogout={onLogout} />
@@ -40,6 +50,10 @@ function Help(currentUser, onLogout) {
         {/* LEFT: Website explanation */}
         <div className="help-left">
             <h2 className="help-left-title">How does LOOP Work?</h2>
+
+            <button onClick={handleStartTour} className="start-tour-btn">
+              View Website Walkthrough Tour
+            </button>
 
             <div className="help-left-section">
                 <p className="help-left-desc">

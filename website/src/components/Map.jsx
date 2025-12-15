@@ -311,7 +311,7 @@ useEffect(() => {
     });
   }, [events, incidents, userLocation, openChatFromMap]);
 
-  return <div ref={mapRef} className="map-container"/>;
+  return <div id="map-view" ref={mapRef} className="map-container"/>;
 };
 
 export default Map;

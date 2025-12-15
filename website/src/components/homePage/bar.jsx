@@ -96,7 +96,7 @@ function Bar({
                 
                 {/* Top Section */}
                 <div className="top-section">
-                    <div className="logo">
+                    <div id="logo" className="logo">
                         <Link to="/home"  onClick={() => setIsSidebarOpen(false)}>
                             <img src={Logo} alt="Stay in the Loop" />
                         </Link>
@@ -105,19 +105,21 @@ function Bar({
                 
                 {/* Middle Section */}
                 <div className="middle-section">
-                    {/* Show buttons to everyone*/}
-                    <Buttons
-                        openEvents={() => handleNavigationAndOpen(openEvents)}
-                        openSummary={() => handleNavigationAndOpen(openSummary)}
-                        openIncidents={() => handleNavigationAndOpen(openIncidents)}
-                    />
+                    <div id="list-buttons">
+                      {/* Show buttons to everyone*/}
+                      <Buttons
+                          openEvents={() => handleNavigationAndOpen(openEvents)}
+                          openSummary={() => handleNavigationAndOpen(openSummary)}
+                          openIncidents={() => handleNavigationAndOpen(openIncidents)}
+                      />
+                    </div>
                     <hr className="divider" />
                     <div className="nav-links">
-                        <NavLink to="/about" className="nav-link-button">
+                        <NavLink to="/about"  id="about-button" className="nav-link-button">
                             <FaInfoCircle size={20} />
                             <span className="btn-text">About</span>
                         </NavLink>
-                        <NavLink to="/help" className="nav-link-button">
+                        <NavLink to="/help" id="help-button" className="nav-link-button">
                             <FaQuestionCircle size={20} />
                             <span className="btn-text">Help</span>
                         </NavLink>
@@ -151,7 +153,7 @@ function Bar({
             {/* Handle elements on map */}
             {isHomePage && (
                 <div className="floating-controls">
-                    <div className="search-bar-wrapper">
+                    <div id="search-bar" className="search-bar-wrapper">
                         <div className="search-bar">
                             <form className="search-form" onSubmit={handleSearch}>
                                 <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="Search" className="search-icon"/>
