@@ -13,7 +13,7 @@ function getRandomColor() {
     return CategoryColors[random_index];
 }
 
-function EventDetail({ event, onClose, onOpenChat }) {
+function EventDetail({ event, onClose, onOpenChat, currentUser }) {
     let fullDateString = '';
     if (event.start_date) {
         const startDate = new Date(event.start_date);
@@ -37,6 +37,20 @@ function EventDetail({ event, onClose, onOpenChat }) {
         }
     }
 
+    const handleChatClick = () => {
+        if (!currentUser) {
+            alert('Please log in to view the chat room');
+            return;
+        }
+        // Double check token exists
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Please log in to view the chat room');
+            return;
+        }
+        onOpenChat();
+    };
+
     return(
         <div className="event-detail-container">
 
@@ -45,7 +59,7 @@ function EventDetail({ event, onClose, onOpenChat }) {
                 <button className="back-button" onClick={onClose}>
                     <IoArrowBack size={24} />
                 </button>
-                <button className="open-chat-button" onClick={onOpenChat}>
+                <button className="open-chat-button" onClick={handleChatClick}>
                     <span className="chat-button-text">OPEN EVENT CHAT</span>
                     <MdOutlineChat size={20} />
                 </button>

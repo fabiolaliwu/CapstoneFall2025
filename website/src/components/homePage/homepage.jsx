@@ -7,7 +7,7 @@ import EventContainer from './container/eventContainer.jsx';
 import IncidentContainer from './container/incidentContainer.jsx';
 import SummaryContainer from './container/summaryContainer.jsx';
 
-function Homepage({currentUser}) {
+function Homepage({currentUser, onLogout}) {
     const [openList, setOpenList] = useState('');
     const [events, setEvents] = useState([]);
     const [incidents, setIncidents] = useState([]);
@@ -85,6 +85,7 @@ function Homepage({currentUser}) {
             <div className='content'>
                 <Bar 
                     currentUser={currentUser} 
+                    onLogout={onLogout}
                     searchQuery={searchQuery} 
                     setSearchQuery={setSearchQuery}
                     openEvents={() => toggleList('events')}

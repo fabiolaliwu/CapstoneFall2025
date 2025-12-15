@@ -44,7 +44,7 @@ function EventContainer({ currentUser, userLocation, onClose, initialSelectedId 
         }
     };
 
-    // also reset chat when selectedEventId changes to null fior when you closing detail)
+    // also reset chat when selectedEventId changes to null (when closing detail)
     useEffect(() => {
         if (selectedEventId === null) {
             setShowChat(false);
@@ -71,7 +71,7 @@ function EventContainer({ currentUser, userLocation, onClose, initialSelectedId 
                 {/* Content: Detail or Chat */}
                 {showChat ? (
                     <div className="chat-section">
-                        {selectedEventId ? (
+                        {selectedEventId && currentUser ? (
                             <ChatRoom
                                 currentUser={currentUser}
                                 chatType="event"
@@ -79,6 +79,10 @@ function EventContainer({ currentUser, userLocation, onClose, initialSelectedId 
                                 onClose={() => setShowChat(false)} // Close chat, stay on same event
                                 eventTitle={selectedEvent?.title}
                             />
+                        ) : !currentUser ? (
+                            <div className="chat-placeholder">
+                                <p>Please log in to view the chat room</p>
+                            </div>
                         ) : (
                             <div className="chat-placeholder">
                                 <p>← Click an event to view its chat room</p>
@@ -91,7 +95,8 @@ function EventContainer({ currentUser, userLocation, onClose, initialSelectedId 
                             <EventDetail 
                                 event={selectedEvent} 
                                 onClose={() => setSelectedEventId(null)}                       
-                                onOpenChat={() => setShowChat(true)} 
+                                onOpenChat={() => setShowChat(true)}
+                                currentUser={currentUser}
                             />
                         ) : (
                             <div className="chat-placeholder">
