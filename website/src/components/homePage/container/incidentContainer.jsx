@@ -5,8 +5,7 @@ import IncidentList from '../sideList/incidentList.jsx';
 import IncidentDetail from '../sideList/incidentDetail.jsx';
 import ChatRoom from '../live-chat/chatRoom.jsx';
 
-function IncidentContainer({ currentUser, userLocation, onClose, initialSelectedId }) {
-    const [incidents, setIncidents] = useState([]);
+function IncidentContainer({ currentUser, userLocation, onClose, initialSelectedId, incidents }) {
     const [selectedIncidentId, setSelectedIncidentId] = useState(null);
     const [showChat, setShowChat] = useState(false);
     const [previousSelectedIncidentId, setPreviousSelectedIncidentId] = useState(null);
@@ -16,19 +15,6 @@ function IncidentContainer({ currentUser, userLocation, onClose, initialSelected
             setSelectedIncidentId(initialSelectedId);
         }
     }, [initialSelectedId]);
-
-    useEffect(() => {
-        // Fetch all incidents
-        const fetchIncidents = async () => {
-            try {
-                const response = await axios.get('http://localhost:4000/api/incidents');
-                setIncidents(response.data);
-            } catch (error) {
-                console.error('Error fetching incidents:', error);
-            }
-        };
-        fetchIncidents();
-    }, []);
 
     const selectedIncident = incidents.find(i => String(i._id) === String(selectedIncidentId));
 

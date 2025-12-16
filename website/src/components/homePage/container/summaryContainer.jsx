@@ -6,9 +6,7 @@ import ChatRoom from '../live-chat/chatRoom.jsx';
 import EventDetail from '../sideList/eventDetail.jsx';
 import IncidentDetail from '../sideList/incidentDetail.jsx';
 
-function SummaryContainer({ currentUser, userLocation, onClose, initialSelected }) {
-    const [incidents, setIncidents] = useState([]);
-    const [events, setEvents] = useState([]);
+function SummaryContainer({ currentUser, userLocation, onClose, initialSelected, events, incidents }) {
     const [selectedItem, setSelectedItem] = useState(null); // { type, _id }
     const [selectedDetail, setSelectedDetail] = useState(null);
     const [showChat, setShowChat] = useState(true); // default to global chat
@@ -19,23 +17,6 @@ function SummaryContainer({ currentUser, userLocation, onClose, initialSelected 
             handleSelect(initialSelected);
         }
     }, [initialSelected]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [incidentsResponse, eventResponse] = await Promise.all([
-                    axios.get('http://localhost:4000/api/incidents'),
-                    axios.get('http://localhost:4000/api/events'),
-                ]);
-
-                setIncidents(incidentsResponse.data);
-                setEvents(eventResponse.data);
-            } catch (error) {
-                console.error('Error fetching the summary data:', error);
-            }
-        };
-        fetchData();
-    }, []);
 
     const handleSelect = async (item) => {
         if (selectedItem && item && selectedItem.type === item.type && selectedItem._id === item._id) {
