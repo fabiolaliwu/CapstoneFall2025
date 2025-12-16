@@ -5,8 +5,7 @@ import EventList from '../sideList/eventList.jsx';
 import EventDetail from '../sideList/eventDetail.jsx';
 import ChatRoom from '../live-chat/chatRoom.jsx';
 
-function EventContainer({ currentUser, userLocation, onClose, initialSelectedId }) {
-    const [events, setEvents] = useState([]);
+function EventContainer({ currentUser, userLocation, onClose, initialSelectedId,events }) {
     const [selectedEventId, setSelectedEventId] = useState(null);
     const [showChat, setShowChat] = useState(false);
     const [previousSelectedEventId, setPreviousSelectedEventId] = useState(null);
@@ -21,19 +20,6 @@ function EventContainer({ currentUser, userLocation, onClose, initialSelectedId 
             }, 100);
         }
     }, [initialSelectedId]);
-
-    useEffect(() => {
-        // Fetch all events
-        const fetchEvents = async () => {
-            try {
-                const response = await axios.get('http://localhost:4000/api/events');
-                setEvents(response.data);
-            } catch (error) {
-                console.error('Error fetching events:', error);
-            }
-        };
-        fetchEvents();
-    }, []);
 
     const selectedEvent = events.find(e => String(e._id) === String(selectedEventId));
 

@@ -146,7 +146,7 @@ function Homepage({currentUser, onLogout}) {
 
             {openList === 'events' && < EventContainer currentUser={currentUser} events={events} userLocation={userLocation} onClose={handleCloseContainer} initialSelectedId={mapSelectedId} /> }
             {openList === 'incidents' && < IncidentContainer currentUser={currentUser} incidents={incidents} userLocation={userLocation} onClose={handleCloseContainer} initialSelectedId={mapSelectedId} /> }
-            {openList === 'summary' && < SummaryContainer currentUser={currentUser} userLocation={userLocation} onClose={handleCloseContainer} initialSelected={mapSelectedId} /> }
+            {openList === 'summary' && < SummaryContainer currentUser={currentUser} events={events} incidents={incidents} userLocation={userLocation} onClose={handleCloseContainer} initialSelected={mapSelectedId} /> }
         </div>
     );
 }
