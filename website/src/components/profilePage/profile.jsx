@@ -91,7 +91,7 @@ function Profile({ currentUser, onLogout }) {
   const handleUnsaveEvent = async (eventId) => {
     try {
       const res = await fetch(
-        `http://localhost:4000/api/users/${currentUser._id}/savedEvents/${eventId}`,
+        `${safeBaseUrl}api/users/${currentUser._id}/savedEvents/${eventId}`,
         { method: "DELETE" }
       );
 
