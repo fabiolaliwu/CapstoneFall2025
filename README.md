@@ -9,7 +9,7 @@ Whether it's a transit delay, a street closure, an emergency alert, or a neighbo
 ---
 
 ## Live Demo
-Link here: [click me] (https://capstonefall2025-frontend.onrender.com/)
+Link here: [click me](https://capstonefall2025-frontend.onrender.com/)
 
 ---
 
