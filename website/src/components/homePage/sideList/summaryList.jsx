@@ -104,10 +104,10 @@ function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelect
         setSavedEvents(prev =>
             wasSaved ? prev.filter(id => id !== eventId) : [...prev, eventId]
         );
-
+        
         try {
             const response = await fetch(
-                `http://localhost:4000/api/users/${currentUser._id}/savedEvents`,
+                `${safeBaseUrl}/api/users/${currentUser._id}/savedEvents`,
                 {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
@@ -129,7 +129,7 @@ function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelect
 
             try {
                 const response = await fetch(
-                    `http://localhost:4000/api/users/${currentUser._id}/savedEvents`
+                    `${safeBaseUrl}/api/users/${currentUser._id}/savedEvents`
                 );
 
                 if (response.ok) {
