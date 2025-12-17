@@ -130,7 +130,9 @@ function ChatRoom({ currentUser, chatType = "global", chatId = null, onClose, ev
     }, [messages]);    
 
     return (
-        <div className="chat-room-container">
+        <div className={`chat-room-container ${
+            chatType === "incident" || chatType === "event" ? "chat-room-mobile" : ""
+          }`}>
             
             <div className="chat-room">
                 <div className="chat-header">

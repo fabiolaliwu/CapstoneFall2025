@@ -28,7 +28,7 @@ function About(currentUser, onLogout) {
         </p>
 
         <p className="section-text">
-          Whether it’s a transit delay, a street closure, an emergency alert, or a neighborhood meetup, LOOP keeps you informed and involved.
+          Whether it's a transit delay, a street closure, an emergency alert, or a neighborhood meetup, LOOP keeps you informed and involved.
         </p>
       </section>
 
@@ -46,8 +46,8 @@ function About(currentUser, onLogout) {
                 <a href="https://www.linkedin.com/in/angelapzhang" target="_blank" rel="noopener noreferrer">
                 <div className="team-card">Angela Zhang</div>
                 </a>
-                <a href="" target="_blank" rel="noopener noreferrer">
-                <div className="team-card">Team Member 4</div>
+                <a href="https://www.linkedin.com/in/ying2212/" target="_blank" rel="noopener noreferrer">
+                <div className="team-card">Guan Ying Goh</div>
                 </a>
             </div>
         </section>

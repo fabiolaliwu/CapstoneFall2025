@@ -448,8 +448,8 @@
  @media (max-width: 768px) {
     .event-detail-container {
         width: 100%;
-        height: 35vh;
-        max-height: 50vh;
+        height:auto;
+        max-height: 60vh;
         overflow-y: auto;
         box-sizing: border-box;
     }
