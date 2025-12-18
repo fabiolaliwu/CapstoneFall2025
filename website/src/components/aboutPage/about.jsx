@@ -40,8 +40,8 @@ function About(currentUser, onLogout) {
                 <a href="" target="_blank" rel="noopener noreferrer">
                 <div className="team-card">Team Member 1</div>
                 </a>
-                <a href="" target="_blank" rel="noopener noreferrer">
-                <div className="team-card">Team Member 2</div>
+                <a href="https://www.linkedin.com/in/shijie-reina-chen/" target="_blank" rel="noopener noreferrer">
+                <div className="team-card">Reina Chen</div>
                 </a>
                 <a href="https://www.linkedin.com/in/angelapzhang" target="_blank" rel="noopener noreferrer">
                 <div className="team-card">Angela Zhang</div>
