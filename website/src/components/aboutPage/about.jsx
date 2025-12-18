@@ -38,7 +38,7 @@ function About(currentUser, onLogout) {
 
             <div className="team-grid">
                 <a href="https://www.linkedin.com/in/fabiolaliwu" target="_blank" rel="noopener noreferrer">
-                <div className="team-card">Team Member 1</div>
+                <div className="team-card">Fabiola Li Wu</div>
                 </a>
                 <a href="https://www.linkedin.com/in/shijie-reina-chen/" target="_blank" rel="noopener noreferrer">
                 <div className="team-card">Reina Chen</div>
