@@ -221,3 +221,8 @@ export const deleteSavedEvent = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// citation for structure:
+// reused and modified code from other Controller files in this project
+// citations for bcrypt and jwt workflow:
+// https://talent500.com/blog/user-authentication-and-authorization-using-jwt-and-bcrypt/ 

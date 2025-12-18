@@ -200,3 +200,7 @@ export const startIntroTour = ({
   // start the first segment
   runTourSegment(0);
 };
+
+// citation for base structure of using introjs in a tour:
+// https://www.youtube.com/watch?v=S-EFXmRZvBs
+// used deepseek to aid in customizing the tour segments, and making it work with react components and state management since introjs is for vanilla js and vanilla html

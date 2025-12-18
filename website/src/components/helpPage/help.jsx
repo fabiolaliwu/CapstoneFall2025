@@ -32,7 +32,6 @@ function Help(currentUser, onLogout) {
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 5000);
 
-      // alert('Form submitted successfully!');
       setFullName(''); 
       setEmail(''); 
       setSubject(''); 
@@ -41,8 +40,6 @@ function Help(currentUser, onLogout) {
 
     } catch (err) {
       console.error('Error submitting form:', err);
-      // alert(`Error submitting form: ${err.message || 'Something went wrong'}`);
-      /* 🔹 error popup instead of alert */
       setPopupMessage(`Error submitting form: ${err.message || 'Something went wrong'}`);
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 5000);
@@ -171,3 +168,5 @@ function Help(currentUser, onLogout) {
 }
 
 export default Help;
+
+// citation: chatgpt fixed introTour navigating over to homepage and then starting the tour since the tour starts on the homepage
