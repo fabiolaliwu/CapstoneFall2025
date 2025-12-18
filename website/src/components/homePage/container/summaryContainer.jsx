@@ -11,6 +11,7 @@ function SummaryContainer({ currentUser, userLocation, onClose, initialSelected,
     const [selectedDetail, setSelectedDetail] = useState(null);
     const [showChat, setShowChat] = useState(true); // default to global chat
     const [previousSelectedItem, setPreviousSelectedItem] = useState(null);
+    const [ popupMessage, setPopupMessage ] = useState('');
 
     useEffect(() => {
         if (initialSelected) {
@@ -88,70 +89,89 @@ function SummaryContainer({ currentUser, userLocation, onClose, initialSelected,
         setShowChat(true); // Show global chat when closing detail
     };
 
+    const handleOpenChat = () => {
+        if (!currentUser) {
+            setPopupMessage('Please log in to view the chat room');
+            return;
+        }
+        setShowChat(true);
+    };
+
     return (
-        <div id="summary-container" className="summary-container">
-            {/* Left side list */}
-            <div className="summary-list">
-                <SummaryList
-                    incidents={incidents}
-                    events={events}
-                    userLocation={userLocation}
-                    onSelectEvents={handleSelect}
-                    onSelectIncident={handleSelect}
-                    onClose={onClose}
-                    currentUser={currentUser}
-                />
-            </div>
+        <div>
+            <div id="summary-container" className="summary-container">
+                {/* Left side list */}
+                <div className="summary-list">
+                    <SummaryList
+                        incidents={incidents}
+                        events={events}
+                        userLocation={userLocation}
+                        onSelectEvents={handleSelect}
+                        onSelectIncident={handleSelect}
+                        onClose={onClose}
+                        currentUser={currentUser}
+                    />
+                </div>
 
-            <hr className="container-divider" />
+                <hr className="container-divider" />
 
-            {/* Right side: Detail or Chat */}
-            <div id="global-chat" className="summary-right-section">
-                {showChat ? (
-                    <div className="chat-section">
-                        {/* Check if user is logged in before showing chat */}
-                        {currentUser ? (
-                            <ChatRoom
-                                currentUser={currentUser}
-                                chatType={selectedItem ? selectedItem.type : "global"}
-                                chatId={selectedItem ? selectedItem._id : null}
-                                onClose={selectedItem ? () => setShowChat(false) : undefined}
-                                eventTitle={selectedDetail?.title}
-                            />
-                        ) : (
-                            <div className="chat-placeholder">
-                                <p>Please log in to view the chat room</p>
-                            </div>
-                        )}
-                    </div>
-                ) : (
-                    <div className="detail-section">
-                        {selectedDetail && selectedItem ? (
-                            selectedItem.type === 'event' ? (
-                                <EventDetail
-                                    event={selectedDetail}
-                                    onClose={handleCloseDetail}
-                                    onOpenChat={null}
+                {/* Right side: Detail or Chat */}
+                <div id="global-chat" className="summary-right-section">
+                    {showChat ? (
+                        <div className="chat-section">
+                            {/* Check if user is logged in before showing chat */}
+                            {currentUser ? (
+                                <ChatRoom
                                     currentUser={currentUser}
+                                    chatType={selectedItem ? selectedItem.type : "global"}
+                                    chatId={selectedItem ? selectedItem._id : null}
+                                    onClose={selectedItem ? () => setShowChat(false) : undefined}
+                                    eventTitle={selectedDetail?.title}
                                 />
                             ) : (
-                                <IncidentDetail
-                                    incident={selectedDetail}
-                                    onClose={handleCloseDetail}
-                                    onOpenChat={null}
-                                    currentUser={currentUser}
-                                />
-                            )
-                        ) : (
-                            <div className="chat-placeholder">
-                                <p>← Click an item to view details</p>
-                            </div>
-                        )}
-                    </div>
-                )}
+                                <div className="chat-placeholder">
+                                    <p>Please log in to view the chat room</p>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="detail-section">
+                            {selectedDetail && selectedItem ? (
+                                selectedItem.type === 'event' ? (
+                                    <EventDetail
+                                        event={selectedDetail}
+                                        onClose={handleCloseDetail}
+                                        onOpenChat={handleOpenChat}
+                                        currentUser={currentUser}
+                                    />
+                                ) : (
+                                    <IncidentDetail
+                                        incident={selectedDetail}
+                                        onClose={handleCloseDetail}
+                                        onOpenChat={handleOpenChat}
+                                        currentUser={currentUser}
+                                    />
+                                )
+                            ) : (
+                                <div className="chat-placeholder">
+                                    <p>← Click an item to view details</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
 
+                </div>
             </div>
+            {popupMessage && (
+                <div className="popup-overlay" onClick={() => setPopupMessage('')}>
+                    <div className="popup-content">
+                        <p>{popupMessage}</p>
+                        <button onClick={() => setPopupMessage('')}>OK</button>
+                    </div>
+                </div>
+            )}
         </div>
+
     );
 }
 
