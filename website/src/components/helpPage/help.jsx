@@ -15,6 +15,8 @@ function Help(currentUser, onLogout) {
   const [subject, setSubject] = useState('');
   const [type, setType] = useState('');
   const [message, setMessage] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,12 +28,24 @@ function Help(currentUser, onLogout) {
       });
       if (!response.ok) throw new Error("Failed to submit form");
 
-      alert('Form submitted successfully!');
-      setFullName(''); setEmail(''); setSubject(''); setType(''); setMessage('');
+      setPopupMessage('Form submitted successfully!');
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 5000);
+
+      // alert('Form submitted successfully!');
+      setFullName(''); 
+      setEmail(''); 
+      setSubject(''); 
+      setType(''); 
+      setMessage('');
 
     } catch (err) {
       console.error('Error submitting form:', err);
-      alert(`Error submitting form: ${err.message || 'Something went wrong'}`);
+      // alert(`Error submitting form: ${err.message || 'Something went wrong'}`);
+      /* 🔹 error popup instead of alert */
+      setPopupMessage(`Error submitting form: ${err.message || 'Something went wrong'}`);
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 5000);
     }
   };
 
@@ -143,8 +157,15 @@ function Help(currentUser, onLogout) {
             <button type="submit" className="form-button">Submit</button>
           </form>
         </div>
-
       </div>
+      {showPopup && (
+        <div className="popup-message">
+          <span>{popupMessage}</span>
+          <button className="popup-close" onClick={() => setShowPopup(false)}>
+            ✕
+          </button>
+        </div>
+      )}
     </div>
   );
 }

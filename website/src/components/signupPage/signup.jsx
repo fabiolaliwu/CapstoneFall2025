@@ -43,7 +43,6 @@ function Signup(){
             } else {
                 // Signup succeeded
                 setMessage(`Account created! Welcome, ${data.user.username}`);
-                // alert('Account created successfully! You can now log in.');
                 navigate('/login');
 
             }

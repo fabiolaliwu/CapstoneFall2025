@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import './incidentList.css';
 import { BiSolidUpvote } from "react-icons/bi";
 import { useIncidentUpvotes } from './useUpvote';
@@ -51,81 +52,106 @@ function IncidentList({ incidents, onClose, userLocation, onSelect, currentUser 
         toggleUpvote
     } = useIncidentUpvotes(incidents, currentUser, safeBaseUrl);
 
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
+
+    const showAuthPopup = (message) => {
+        setPopupMessage(message);
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 5000);
+    };
+
     return (
         <div className="incident-list-container">
             <div className="incident-list">
-                <header>INCIDENTS</header>
-                <div className="incident-items">
-                    {sortedIncidents.map((incident) => {
-                        const incidentLocation = incident.location ? incident.location.coordinates : null;
-                        const distance = calculateDistance(userLocation, incidentLocation);
-                        const incidentId = String(incident._id);
-                        const isUpvoted = upvotedIncidents.has(incidentId);
-                        const upvoteCount = incidentUpvoteCounts[incidentId] || 0;
+            <header>INCIDENTS</header>
+            <div className="incident-items">
+                {sortedIncidents.map((incident) => {
+                const incidentLocation = incident.location ? incident.location.coordinates : null;
+                const distance = calculateDistance(userLocation, incidentLocation);
+                const incidentId = String(incident._id);
+                const isUpvoted = upvotedIncidents.has(incidentId);
+                const upvoteCount = incidentUpvoteCounts[incidentId] || 0;
 
-                        return (
-                            <div
-                                key={incident._id}
-                                className="incident-item"
-                                onClick={() => onSelect(incident)}
-                            >
-                                <div className="icon">  
-                                    <div className="left-icon">
-                                        <div className="incident-distance-bar">
-                                            {distance.toFixed(2)} mi
-                                        </div>
-                                        {incident.train_line && !(incident.train_line.length === 1 && incident.train_line[0] === "N/A") && (
-                                            <div className="train-lines">
-                                            {incident.train_line.map((line) => (
-                                                <span
-                                                key={line}
-                                                style={{
-                                                    backgroundColor: trainColors[line] || '#000000',
-                                                    color: (line === 'N' || line === 'R' ||  line === 'Q' ||  line === 'W') ? '#000000' : '#FFFFFF' 
-                                                }}
-                                                >
-                                                {line}
-                                                </span>
-                                            ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                        
-                                    <div className="upvote-icon"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            toggleUpvote(incident); 
-                                        }}
-                                    >   
-                                        {upvoteCount > 0 &&(
-                                            <span className="upvote-count">{upvoteCount}</span>
-                                        )}
-                                        <BiSolidUpvote 
-                                            size={20} 
-                                            color={isUpvoted ? '#ed623b' : "grey"} 
-                                        />
-                                        
-                                    </div>
-                                </div>
-                                <h3>{incident.title}</h3>
-                                <p>{incident.description}</p>
-                                <span>
-                                    Time Occurred: {new Date(incident.createdAt).toLocaleString('en-US', {
-                                    year: 'numeric',
-                                    month: 'short',
-                                    day: 'numeric',
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                })}
+                return (
+                    <div
+                    key={incident._id}
+                    className="incident-item"
+                    onClick={() => onSelect(incident)}
+                    >
+                    <div className="icon">  
+                        <div className="left-icon">
+                        <div className="incident-distance-bar">
+                            {distance.toFixed(2)} mi
+                        </div>
+                        {incident.train_line && !(incident.train_line.length === 1 && incident.train_line[0] === "N/A") && (
+                            <div className="train-lines">
+                            {incident.train_line.map((line) => (
+                                <span
+                                key={line}
+                                style={{
+                                    backgroundColor: trainColors[line] || '#000000',
+                                    color: (line === 'N' || line === 'R' || line === 'Q' || line === 'W') ? '#000000' : '#FFFFFF' 
+                                }}
+                                >
+                                {line}
                                 </span>
-                                <br />
+                            ))}
                             </div>
-                        );
-                    })}
-                </div>
+                        )}
+                        </div>
+                            
+                        <div className="upvote-icon"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (!currentUser?._id) {
+                            showAuthPopup('To upvote, create an account!');
+                            return;
+                            }
+                            toggleUpvote(incident);
+                        }}
+                        >   
+                        {upvoteCount > 0 && (
+                            <span className="upvote-count">{upvoteCount}</span>
+                        )}
+                        <BiSolidUpvote 
+                            size={20} 
+                            color={isUpvoted ? '#ed623b' : "grey"} 
+                        />
+                        </div>
+                    </div>
+                    <h3>{incident.title}</h3>
+                    <p>{incident.description}</p>
+                    <span>
+                        Time Occurred: {new Date(incident.createdAt).toLocaleString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                        })}
+                    </span>
+                    </div>
+                );
+                })}
             </div>
+            </div>
+
+            {/* Popup goes here */}
+            {showPopup && (
+            <div className="popup-message">
+                <span>{popupMessage}</span>
+                <button
+                className="popup-close"
+                onClick={() => setShowPopup(false)}
+                >
+                ✕
+                </button>
+            </div>
+            )}
         </div>
     );
+
 }
 
 export default IncidentList;

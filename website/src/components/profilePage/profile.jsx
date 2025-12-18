@@ -17,6 +17,13 @@ function Profile({ currentUser, onLogout }) {
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState("events");
   const [eventToEdit, setEventToEdit] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [confirmPopup, setConfirmPopup] = useState({
+    open: false,
+    type: null,
+    item: null,
+  });
 
   // format date
   const formatForInput = (date) => {
@@ -33,14 +40,15 @@ function Profile({ currentUser, onLogout }) {
 
     const fetchUserData = async () => {
       try {
-        // fetch events created by this user
         const [eventsResponse, incidentsResponse, savedEventsResponse] = await Promise.all([
           fetch(`${safeBaseUrl}/api/events/user/${currentUser._id}`),
           fetch(`${safeBaseUrl}/api/incidents/user/${currentUser._id}`),
           fetch(`${safeBaseUrl}/api/users/${currentUser._id}/savedEvents`)
         ]);
 
-        if (!eventsResponse.ok || !incidentsResponse.ok || !savedEventsResponse.ok) { throw new Error('Failed to fetch user posts'); }
+        if (!eventsResponse.ok || !incidentsResponse.ok || !savedEventsResponse.ok) {
+          throw new Error('Failed to fetch user posts');
+        }
 
         setEventsPosted(await eventsResponse.json());
         setIncidentsPosted(await incidentsResponse.json());
@@ -55,43 +63,49 @@ function Profile({ currentUser, onLogout }) {
     fetchUserData();
   }, [currentUser]);
 
-  // event and incident handlers 
-  const handleEvent = async (event, action) => { 
-    if (action === "delete") { 
-      const confirmDelete = window.confirm(`Delete event "${event.title}"? This action cannot be undone.`);
-      if (!confirmDelete) return;
-      try {
-        const response = await fetch(`${safeBaseUrl}/api/events/${event._id}`, { method: "DELETE" });
-        if (response.ok) {
-          setEventsPosted(prev => prev.filter(e => e._id !== event._id));
-          alert(`Event "${event.title}" deleted successfully!`);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
+  /* 🔹 delete request handlers (added) */
+  const requestDeleteEvent = (event) => {
+    setConfirmPopup({ open: true, type: "event", item: event });
   };
 
-  const handleIncident = async (incident, action) => { 
-    if (action === "delete") { 
-      const confirmDelete = window.confirm(`Delete incident "${incident.title}"? This action cannot be undone.`);
-      if (!confirmDelete) return; 
-      try { 
-        const response = await fetch(`${safeBaseUrl}/api/incidents/${incident._id}`, { method: "DELETE" }); 
-        if (response.ok) { 
-          setIncidentsPosted(prev => prev.filter(i => i._id !== incident._id)); 
-          alert(`Incident "${incident.title}" deleted successfully!`);
-        } 
-      } catch (error) { 
-        console.error(error);
-      } 
-    } 
+  const requestDeleteIncident = (incident) => {
+    setConfirmPopup({ open: true, type: "incident", item: incident });
+  };
+
+  const confirmDelete = async () => {
+    const { type, item } = confirmPopup;
+
+    try {
+      const url =
+        type === "event"
+          ? `${safeBaseUrl}/api/events/${item._id}`
+          : `${safeBaseUrl}/api/incidents/${item._id}`;
+
+      const response = await fetch(url, { method: "DELETE" });
+
+      if (response.ok) {
+        if (type === "event") {
+          setEventsPosted(prev => prev.filter(e => e._id !== item._id));
+          setPopupMessage(`Event "${item.title}" deleted successfully.`);
+        } else {
+          setIncidentsPosted(prev => prev.filter(i => i._id !== item._id));
+          setPopupMessage(`Incident "${item.title}" deleted successfully.`);
+        }
+
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 5000);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setConfirmPopup({ open: false, type: null, item: null });
+    }
   };
 
   const handleUnsaveEvent = async (eventId) => {
     try {
       const res = await fetch(
-        `${safeBaseUrl}api/users/${currentUser._id}/savedEvents/${eventId}`,
+        `${safeBaseUrl}/api/users/${currentUser._id}/savedEvents/${eventId}`,
         { method: "DELETE" }
       );
 
@@ -103,15 +117,12 @@ function Profile({ currentUser, onLogout }) {
     }
   };
 
-
-
   if (loading) return <div>Loading profile...</div>;
 
   return (
     <div className="profile-page">
       <Bar currentUser={currentUser} />
 
-      {/* profile card */}
       <div className="profile-header-card">
         <Avatar currentUser={currentUser} />
 
@@ -129,22 +140,16 @@ function Profile({ currentUser, onLogout }) {
         </div>
       </div>
 
-      {/* event / incident / saved tabs */}
       <div className="profile-tabs">
         <button onClick={() => setActiveTab("events")} className={activeTab==="events"?"active":""}>My Events</button>
         <button onClick={() => setActiveTab("reports")} className={activeTab==="reports"?"active":""}>Reports</button>
         <button onClick={() => setActiveTab("saved")} className={activeTab==="saved"?"active":""}>Saved</button>
       </div>
 
-      {/* tab content */}
       <div className="profile-content-area">
-      
-        {/* Event List */}
         {activeTab === "events" && (
           <div className="card-list">
-            {eventsPosted.length === 0 ? (
-              <p>No events posted yet.</p>
-            ) : eventsPosted.map(event => (
+            {eventsPosted.map(event => (
               <div className="item-card" key={event._id}>
                 <div>
                   <h4>{event.title}</h4>
@@ -152,7 +157,7 @@ function Profile({ currentUser, onLogout }) {
                 </div>
 
                 <div className="item-actions">
-                  <button onClick={() => handleEvent(event, "delete")}>Delete</button>
+                  <button onClick={() => requestDeleteEvent(event)}>Delete</button>
                   <button onClick={() => {
                     setEventToEdit({
                       ...event,
@@ -167,12 +172,9 @@ function Profile({ currentUser, onLogout }) {
           </div>
         )}
 
-        {/* Incident List */}
         {activeTab === "reports" && (
           <div className="card-list">
-            {incidentsPosted.length === 0 ? (
-              <p>No reports submitted.</p>
-            ) : incidentsPosted.map(incident => (
+            {incidentsPosted.map(incident => (
               <div className="item-card" key={incident._id}>
                 <div>
                   <h4>{incident.title}</h4>
@@ -180,45 +182,33 @@ function Profile({ currentUser, onLogout }) {
                 </div>
 
                 <div className="item-actions">
-                  <button onClick={() => handleIncident(incident, "delete")}>Delete</button>
-
+                  <button onClick={() => requestDeleteIncident(incident)}>Delete</button>
                 </div>
               </div>
             ))}
           </div>
         )}
 
-        {/* Saved Event List */}
         {activeTab === "saved" && (
           <div className="card-list">
-            {savedEvents.length === 0 ? (
-              <p>No saved events yet.</p>
-            ) : (
-              savedEvents.map(event => (
-                <div className="item-card" key={event._id}>
-                  <div>
-                    <h4>{event.title}</h4>
-                    <p className="item-date">
-                      {new Date(event.start_date).toLocaleString()}
-                    </p>
-                  </div>
-
-                  <div className="item-actions">
-                    <button
-                      className="unsave-btn"
-                      onClick={() => handleUnsaveEvent(event._id)}
-                    >
-                      Unsave
-                    </button>
-                  </div>
+            {savedEvents.map(event => (
+              <div className="item-card" key={event._id}>
+                <div>
+                  <h4>{event.title}</h4>
+                  <p className="item-date">{new Date(event.start_date).toLocaleString()}</p>
                 </div>
-              ))
-            )}
+
+                <div className="item-actions">
+                  <button className="unsave-btn" onClick={() => handleUnsaveEvent(event._id)}>
+                    Unsave
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
 
-      {/* EVENT EDIT MODAL */}
       {showModal && (
         <Modal
           eventData={eventToEdit}
@@ -230,6 +220,29 @@ function Profile({ currentUser, onLogout }) {
             setShowModal(false);
           }}
         />
+      )}
+
+      {/* confirmation popup */}
+      {confirmPopup.open && (
+        <div className="popup-overlay">
+          <div className="popup-message">
+            <p>Are you sure you want to delete <strong>{confirmPopup.item?.title}</strong>?</p>
+            <p>This action cannot be undone.</p>
+            <div className="popup-actions">
+              <button className="danger" onClick={confirmDelete}>Delete</button>
+              <button onClick={() => setConfirmPopup({ open: false, type: null, item: null })}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showPopup && (
+        <div className="popup-message">
+          <span>{popupMessage}</span>
+          <button className="popup-close" onClick={() => setShowPopup(false)}>✕</button>
+        </div>
       )}
     </div>
   );

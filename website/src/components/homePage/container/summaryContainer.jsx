@@ -88,15 +88,6 @@ function SummaryContainer({ currentUser, userLocation, onClose, initialSelected,
         setShowChat(true); // Show global chat when closing detail
     };
 
-    const handleOpenChat = () => {
-        // Check if user is logged in before opening chat
-        if (!currentUser) {
-            alert('Please log in to view the chat room');
-            return;
-        }
-        setShowChat(true);
-    };
-    
     return (
         <div id="summary-container" className="summary-container">
             {/* Left side list */}
@@ -140,14 +131,14 @@ function SummaryContainer({ currentUser, userLocation, onClose, initialSelected,
                                 <EventDetail
                                     event={selectedDetail}
                                     onClose={handleCloseDetail}
-                                    onOpenChat={handleOpenChat}
+                                    onOpenChat={null}
                                     currentUser={currentUser}
                                 />
                             ) : (
                                 <IncidentDetail
                                     incident={selectedDetail}
                                     onClose={handleCloseDetail}
-                                    onOpenChat={handleOpenChat}
+                                    onOpenChat={null}
                                     currentUser={currentUser}
                                 />
                             )

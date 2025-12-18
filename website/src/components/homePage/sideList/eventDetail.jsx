@@ -2,6 +2,7 @@ import './eventDetail.css';
 import { IoArrowBack } from "react-icons/io5";
 import { LuCalendarClock, LuMapPin, LuTicket, LuUser } from "react-icons/lu";
 import { MdOutlineChat } from "react-icons/md";
+import { useState } from 'react';
 
 const CategoryColors = [
     "#6e98a3", "#4A6CF7", "#8E7AB5", "#E1AFAF", "#7FB77E",
@@ -14,6 +15,9 @@ function getRandomColor() {
 }
 
 function EventDetail({ event, onClose, onOpenChat, currentUser }) {
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
+
     let fullDateString = '';
     if (event.start_date) {
         const startDate = new Date(event.start_date);
@@ -27,8 +31,10 @@ function EventDetail({ event, onClose, onOpenChat, currentUser }) {
             const endDate = new Date(event.end_date);
             let endDateFormat;
             if (endDate.toDateString() !== startDate.toDateString()){
-                endDateFormat = { year: 'numeric', month: 'short', day: 'numeric',
-                hour: '2-digit', minute: '2-digit' };
+                endDateFormat = {
+                    year: 'numeric', month: 'short', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                };
             } else {
                 endDateFormat = { hour: '2-digit', minute: '2-digit' };
             }        
@@ -39,15 +45,20 @@ function EventDetail({ event, onClose, onOpenChat, currentUser }) {
 
     const handleChatClick = () => {
         if (!currentUser) {
-            alert('Please log in to view the chat room');
+            setPopupMessage('Please log in or create an account to view the chat room!');
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 5000);
             return;
         }
-        // Double check token exists
+
         const token = localStorage.getItem('token');
         if (!token) {
-            alert('Please log in to view the chat room');
+            setPopupMessage('Please log in or create an account to view the chat room!');
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 5000);
             return;
         }
+
         onOpenChat();
     };
 
@@ -76,11 +87,10 @@ function EventDetail({ event, onClose, onOpenChat, currentUser }) {
                 </div>
             )}
 
-
             {/* BODY */}
             <div className="event-detail-body">
                 <div className="scroll-wrapper">
-                    {/* category */}
+
                     {Array.isArray(event.category) && event.category.length > 0 && (
                         <div className="category-container">
                             {event.category.map((cat, index) => (
@@ -94,18 +104,15 @@ function EventDetail({ event, onClose, onOpenChat, currentUser }) {
                             ))}
                         </div>
                     )}
-                    
-                    {/* title */}
+
                     <h2 className="event-title">{event.title}</h2>
 
-                    {/* description */}
                     {event.description && (
                         <p className="event-description">{event.description}</p>
                     )}
 
                     <div className="event-info">
-                        
-                        {/* Date & Time */}
+
                         {fullDateString && (
                             <div className="info-item">
                                 <LuCalendarClock size={24} className="info-icon" />
@@ -116,7 +123,6 @@ function EventDetail({ event, onClose, onOpenChat, currentUser }) {
                             </div>
                         )}
 
-                        {/* Location */}
                         {event.location?.address && (
                             <div className="info-item">
                                 <LuMapPin size={24} className="info-icon" />
@@ -127,7 +133,6 @@ function EventDetail({ event, onClose, onOpenChat, currentUser }) {
                             </div>
                         )}
 
-                        {/* Cost */}
                         {event.cost && (
                             <div className="info-item">
                                 <LuTicket size={24} className="info-icon" />
@@ -138,7 +143,6 @@ function EventDetail({ event, onClose, onOpenChat, currentUser }) {
                             </div>
                         )}
 
-                        {/* Host */}
                         {event.host && (
                             <div className="info-item">
                                 <LuUser size={24} className="info-icon" />
@@ -149,6 +153,7 @@ function EventDetail({ event, onClose, onOpenChat, currentUser }) {
                             </div>
                         )}
                     </div>
+
                     {event.location?.coordinates && (
                         <button
                             className="show-map-button"
@@ -157,9 +162,17 @@ function EventDetail({ event, onClose, onOpenChat, currentUser }) {
                             Show Route
                         </button>
                     )}
-
                 </div>    
             </div>
+
+            {showPopup && (
+                <div className="popup-message">
+                    <span>{popupMessage}</span>
+                    <button className="popup-close" onClick={() => setShowPopup(false)}>
+                        ✕
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

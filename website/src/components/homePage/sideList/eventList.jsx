@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import './eventList.css';
-import {FaHeart} from 'react-icons/fa';
+import { FaHeart } from 'react-icons/fa';
 import { BiSolidUpvote } from "react-icons/bi";
 import { useEventUpvotes } from './useUpvote';
 
@@ -48,8 +48,23 @@ function EventList({ events, onClose, userLocation, onSelect, currentUser }) {
 
   const [savedEvents, setSavedEvents] = useState([]);
   const [savingEventId, setSavingEventId] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+
+  const showAuthPopup = (message) => {
+    setPopupMessage(message);
+    setShowPopup(true);
+    setTimeout(() => setShowPopup(false), 5000);
+  };
+
   const handleSaveEvent = async (event) => {
-    if (!currentUser?._id || savingEventId) return;
+    if (!currentUser?._id) {
+      showAuthPopup('To save events, create an account!');
+      return;
+    }
+
+    if (savingEventId) return;
+
     const eventId = String(event._id);
     const wasSaved = savedEvents.includes(eventId);
     
@@ -59,6 +74,7 @@ function EventList({ events, onClose, userLocation, onSelect, currentUser }) {
       ? prev.filter(id => id !== eventId)
       : [...prev, eventId]
     );
+
     try {
       const response = await fetch(
         `${safeBaseUrl}/api/users/${currentUser._id}/savedEvents`,
@@ -71,7 +87,13 @@ function EventList({ events, onClose, userLocation, onSelect, currentUser }) {
       if (!response.ok) {
         throw new Error('Failed to save/unsave event');
       }else{  // Allow toggling between saved and unsaved event 
-        alert(wasSaved ? 'Event unsaved successfully!' : 'Event saved successfully!');
+
+        setPopupMessage(
+          wasSaved ? 'Event unsaved successfully!' : 'Event saved successfully!'
+        );
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 5000);
+
       }
     } catch (error) {
       console.error('Error saving/unsaving event:', error);
@@ -108,8 +130,6 @@ function EventList({ events, onClose, userLocation, onSelect, currentUser }) {
     fetchSavedEvents();
   }, [currentUser]);
   
-  
-
     return (
         <div className="event-list-container">
         <div className="event-list">
@@ -135,9 +155,14 @@ function EventList({ events, onClose, userLocation, onSelect, currentUser }) {
                         <div className="icon-group">
                           <div className="upvote-icon"
                             onClick={(e) => {
-                                e.stopPropagation();
-                                toggleUpvote(event); 
+                              e.stopPropagation();
+                              if (!currentUser?._id) {
+                                showAuthPopup('To upvote, create an account!');
+                                return;
+                              }
+                              toggleUpvote(event);
                             }}
+
                           >   
                             {upvoteCount > 0 &&( <span className="upvote-count">{upvoteCount}</span>)}
                             <BiSolidUpvote 
@@ -186,7 +211,18 @@ function EventList({ events, onClose, userLocation, onSelect, currentUser }) {
             })}
             </div>
         </div>
-        </div>
+        {showPopup && (
+          <div className="popup-message">
+              <span>{popupMessage}</span>
+              <button
+                className="popup-close"
+                onClick={() => setShowPopup(false)}
+              >
+                ✕
+              </button>
+          </div>
+        )}
+      </div>
     );
 }
 
