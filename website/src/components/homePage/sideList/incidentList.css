@@ -163,8 +163,8 @@
 /* MOBILE RESPONSIVE */
 @media (max-width: 768px) {
     .incident-list-container {
-        width: 95%;
-        height: 35vh;
+        width: 100%;
+        height: 100%;
     }
     .incident-list {
         width: 100%;
