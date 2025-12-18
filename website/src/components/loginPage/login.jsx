@@ -37,7 +37,6 @@ function Login( {setCurrentUser} ) {
                 localStorage.setItem('user', JSON.stringify(data.user)); // save user info in local storage
 
                 setCurrentUser(data.user);
-                // alert('Login successful! thank you');
                 navigate('/home'); // redirect to home page
             }
     

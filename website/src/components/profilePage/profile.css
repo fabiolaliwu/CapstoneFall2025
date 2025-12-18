@@ -203,27 +203,6 @@
     text-align: center; 
 }
 
-/* popup css */
-.popup-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.popup-actions {
-  display: flex;
-  gap: 12px;
-}
-
-.popup-actions .danger {
-  background: #e53935;
-  color: white;
-}
-
 
 /* Mobile */
 @media (max-width: 768px) {
