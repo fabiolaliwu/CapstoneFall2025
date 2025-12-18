@@ -45,7 +45,7 @@ function Avatar({ currentUser }) {
         currentUser.avatar = avatar;
         setShowPopup(true);
         setTimeout(() => setShowPopup(false), 5000);
-        // alert('Avatar updated successfully!');
+
         console.log('Avatar updated:', avatar);
       } else {
         console.error('Failed to update avatar');
