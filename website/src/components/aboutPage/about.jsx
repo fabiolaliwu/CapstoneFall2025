@@ -37,7 +37,7 @@ function About(currentUser, onLogout) {
             <h3 className="section-title">Learn More About the Team on LinkedIn</h3>
 
             <div className="team-grid">
-                <a href="" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.linkedin.com/in/fabiolaliwu" target="_blank" rel="noopener noreferrer">
                 <div className="team-card">Team Member 1</div>
                 </a>
                 <a href="https://www.linkedin.com/in/shijie-reina-chen/" target="_blank" rel="noopener noreferrer">
