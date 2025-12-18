@@ -36,6 +36,14 @@ const trainColors = {
 function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelectIncident, currentUser }) {
     const [savedEvents, setSavedEvents] = useState([]);
     const [savingEventId, setSavingEventId] = useState(null);
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
+
+    const showAuthPopup = (message) => {
+        setPopupMessage(message);
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 5000);
+    };
 
     const {
         upvotedIncidents,
@@ -96,7 +104,12 @@ function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelect
 
     // Event save system
     const handleSaveEvent = async (event) => {
-        if (!currentUser?._id || savingEventId) return;
+        if (!currentUser?._id) {
+            showAuthPopup("To save events, create an account!");
+            return;
+        }
+        if (savingEventId) return;
+
         const eventId = String(event._id);
         const wasSaved = savedEvents.includes(eventId);
 
@@ -202,15 +215,18 @@ function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelect
                             </div>
 
                             <div className="right-icon">
-                            <div 
-                                className="upvote-icon" 
-                                onClick={(e) => {
-                                    e.stopPropagation(); 
-                                    if (item.type === 'incident') toggleIncidentUpvote(item);
-                                    else toggleEventUpvote(item);
-                                }}
-                                style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}
-                            >
+                                <div className="upvote-icon"
+                                    onClick={e => {
+                                        e.stopPropagation();
+                                        if (!currentUser?._id) {
+                                            showAuthPopup("To upvote, create an account!");
+                                            return;
+                                        }
+                                        if (item.type === 'incident') toggleIncidentUpvote(item);
+                                        else toggleEventUpvote(item);
+                                    }}
+                                    style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}
+                                    >
                                 {upvoteCount > 0 &&(
                                     <span className="upvote-count">{upvoteCount}</span>
                                 )}
@@ -288,6 +304,13 @@ function SummaryList({ incidents, events, userLocation, onSelectEvents, onSelect
                 })} 
             </div>
             </div>
+
+            {showPopup && (
+                <div className="popup-message">
+                    <span>{popupMessage}</span>
+                    <button className="popup-close" onClick={() => setShowPopup(false)}>✕</button>
+                </div>
+            )}
         </div>
     );
 }

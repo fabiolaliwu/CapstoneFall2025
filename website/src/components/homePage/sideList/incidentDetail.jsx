@@ -2,6 +2,7 @@ import './incidentDetail.css';
 import { IoArrowBack } from "react-icons/io5";
 import { LuCalendarClock, LuMapPin } from "react-icons/lu";
 import { MdOutlineChat } from "react-icons/md";
+import { useState } from 'react';
 
 const CategoryColors = [
     "#6e98a3", "#4A6CF7", "#8E7AB5", "#E1AFAF", "#7FB77E",
@@ -14,6 +15,9 @@ function getRandomColor() {
 }
 
 function IncidentDetail({ incident, onClose, onOpenChat, currentUser }) {
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
+
     let fullDateString = '';
     if (incident.createdAt) {
         const occuredTime = new Date(incident.createdAt);
@@ -26,15 +30,20 @@ function IncidentDetail({ incident, onClose, onOpenChat, currentUser }) {
 
     const handleChatClick = () => {
         if (!currentUser) {
-            alert('Please log in to view the chat room');
+            setPopupMessage('Please log in or create an account to view the chat room!');
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 5000);
             return;
         }
-        // Double check token exists
+
         const token = localStorage.getItem('token');
         if (!token) {
-            alert('Please log in to view the chat room');
+            setPopupMessage('Please log in or create an account to view the chat room!');
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 5000);
             return;
         }
+
         onOpenChat();
     };
 
@@ -66,7 +75,7 @@ function IncidentDetail({ incident, onClose, onOpenChat, currentUser }) {
             {/* BODY */}
             <div className="incident-detail-body">
                 <div className="scroll-wrapper">
-                    {/* category */}
+
                     {Array.isArray(incident.category) && incident.category.length > 0 && (
                         <div className="category-container">
                             {incident.category.map((cat, index) => (
@@ -80,29 +89,25 @@ function IncidentDetail({ incident, onClose, onOpenChat, currentUser }) {
                             ))}
                         </div>
                     )}
-                    
-                    {/* title */}
+
                     <h2 className="incident-title">{incident.title}</h2>
 
-                    {/* description */}
                     {incident.description && (
                         <p className="incident-description">{incident.description}</p>
                     )}
 
                     <div className="incident-info">
-                        
-                        {/* Date & Time */}
+
                         {fullDateString && (
                             <div className="info-item">
                                 <LuCalendarClock size={24} className="info-icon" />
                                 <div className="info-text">
-                                    <span className="info-label">Date Occured</span>
+                                    <span className="info-label">Date Occurred</span>
                                     <span className="info-data">{fullDateString}</span>
                                 </div>
                             </div>
                         )}
 
-                        {/* Location */}
                         {incident.location?.address && (
                             <div className="info-item">
                                 <LuMapPin size={24} className="info-icon" />
@@ -113,6 +118,7 @@ function IncidentDetail({ incident, onClose, onOpenChat, currentUser }) {
                             </div>
                         )}
                     </div>
+
                     {incident.location?.coordinates && (
                         <button
                             className="show-map-button"
@@ -124,6 +130,18 @@ function IncidentDetail({ incident, onClose, onOpenChat, currentUser }) {
 
                 </div>    
             </div>
+
+            {showPopup && (
+                <div className="popup-message">
+                    <span>{popupMessage}</span>
+                    <button
+                        className="popup-close"
+                        onClick={() => setShowPopup(false)}
+                    >
+                        ✕
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
