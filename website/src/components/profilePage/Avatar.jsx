@@ -12,6 +12,8 @@ const AVATARS = [
 function Avatar({ currentUser }) {
   const [selectedAvatar, setSelectedAvatar] = useState(currentUser?.avatar || 'avatar8.png');
   const [showAvatarList, setShowAvatarList] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+
 
   // Fetch current avatar from server
   useEffect(() => {
@@ -41,7 +43,9 @@ function Avatar({ currentUser }) {
         setSelectedAvatar(avatar);
         setShowAvatarList(false);
         currentUser.avatar = avatar;
-        alert('Avatar updated successfully!');
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 5000);
+        // alert('Avatar updated successfully!');
         console.log('Avatar updated:', avatar);
       } else {
         console.error('Failed to update avatar');
@@ -72,12 +76,20 @@ function Avatar({ currentUser }) {
               />
             ))}
           </div>
-          {selectedAvatar === 'avatar8.png' && <p>You're still a potato 🥔. Choose any avatar you like!</p>}
+          {selectedAvatar === 'avatar8.png' && <p>Choose any avatar you like!</p>}
           <button 
             className="avatar-button"
             onClick={() => handleAvatar(selectedAvatar)}
           >
             Save selection
+          </button>
+        </div>
+      )}
+      {showPopup && (
+        <div className="popup-message">
+          <span>Avatar updated successfully!</span>
+          <button className="popup-close" onClick={() => setShowPopup(false)}>
+            ✕
           </button>
         </div>
       )}
